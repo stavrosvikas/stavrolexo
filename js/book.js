@@ -7,6 +7,12 @@ window.Book = (function () {
   // σύρσιμο
   var drag = null, justDragged = false;
 
+  // μετά από σύρσιμο ή πάτημα στην άκρη, το click που ακολουθεί δεν μετράει
+  function suppressClick() {
+    justDragged = true;
+    setTimeout(function () { justDragged = false; }, 350);
+  }
+
   function setLeaf(el, deg) {
     el.style.transform = 'rotateY(' + deg + 'deg)';
     // --curl: 0 στην αρχή/τέλος, 1 στη μέση της κίνησης. Το CSS το χρησιμοποιεί
@@ -86,11 +92,16 @@ window.Book = (function () {
     return Math.max(28, Math.min(64, stack.clientWidth * .11));
   }
 
+  function edgeSide(clientX) {
+    if (!stack) return null;
+    var r = stack.getBoundingClientRect(), e = edgeZone();
+    if ((clientX - r.left) < e) return 'left';    // και αριστερότερα (διπλανή σελίδα)
+    if ((r.right - clientX) < e) return 'right';
+    return null;
+  }
+
   function inEdgeZone(clientX) {
-    if (!stack) return false;
-    var r = stack.getBoundingClientRect();
-    var e = edgeZone();
-    return (clientX - r.left) < e || (r.right - clientX) < e;
+    return edgeSide(clientX) !== null;
   }
 
   function canDrag(e) {
@@ -105,7 +116,8 @@ window.Book = (function () {
 
   function down(e) {
     if (!canDrag(e)) return;
-    drag = { x: e.clientX, y: e.clientY, leaf: null, back: false, deg: 0, live: false };
+    drag = { x: e.clientX, y: e.clientY, leaf: null, back: false, deg: 0,
+             live: false, edge: edgeSide(e.clientX) };
   }
 
   function move(e) {
@@ -132,9 +144,18 @@ window.Book = (function () {
     if (!drag) return;
     var d = drag;
     drag = null;
-    if (!d.live) return;
-    justDragged = true;
-    setTimeout(function () { justDragged = false; }, 350);
+
+    // Σκέτο πάτημα στην άκρη (χωρίς σύρσιμο) γυρίζει κι αυτό σελίδα —
+    // δεξιά μπροστά, αριστερά πίσω, όπως και στη διπλανή ανοιχτή σελίδα.
+    if (!d.live) {
+      if (!d.edge) return;
+      var target = d.edge === 'left' ? current - 1 : current + 1;
+      if (target < 0 || target >= count || target === current) return;
+      suppressClick();
+      go(target);
+      return;
+    }
+    suppressClick();
     d.leaf.classList.add('turning');
     // πέρασε τη μέση; τότε ολοκλήρωσε το γύρισμα, αλλιώς γύρνα πίσω
     var complete = d.back ? d.deg > -90 : d.deg < -90;

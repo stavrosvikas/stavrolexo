@@ -40,14 +40,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mynerve&family=Roboto:wght@400;500;700;900&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css?v=5">
+  <link rel="stylesheet" href="css/style.css?v=6">
 </head>
 <body>
 
 <div id="app">
 
   <!-- ── μπάρα ορισμού — ΠΑΝΩ από το πλέγμα ─────────────────────── -->
-  <div id="cluebar" hidden>
+  <div id="cluebar" class="empty">
     <button class="clue-nav" id="clue-prev" aria-label="Προηγούμενος ορισμός">‹</button>
     <div class="clue-body">
       <img id="clue-image" alt="" hidden>
@@ -66,6 +66,9 @@
   <div id="book">
     <div id="stack">
 
+      <!-- η αριστερή ανοιχτή σελίδα σε desktop — πατιέται για γύρισμα πίσω -->
+      <div id="facing" aria-label="Προηγούμενη σελίδα"></div>
+
       <!-- σελίδα 0 — εξώφυλλο -->
       <section class="leaf" data-page="0">
         <!-- Χωρίς κουμπί: όλο το εξώφυλλο πατιέται, ώστε να μη μπει τίποτα
@@ -73,7 +76,8 @@
              bleed και γεμίζει με το --cover-bleed. -->
         <div class="face front cover" data-goto="1">
           <div class="cover-art">
-            <img src="assets/cover-web.jpg?v=5" alt="ΛΟΥΜΠΕΝΟΛΕΞΟ No 01 — Luben Summer 26">
+            <img src="assets/cover-web.jpg?v=6" alt="ΛΟΥΜΠΕΝΟΛΕΞΟ No 01 — Luben Summer 26">
+            <div class="cover-peel"></div>
             <div class="cover-progress" id="cover-progress"></div>
           </div>
         </div>
@@ -108,7 +112,7 @@
   </div>
 
   <!-- ── ελληνικό πληκτρολόγιο ─────────────────────────────────── -->
-  <div id="keyboard" hidden></div>
+  <div id="keyboard" class="empty"></div>
 
   <!-- ── πλοήγηση ──────────────────────────────────────────────── -->
   <nav id="pager">
@@ -119,14 +123,14 @@
 
 </div>
 
-<script src="data/puzzle.js?v=5"></script>
-<script src="data/dots.js?v=5"></script>
-<script src="js/sfx.js?v=5"></script>
-<script src="js/storage.js?v=5"></script>
-<script src="js/book.js?v=5"></script>
-<script src="js/grid.js?v=5"></script>
-<script src="js/dots.js?v=5"></script>
-<script src="js/keyboard.js?v=5"></script>
-<script src="js/app.js?v=5"></script>
+<script src="data/puzzle.js?v=6"></script>
+<script src="data/dots.js?v=6"></script>
+<script src="js/sfx.js?v=6"></script>
+<script src="js/storage.js?v=6"></script>
+<script src="js/book.js?v=6"></script>
+<script src="js/grid.js?v=6"></script>
+<script src="js/dots.js?v=6"></script>
+<script src="js/keyboard.js?v=6"></script>
+<script src="js/app.js?v=6"></script>
 </body>
 </html>

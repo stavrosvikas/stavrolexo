@@ -21,8 +21,9 @@
 
   function showClue(w, q) {
     if (!w) {
-      // καθάρισε το πεδίο, μη μείνει κρεμασμένος ο προηγούμενος ορισμός
-      cluebar.hidden = true;
+      // καθάρισε το πεδίο, μη μείνει κρεμασμένος ο προηγούμενος ορισμός.
+      // Η μπάρα κρατάει τον χώρο της, απλώς αδειάζει.
+      cluebar.classList.add('empty');
       clueN.textContent = '';
       clueText.textContent = '';
       clueLen.textContent = '';
@@ -30,7 +31,7 @@
       clueImg.removeAttribute('src');
       return;
     }
-    cluebar.hidden = false;
+    cluebar.classList.remove('empty');
     clueN.textContent = w.n + (w.dir === 'H' ? ' ΟΡΙΖΟΝΤΙΑ' : ' ΚΑΘΕΤΑ');
     clueText.textContent = q.clue;
     clueLen.textContent = w.answer.length + ' γράμματα';
@@ -51,12 +52,14 @@
     el.classList.toggle('on', done > 0);
   }
 
+  /* Και τα δύο μένουν στη ροή -- αλλάζει μόνο αν δείχνουν κάτι. Έτσι η
+     σελίδα έχει ακριβώς το ίδιο ύψος σε εξώφυλλο, πλέγματα και λύσεις. */
   function syncChrome() {
     var i = Book.current();
     var onGrid = (i === 1 || i === 2);
     var p = activePuzzle();
-    cluebar.hidden = !onGrid || !p || !p.active;
-    kb.hidden = !onGrid || !Keyboard.wantsOnScreen();
+    cluebar.classList.toggle('empty', !onGrid || !p || !p.active);
+    kb.classList.toggle('empty', !onGrid || !Keyboard.wantsOnScreen());
   }
 
   // ── πλέγματα ────────────────────────────────────────────────────

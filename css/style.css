@@ -47,8 +47,24 @@ body{
   overscroll-behavior:none;touch-action:manipulation;
 }
 
-#app{position:fixed;inset:0;display:flex;flex-direction:column;
-     padding-bottom:var(--pad-b)}
+/* 100dvh αντί για inset:0 — στο κινητό η μπάρα διεύθυνσης μαζεύεται και
+   ξαναβγαίνει, και με fixed inset:0 έκοβε το κάτω μέρος της σελίδας. */
+#app{
+  position:fixed;left:0;right:0;top:0;
+  height:100vh;height:100dvh;
+  display:flex;flex-direction:column;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:var(--pad-b);
+  /* τίποτα δεν μαρκάρεται όσο σέρνεις — ούτε αριθμοί, ούτε ορισμοί */
+  user-select:none;-webkit-user-select:none;
+  -webkit-touch-callout:none;
+}
+/* οι εικόνες δεν σέρνονται μόνες τους — αλλιώς το native image-drag του
+   browser έκλεβε το gesture του γυρίσματος */
+#app img{-webkit-user-drag:none;user-drag:none}
+.cover-art img{pointer-events:none}
+/* εξαίρεση: στις λύσεις θες να μπορείς να αντιγράψεις */
+.sol .sc,.sol .sa.on{user-select:text;-webkit-user-select:text}
 
 .btn{
   font:inherit;font-weight:700;font-size:15px;
@@ -70,11 +86,16 @@ body{
 
 /* ── μπάρα ορισμού (πάνω, κεντραρισμένη) ───────────────────────── */
 
+/* Η μπάρα κρατάει ΠΑΝΤΑ τον χώρο της, ακόμα κι όταν δεν δείχνει ορισμό —
+   αλλιώς η σελίδα άλλαζε ύψος από σελίδα σε σελίδα και έσπαγε η αίσθηση
+   του τεύχους. Το ίδιο και το πληκτρολόγιο πιο κάτω. */
 #cluebar{
   flex:0 0 auto;display:flex;align-items:stretch;
   background:var(--m-05);border-bottom:1px solid var(--m-20);
   min-height:66px;
 }
+#cluebar.empty{background:var(--bg);border-bottom-color:transparent}
+#cluebar.empty > *{visibility:hidden}
 #cluebar .clue-nav{
   flex:0 0 44px;background:transparent;border:0;color:var(--m-ink);
   font-size:24px;cursor:pointer;
@@ -257,14 +278,22 @@ body{
 .last::-webkit-scrollbar-thumb:hover{background:var(--m-40)}
 .last{scrollbar-width:thin;scrollbar-color:var(--m-20) var(--m-05)}
 
-.sheet{padding:16px 16px 40px 36px;max-width:620px;margin:0 auto;width:100%}
+/* Κλειστές λύσεις = μια σελίδα που χωράει ολόκληρη, χωρίς σκρολ.
+   Ανοιχτές = η σελίδα επιμηκύνεται και σκρολάρει. */
+.last{display:flex}
+.last.scrollable{display:block}
+.sheet{padding:14px 16px 18px 36px;max-width:620px;margin:0 auto;width:100%;
+       display:flex;flex-direction:column;min-height:0}
+.last.scrollable .sheet{display:block;padding-bottom:42px}
 .sheet h2{margin:0 0 3px;font-size:20px;font-weight:900;letter-spacing:-.015em}
 .sheet h2.mt{margin-top:26px}
 .sheet .sub{margin:0 0 12px;color:var(--ink-2);font-size:13px}
 
 #dots-wrap{background:#fff;border:1px solid var(--hair);overflow:hidden;
-           touch-action:none;display:flex;justify-content:center}
-#dots-wrap svg{display:block;width:100%;height:auto;max-height:46vh}
+           touch-action:none;display:flex;justify-content:center;
+           flex:1 1 auto;min-height:140px}
+#dots-wrap svg{display:block;width:100%;height:100%}
+.last.scrollable #dots-wrap{flex:none;height:46vh}
 .dot-pt{fill:#c9c9d2}
 .dot-pt.done{fill:var(--m-100)}
 .dot-pt.next{fill:var(--m-100)}
@@ -299,6 +328,8 @@ body{
 
 #keyboard{flex:0 0 auto;background:#ecebef;padding:6px 4px;user-select:none;
           border-top:1px solid var(--hair)}
+#keyboard.empty{background:var(--bg);border-top-color:transparent}
+#keyboard.empty > *{visibility:hidden}
 .krow{display:flex;gap:5px;justify-content:center;margin-bottom:5px}
 .key{
   flex:1 1 0;max-width:42px;height:46px;
@@ -314,8 +345,8 @@ body{
 /* ── pager ─────────────────────────────────────────────────────── */
 
 #pager{flex:0 0 auto;display:flex;align-items:center;gap:12px;
-       padding:8px 12px;background:#0e0e10}
-#pager button{width:42px;height:34px;border:1px solid #2a2a30;border-radius:8px;
+       padding:8px 12px;background:var(--bg)}
+#pager button{width:42px;height:34px;border:1px solid #4a4a52;border-radius:8px;
               background:transparent;color:#fff;font-size:18px;cursor:pointer}
 #pager button:disabled{opacity:.22}
 #dots-nav{flex:1 1 auto;display:flex;gap:7px;justify-content:center}
@@ -323,13 +354,36 @@ body{
       transition:width .2s,background .2s}
 .pdot.on{width:22px;background:var(--m-100)}
 
-/* Στο εξώφυλλο δεν υπάρχει κουμπί πάνω στο γραφιστικό, οπότε το βέλος
-   χτυπάει λίγο για να δείξει από πού συνεχίζεις. */
+/* Στο εξώφυλλο δεν υπάρχει κουμπί πάνω στο γραφιστικό, οπότε διδάσκουμε την
+   κίνηση αλλού: το βέλος χτυπάει συνέχεια, και η γωνία της σελίδας σηκώνεται
+   και ξαναπέφτει σαν να τη γυρνάει κάποιος. */
 @keyframes nudge{
-  0%,60%,100%{transform:translateX(0);background:transparent}
-  75%{transform:translateX(4px);background:var(--m-100)}
+  0%,55%,100%{transform:translateX(0);background:transparent;color:#fff}
+  70%,80%{transform:translateX(5px);background:var(--m-100);color:#fff}
 }
-#app.at-cover #next{animation:nudge 2.4s ease-in-out 3;border-color:var(--m-100)}
+#app.at-cover #next{animation:nudge 2.6s ease-in-out infinite;
+                    border-color:var(--m-100)}
+
+.cover-peel{
+  position:absolute;right:0;bottom:0;width:24%;z-index:3;
+  aspect-ratio:1;pointer-events:none;opacity:0;
+  clip-path:polygon(100% 0,100% 100%,0 100%);
+  background:linear-gradient(225deg,
+    #ffffff 0%,#f4f2f3 38%,#dcd9dc 52%,rgba(0,0,0,.28) 56%,transparent 57%);
+  animation:peel 3.4s ease-in-out infinite;
+}
+@keyframes peel{
+  0%,62%,100%{opacity:0;transform:translate(16%,16%)}
+  18%,44%{opacity:1;transform:translate(0,0)}
+}
+#app:not(.at-cover) .cover-peel{animation:none;opacity:0}
+
+/* η αριστερή, ανοιχτή σελίδα σε desktop — πατιέται για να γυρίσεις πίσω */
+#facing{
+  position:absolute;z-index:0;display:none;cursor:pointer;
+  background:linear-gradient(to left,#f4f2f4,#e9e7ea 70%);
+  box-shadow:inset -20px 0 26px rgba(0,0,0,.14);
+}
 
 /* ── desktop ───────────────────────────────────────────────────── */
 
@@ -337,13 +391,9 @@ body{
   /* Το τεύχος κλειδώνει σε 3:4 — ίδια αναλογία με το artboard του εξωφύλλου,
      ώστε να μοιάζει περιοδικό και όχι άλμπουμ. */
   #stack{width:auto;aspect-ratio:3/4;height:100%;max-width:100%}
-  #stack::before{
-    content:"";position:absolute;top:1.5%;bottom:1.5%;right:100%;width:96%;
-    background:linear-gradient(to left,#f4f2f4,#e9e7ea 70%);
-    box-shadow:inset -20px 0 26px rgba(0,0,0,.14);z-index:-1;
-  }
+  #facing{display:block;top:1.5%;bottom:1.5%;right:100%;width:96%}
   /* στο εξώφυλλο δεν υπάρχει διπλανή σελίδα — μόνο το γκρι */
-  #app.at-cover #stack::before{display:none}
+  #app.at-cover #facing{display:none}
   .clue-text{font-size:20px}
 }
 @media (min-width:900px){#keyboard{display:none!important}}
