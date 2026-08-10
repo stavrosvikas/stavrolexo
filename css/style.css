@@ -1,0 +1,359 @@
+/* ΣΤΑΥΡΟΛΕΞΟ LUBEN — Summer 26
+   Λευκές σελίδες. Το magenta μπαίνει σε τόνους: όσο πιο μεγάλη η επιφάνεια,
+   τόσο πιο ξεπλυμένο το χρώμα. Πλήρης κορεσμός μόνο σε μικρές λεπτομέρειες. */
+
+:root{
+  --bg:#2a2a2f;              /* το γκρι γύρω από το τεύχος */
+  --cover-bleed:#f2eff3;     /* γεμίζει γύρω από το artboard 3:4 του εξωφύλλου */
+  --page:#ffffff;
+  --page-2:#faf7f9;
+  --ink-1:#141418;           /* κείμενο */
+  --ink-2:#5c5c68;           /* δευτερεύον */
+  --ink-3:#9a9aa6;           /* απαλό */
+  --rule:#15151a;            /* γραμμές πλέγματος */
+  --hair:#e4e4ea;            /* λεπτές γραμμές UI */
+
+  /* Κόκκινο του εξωφύλλου, σε κλίμακα — από ξεπλυμένο σε πλήρες.
+     Χρησιμοποιείται για chrome: μπάρες, αριθμούς, κουμπιά. */
+  --m-05:#fff2f4;
+  --m-10:#ffe4e7;
+  --m-20:#ffc9d0;
+  --m-40:#ff8e9a;
+  --m-60:#fc5568;
+  --m-100:#fb2d46;
+  --m-ink:#c8102a;           /* κόκκινο αρκετά σκούρο για κείμενο σε λευκό */
+
+  /* Κίτρινο του εξωφύλλου — δείχνει ΠΟΥ είσαι μέσα στο πλέγμα.
+     Ξεχωριστό κανάλι από το κόκκινο, ώστε το «λάθος» να μη μπερδεύεται. */
+  --y-10:#fffceb;
+  --y-40:#fff3a8;
+  --y-100:#ffe822;
+
+  --ink-pencil:#1a1a1e;      /* όσο γράφεις */
+  --ok:#1b4dd8;              /* σωστή λέξη — μπλε στυλό */
+  --bad:#e01b2e;             /* λάθος λέξη */
+
+  --hand:"Mynerve", cursive;
+  --ui:"Roboto", system-ui, sans-serif;
+
+  --cell:40px;
+  --pad-b:env(safe-area-inset-bottom,0px);
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{
+  font-family:var(--ui);background:var(--bg);color:var(--ink-1);
+  overscroll-behavior:none;touch-action:manipulation;
+}
+
+#app{position:fixed;inset:0;display:flex;flex-direction:column;
+     padding-bottom:var(--pad-b)}
+
+.btn{
+  font:inherit;font-weight:700;font-size:15px;
+  padding:12px 26px;border:0;border-radius:99px;
+  background:var(--m-100);color:#fff;cursor:pointer;letter-spacing:.01em;
+}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{
+  background:#fff;color:var(--m-ink);border:1.5px solid var(--m-20);
+  padding:10px 18px;font-size:14px;
+}
+.btn.ghost:hover{border-color:var(--m-40);background:var(--m-05)}
+/* διακριτικό — για ενέργειες που δεν θέλουμε να προσκαλούν */
+.btn.quiet{
+  background:none;border:0;color:var(--ink-3);font-size:12px;font-weight:400;
+  text-decoration:underline;text-underline-offset:3px;padding:8px 4px;cursor:pointer;
+}
+.btn.quiet:hover{color:var(--m-ink)}
+
+/* ── μπάρα ορισμού (πάνω, κεντραρισμένη) ───────────────────────── */
+
+#cluebar{
+  flex:0 0 auto;display:flex;align-items:stretch;
+  background:var(--m-05);border-bottom:1px solid var(--m-20);
+  min-height:66px;
+}
+#cluebar .clue-nav{
+  flex:0 0 44px;background:transparent;border:0;color:var(--m-ink);
+  font-size:24px;cursor:pointer;
+}
+#cluebar .clue-nav:active{background:var(--m-10)}
+.clue-body{flex:1 1 auto;display:flex;align-items:center;justify-content:center;
+           gap:12px;padding:9px 4px;min-width:0}
+#clue-image{height:54px;width:54px;object-fit:cover;flex:0 0 auto;
+            border:1px solid var(--rule)}
+.clue-lines{min-width:0;text-align:center}
+.clue-meta{display:flex;align-items:baseline;gap:8px;justify-content:center;margin-bottom:1px}
+.clue-n{font-family:"Roboto Mono",monospace;font-weight:700;font-size:11px;
+        color:var(--m-ink);letter-spacing:.1em}
+.clue-len{color:var(--ink-3);font-size:11px}
+.clue-text{font-size:18px;line-height:1.24;font-weight:500;text-wrap:balance}
+
+/* ── το τεύχος ─────────────────────────────────────────────────── */
+
+#book{flex:1 1 auto;min-height:0;display:grid;place-items:center;
+      perspective:2200px;perspective-origin:50% 50%}
+#stack{position:relative;width:100%;height:100%;transform-style:preserve-3d}
+
+.leaf{
+  position:absolute;inset:0;
+  transform-origin:left center;transform-style:preserve-3d;
+  will-change:transform;
+}
+.leaf.turning{transition:transform .7s cubic-bezier(.36,.06,.24,1)}
+
+.face{
+  position:absolute;inset:0;overflow:hidden;
+  background:var(--page);
+  display:flex;flex-direction:column;
+  backface-visibility:hidden;
+  box-shadow:0 2px 30px rgba(0,0,0,.45);
+}
+/* σκιά ράχης */
+.face::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:30px;
+  background:linear-gradient(to right,rgba(0,0,0,.16),rgba(0,0,0,.03) 45%,rgba(0,0,0,0));
+  pointer-events:none;z-index:4;
+}
+/* η πίσω όψη του φύλλου — αυτή είναι που κάνει το γύρισμα να μοιάζει χαρτί */
+.face.back{
+  transform:rotateY(180deg);
+  background:
+    linear-gradient(to left,#f2f0f2,#ffffff 30%,#f7f5f7);
+}
+.face.back::before{
+  left:auto;right:0;
+  background:linear-gradient(to left,rgba(0,0,0,.16),rgba(0,0,0,0));
+}
+.face.back::after{
+  content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.012) 0 2px,transparent 2px 5px);
+}
+.shade{
+  position:absolute;inset:0;z-index:5;pointer-events:none;opacity:0;
+  background:linear-gradient(to right,rgba(0,0,0,0) 55%,rgba(0,0,0,.22));
+}
+
+/* Peel: το χαρτί δεν λυγίζει πραγματικά (θα ήθελε WebGL), αλλά η λάμψη που
+   τρέχει στην ακμή και η γωνία που στρογγυλεύει δίνουν την ίδια αίσθηση. */
+.leaf{--curl:0}
+.face.front::after{
+  content:"";position:absolute;top:0;bottom:0;right:0;
+  width:calc(18% + var(--curl) * 16%);
+  background:linear-gradient(to right,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,.55) 62%,
+    rgba(0,0,0,.10) 92%,
+    rgba(0,0,0,.20) 100%);
+  opacity:var(--curl);
+  pointer-events:none;z-index:6;
+}
+.leaf{border-top-right-radius:calc(var(--curl) * 26px);
+      border-bottom-right-radius:calc(var(--curl) * 14px)}
+.face{border-top-right-radius:inherit;border-bottom-right-radius:inherit}
+
+/* διακριτική ένδειξη ότι η σελίδα πιάνεται από την άκρη */
+.face.front > .edge-hint{
+  position:absolute;top:0;bottom:0;right:0;width:22px;z-index:7;
+  background:linear-gradient(to left,rgba(0,0,0,.07),rgba(0,0,0,0));
+  pointer-events:none;
+}
+
+/* ── εξώφυλλο ──────────────────────────────────────────────────── */
+
+.cover{display:grid;place-items:center;background:var(--cover-bleed);cursor:pointer}
+
+/* Το artboard: σταθερή αναλογία 3:4, χωράει πάντα ολόκληρο μέσα στη σελίδα.
+   Σχεδιασμένο στα 1200x1600. Safe zone = το εσωτερικό 90% (1080x1440). */
+.cover-art{
+  position:relative;aspect-ratio:3/4;
+  width:100%;max-width:100%;max-height:100%;min-width:0;min-height:0;
+  overflow:hidden;background:var(--page);
+}
+.cover-art img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* Η πρόοδος εμφανίζεται μόνο αφού ξεκινήσεις — μέχρι τότε το γραφιστικό
+   μένει καθαρό, χωρίς τίποτα από πάνω του. */
+.cover-progress{
+  position:absolute;left:4%;bottom:7.5%;z-index:2;
+  background:rgba(0,0,0,.82);color:#fff;
+  font-size:12px;font-weight:700;letter-spacing:.02em;
+  padding:7px 14px;border-radius:99px;
+  opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s;
+  pointer-events:none;
+}
+.cover-progress.on{opacity:1;transform:none}
+
+/* ── σελίδα πλέγματος ──────────────────────────────────────────── */
+
+.puzzle{padding:0}
+.puzzle-head{flex:0 0 auto;display:flex;align-items:center;gap:10px;
+             padding:8px 14px 8px 34px;border-bottom:1px solid var(--hair);
+             position:relative;z-index:6}
+.puzzle-head h2{margin:0;font-size:11px;letter-spacing:.26em;text-transform:uppercase;
+                color:var(--ink-3);font-weight:700}
+.puzzle-head .score{margin-left:auto;font-size:12px;color:var(--m-ink);font-weight:700;
+                    font-family:"Roboto Mono",monospace}
+.puzzle-head .zoomout{background:#fff;border:1px solid var(--hair);color:var(--ink-2);
+                      border-radius:6px;font-size:11px;padding:4px 9px;cursor:pointer}
+.puzzle-head .zoomout:hover{border-color:var(--m-40);color:var(--m-ink)}
+
+.gridwrap{flex:1 1 auto;position:relative;overflow:hidden;touch-action:none;
+          background:var(--page)}
+.stage{position:absolute;top:0;left:0;transform-origin:0 0}
+.stage.fx{transition:transform .34s cubic-bezier(.22,.61,.36,1)}
+.grid{display:grid;gap:0;position:relative}
+
+.c{width:var(--cell);height:var(--cell);position:relative;
+   display:flex;align-items:center;justify-content:center}
+
+.c.void{}                                   /* κενό = λευκή σελίδα */
+
+.c.letter{background:#fff;border:1px solid var(--rule);margin:-1px 0 0 -1px}
+.c.letter.inword{background:var(--y-10)}
+.c.letter.active{background:var(--y-100);z-index:6}
+
+.c .ink{
+  font-family:var(--hand);font-size:calc(var(--cell) * .78);line-height:1;
+  color:var(--ink-pencil);
+  transform:rotate(var(--jit,0deg)) translateY(var(--jit-y,0px));
+  pointer-events:none;
+}
+.c.solved .ink{color:var(--ok)}
+.c.wrong .ink{color:var(--bad)}
+.c.wrong::after{
+  content:"";position:absolute;left:14%;right:14%;bottom:10%;height:2px;
+  background:repeating-linear-gradient(90deg,var(--bad) 0 3px,transparent 3px 6px);
+}
+
+/* κελί ορισμού — μαύρο, όπως στα έντυπα */
+.c.clue{
+  background:var(--rule);border:1px solid var(--rule);margin:-1px 0 0 -1px;
+  flex-direction:column;justify-content:center;cursor:pointer;color:#fff;
+}
+.c.clue .cn{font-family:"Roboto Mono",monospace;font-weight:700;
+            font-size:calc(var(--cell) * .28);line-height:1.05}
+.c.clue .ar{font-size:calc(var(--cell) * .32);line-height:1;opacity:.85}
+.c.clue.on{background:var(--m-100);border-color:var(--m-100)}
+
+.imgblock{position:absolute;z-index:3;border:1px solid var(--rule);
+          background:#fff;overflow:hidden;cursor:pointer}
+.imgblock img{width:100%;height:100%;object-fit:cover;display:block}
+.imgblock .tag{position:absolute;left:0;bottom:0;background:var(--rule);color:#fff;
+               font-family:"Roboto Mono",monospace;font-weight:700;
+               font-size:10px;padding:1px 5px}
+.imgblock.on{box-shadow:0 0 0 3px var(--m-100)}
+
+/* ── τελευταία σελίδα ──────────────────────────────────────────── */
+
+.last{overflow:hidden}
+.last.scrollable{overflow-y:auto;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
+.last::-webkit-scrollbar{width:10px}
+.last::-webkit-scrollbar-track{background:var(--m-05)}
+.last::-webkit-scrollbar-thumb{background:var(--m-20);border-radius:99px;
+                               border:3px solid var(--m-05)}
+.last::-webkit-scrollbar-thumb:hover{background:var(--m-40)}
+.last{scrollbar-width:thin;scrollbar-color:var(--m-20) var(--m-05)}
+
+.sheet{padding:16px 16px 40px 36px;max-width:620px;margin:0 auto;width:100%}
+.sheet h2{margin:0 0 3px;font-size:20px;font-weight:900;letter-spacing:-.015em}
+.sheet h2.mt{margin-top:26px}
+.sheet .sub{margin:0 0 12px;color:var(--ink-2);font-size:13px}
+
+#dots-wrap{background:#fff;border:1px solid var(--hair);overflow:hidden;
+           touch-action:none;display:flex;justify-content:center}
+#dots-wrap svg{display:block;width:100%;height:auto;max-height:46vh}
+.dot-pt{fill:#c9c9d2}
+.dot-pt.done{fill:var(--m-100)}
+.dot-pt.next{fill:var(--m-100)}
+.dot-num{font-family:"Roboto Mono",monospace;font-size:15px;fill:var(--ink-3)}
+.dot-num.done{fill:var(--m-40)}
+.dot-line{stroke:var(--m-100);stroke-width:2.5;fill:none;
+          stroke-linejoin:round;stroke-linecap:round}
+.dot-reveal{stroke:var(--ink-1);stroke-width:1.5;fill:none;opacity:.28}
+.dots-tools{display:flex;align-items:center;gap:12px;margin-top:10px}
+.dots-tools .spacer{flex:1 1 auto}
+
+#solutions-list{margin-top:16px}
+.sol-page{margin-bottom:22px}
+.sol-page h3{font-size:10px;text-transform:uppercase;letter-spacing:.22em;
+             color:var(--m-ink);border-bottom:1px solid var(--hair);
+             padding-bottom:5px;margin:0 0 8px}
+.sol{display:flex;gap:10px;padding:6px 0;font-size:14px;line-height:1.3;
+     border-bottom:1px solid var(--m-05)}
+.sol .sn{font-family:"Roboto Mono",monospace;font-weight:700;color:var(--ink-3);
+         flex:0 0 34px}
+.sol .sc{color:var(--ink-2)}
+.sol .sa{
+  margin-left:auto;font:inherit;font-weight:700;color:var(--m-ink);
+  white-space:nowrap;background:none;border:0;padding:0 2px;cursor:pointer;
+  filter:blur(5px);opacity:.75;transition:filter .18s,opacity .18s;
+  user-select:none;
+}
+.sol .sa:hover{filter:blur(3px)}
+.sol .sa.on{filter:none;opacity:1;cursor:default;user-select:text}
+
+/* ── πληκτρολόγιο — καθαρά γράμματα, όχι χειρόγραφα ────────────── */
+
+#keyboard{flex:0 0 auto;background:#ecebef;padding:6px 4px;user-select:none;
+          border-top:1px solid var(--hair)}
+.krow{display:flex;gap:5px;justify-content:center;margin-bottom:5px}
+.key{
+  flex:1 1 0;max-width:42px;height:46px;
+  display:flex;align-items:center;justify-content:center;
+  background:#fff;color:var(--ink-1);border-radius:7px;
+  font-family:var(--ui);font-size:19px;font-weight:500;
+  border:1px solid #d8d8e0;box-shadow:0 1px 0 #c3c3cd;cursor:pointer;
+}
+.key:active{background:var(--m-100);color:#fff;border-color:var(--m-100);
+            box-shadow:none;transform:translateY(1px)}
+.key.wide{max-width:62px;flex:1.4 1 0;font-size:17px;background:#dedee6}
+
+/* ── pager ─────────────────────────────────────────────────────── */
+
+#pager{flex:0 0 auto;display:flex;align-items:center;gap:12px;
+       padding:8px 12px;background:#0e0e10}
+#pager button{width:42px;height:34px;border:1px solid #2a2a30;border-radius:8px;
+              background:transparent;color:#fff;font-size:18px;cursor:pointer}
+#pager button:disabled{opacity:.22}
+#dots-nav{flex:1 1 auto;display:flex;gap:7px;justify-content:center}
+.pdot{width:8px;height:8px;border-radius:99px;background:#3a3a44;cursor:pointer;
+      transition:width .2s,background .2s}
+.pdot.on{width:22px;background:var(--m-100)}
+
+/* Στο εξώφυλλο δεν υπάρχει κουμπί πάνω στο γραφιστικό, οπότε το βέλος
+   χτυπάει λίγο για να δείξει από πού συνεχίζεις. */
+@keyframes nudge{
+  0%,60%,100%{transform:translateX(0);background:transparent}
+  75%{transform:translateX(4px);background:var(--m-100)}
+}
+#app.at-cover #next{animation:nudge 2.4s ease-in-out 3;border-color:var(--m-100)}
+
+/* ── desktop ───────────────────────────────────────────────────── */
+
+@media (min-width:760px){
+  /* Το τεύχος κλειδώνει σε 3:4 — ίδια αναλογία με το artboard του εξωφύλλου,
+     ώστε να μοιάζει περιοδικό και όχι άλμπουμ. */
+  #stack{width:auto;aspect-ratio:3/4;height:100%;max-width:100%}
+  #stack::before{
+    content:"";position:absolute;top:1.5%;bottom:1.5%;right:100%;width:96%;
+    background:linear-gradient(to left,#f4f2f4,#e9e7ea 70%);
+    box-shadow:inset -20px 0 26px rgba(0,0,0,.14);z-index:-1;
+  }
+  /* στο εξώφυλλο δεν υπάρχει διπλανή σελίδα — μόνο το γκρι */
+  #app.at-cover #stack::before{display:none}
+  .clue-text{font-size:20px}
+}
+@media (min-width:900px){#keyboard{display:none!important}}
+
+/* ── λιγότερη κίνηση ───────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce){
+  .leaf.turning{transition:transform .12s linear}
+  .stage.fx{transition:none}
+  .face.front::after{display:none}
+  .leaf{border-radius:0}
+  .last.scrollable{scroll-behavior:auto}
+}

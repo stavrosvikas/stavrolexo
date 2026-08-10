@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RBDE1VBYBN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-RBDE1VBYBN');
+  </script>
+  <!-- End Google Analytics -->
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#fb2d46">
+  <title>ΛΟΥΜΠΕΝΟΛΕΞΟ No 01 — Luben Summer 26</title>
+
+  <meta name="description" content="Δύο σταυρόλεξα, 60 ερωτήσεις κι ένα παιχνίδι. Τζάμπα.">
+  <!-- Open Graph / Facebook / Slack -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://luben.tv/stavrolexo/">
+  <meta property="og:title" content="ΛΟΥΜΠΕΝΟΛΕΞΟ No 01">
+  <meta property="og:description" content="Δύο σταυρόλεξα, 60 ερωτήσεις κι ένα παιχνίδι. Τζάμπα.">
+  <meta property="og:image" content="https://luben.tv/stavrolexo/assets/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ΛΟΥΜΠΕΝΟΛΕΞΟ No 01">
+  <meta name="twitter:description" content="Δύο σταυρόλεξα, 60 ερωτήσεις κι ένα παιχνίδι. Τζάμπα.">
+  <meta name="twitter:image" content="https://luben.tv/stavrolexo/assets/og.jpg">
+
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mynerve&family=Roboto:wght@400;500;700;900&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css?v=5">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ── μπάρα ορισμού — ΠΑΝΩ από το πλέγμα ─────────────────────── -->
+  <div id="cluebar" hidden>
+    <button class="clue-nav" id="clue-prev" aria-label="Προηγούμενος ορισμός">‹</button>
+    <div class="clue-body">
+      <img id="clue-image" alt="" hidden>
+      <div class="clue-lines">
+        <div class="clue-meta">
+          <span class="clue-n" id="clue-n"></span>
+          <span class="clue-len" id="clue-len"></span>
+        </div>
+        <div class="clue-text" id="clue-text"></div>
+      </div>
+    </div>
+    <button class="clue-nav" id="clue-next" aria-label="Επόμενος ορισμός">›</button>
+  </div>
+
+  <!-- ── το περιοδικό ───────────────────────────────────────────── -->
+  <div id="book">
+    <div id="stack">
+
+      <!-- σελίδα 0 — εξώφυλλο -->
+      <section class="leaf" data-page="0">
+        <!-- Χωρίς κουμπί: όλο το εξώφυλλο πατιέται, ώστε να μη μπει τίποτα
+             πάνω στο γραφιστικό. Artboard 3:4 — ό,τι περισσεύει γύρω είναι
+             bleed και γεμίζει με το --cover-bleed. -->
+        <div class="face front cover" data-goto="1">
+          <div class="cover-art">
+            <img src="assets/cover-web.jpg?v=5" alt="ΛΟΥΜΠΕΝΟΛΕΞΟ No 01 — Luben Summer 26">
+            <div class="cover-progress" id="cover-progress"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- σελίδες 1-2 — τα πλέγματα (χτίζονται από τη JS) -->
+      <section class="leaf" data-page="1"><div class="face front puzzle" data-grid="0"></div></section>
+      <section class="leaf" data-page="2"><div class="face front puzzle" data-grid="1"></div></section>
+
+      <!-- σελίδα 3 — ένωσε τις τελείες + λύσεις -->
+      <section class="leaf" data-page="3">
+        <div class="face front last">
+          <div class="sheet">
+            <h2>Ένωσε τις τελείες</h2>
+            <p class="sub">Ποιος κρύβεται; Σύρε ή πάτα τις τελείες με τη σειρά.</p>
+            <div id="dots-wrap"></div>
+            <div class="dots-tools">
+              <button class="btn ghost" id="dots-reset">Απ' την αρχή</button>
+              <span class="spacer"></span>
+              <button class="btn quiet" id="dots-solve">δείξ' το</button>
+            </div>
+
+            <h2 class="mt">Λύσεις</h2>
+            <p class="sub">Οι απαντήσεις είναι θολές. Πάτα μόνο αυτή που θέλεις.</p>
+            <button class="btn ghost" id="btn-reveal">Δείξε μου τις λύσεις</button>
+            <div id="solutions-list" hidden></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- ── ελληνικό πληκτρολόγιο ─────────────────────────────────── -->
+  <div id="keyboard" hidden></div>
+
+  <!-- ── πλοήγηση ──────────────────────────────────────────────── -->
+  <nav id="pager">
+    <button id="prev" aria-label="Προηγούμενη σελίδα">‹</button>
+    <div id="dots-nav"></div>
+    <button id="next" aria-label="Επόμενη σελίδα">›</button>
+  </nav>
+
+</div>
+
+<script src="data/puzzle.js?v=5"></script>
+<script src="data/dots.js?v=5"></script>
+<script src="js/sfx.js?v=5"></script>
+<script src="js/storage.js?v=5"></script>
+<script src="js/book.js?v=5"></script>
+<script src="js/grid.js?v=5"></script>
+<script src="js/dots.js?v=5"></script>
+<script src="js/keyboard.js?v=5"></script>
+<script src="js/app.js?v=5"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+*.code-workspace
+
+# Πηγαία γραφιστικά (μένουν τοπικά, δεν χρειάζονται στο site)
+*.ai
+*.psd
