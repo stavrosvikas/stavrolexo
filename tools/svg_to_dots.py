@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
 assets/dots-face.svg  ->  data/dots.js
 
@@ -20,8 +20,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "assets", "dots-face.svg")
 OUT = os.path.join(ROOT, "data", "dots.js")
 
-RDP_EPS = 11.0       # ανοχή απλοποίησης (σε μονάδες viewBox 1080)
-MIN_GAP = 26.0       # ελάχιστη απόσταση μεταξύ τελειών
+RDP_EPS = 18.0       # ανοχή απλοποίησης (σε μονάδες viewBox 1080)
+MIN_GAP = 40.0       # ελάχιστη απόσταση μεταξύ τελειών
 CURVE_STEPS = 14
 
 
@@ -225,3 +225,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

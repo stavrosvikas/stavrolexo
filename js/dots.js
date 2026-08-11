@@ -37,10 +37,8 @@ window.Dots = (function () {
     this.nodes = [];
     this.pts.forEach(function (p, i) {
       var g = el('g', {});
-      var circle = el('circle', { cx: p[0], cy: p[1], r: 7, class: 'dot-pt' });
-      var num = el('text', {
-        x: p[0] + 11, y: p[1] - 8, class: 'dot-num'
-      });
+      var circle = el('circle', { cx: p[0], cy: p[1], r: 9, class: 'dot-pt' });
+      var num = el('text', { x: p[0] + 16, y: p[1] - 12, class: 'dot-num' });
       num.textContent = i + 1;
       g.appendChild(circle);
       g.appendChild(num);
@@ -100,6 +98,11 @@ window.Dots = (function () {
     });
   };
 
+  /* Σε πυκνά σημεία (μάτια, στόμα) 79 νούμερα δεν χωράνε όσο μεγάλα κι αν
+     τα κάνεις. Οπότε δείχνουμε μόνο τα επόμενα LOOKAHEAD — μεγάλα και
+     ευδιάκριτα. Το σχέδιο μένει πυκνό, τα νούμερα διαβάζονται. */
+  var LOOKAHEAD = 10;
+
   Board.prototype.paint = function () {
     var pts = this.pts.slice(0, this.progress);
     this.line.setAttribute('points', pts.map(function (p) { return p.join(','); }).join(' '));
@@ -107,9 +110,11 @@ window.Dots = (function () {
       var n = this.nodes[i];
       var done = i < this.progress;
       var next = i === this.progress;
+      var labelled = !done && i < this.progress + LOOKAHEAD;
       n.circle.setAttribute('class', 'dot-pt' + (done ? ' done' : next ? ' next' : ''));
-      n.circle.setAttribute('r', next ? 13 : 7);
-      n.num.setAttribute('class', 'dot-num' + (done ? ' done' : ''));
+      n.circle.setAttribute('r', next ? 17 : 9);
+      n.num.setAttribute('class', 'dot-num' + (next ? ' next' : ''));
+      n.num.style.display = labelled ? '' : 'none';
     }
     if (this.hooks.onProgress) {
       this.hooks.onProgress(this.progress, this.pts.length);

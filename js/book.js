@@ -83,31 +83,33 @@ window.Book = (function () {
 
   /* ── σύρσιμο ──────────────────────────────────────────────────── */
 
-  /* Πόσο κοντά στην άκρη πρέπει να ξεκινήσει το σύρσιμο για να μετρήσει ως
-     γύρισμα σελίδας. Χρειάζεται γιατί στις σελίδες του πλέγματος το .gridwrap
-     πιάνει όλη τη σελίδα και τρώει το gesture — όπως ακριβώς σε ένα βιβλίο,
-     τη σελίδα την πιάνεις από την άκρη. */
-  function edgeZone() {
-    if (!stack) return 0;
-    return Math.max(28, Math.min(64, stack.clientWidth * .11));
-  }
-
-  function edgeSide(clientX) {
+  /* Η σελίδα πιάνεται από την ΚΑΤΩ ΓΩΝΙΑ, όχι από όλο το πλάι.
+     Πριν η ζώνη έπιανε όλο το ύψος και έτρωγε πατήματα σε κελιά του
+     πλέγματος. Η γωνία είναι μικρός στόχος, μακριά από το σώμα του
+     σταυρόλεξου, και συμπίπτει με το σημείο που δείχνει το animation. */
+  function corner(clientX, clientY, target) {
     if (!stack) return null;
-    var r = stack.getBoundingClientRect(), e = edgeZone();
-    if ((clientX - r.left) < e) return 'left';    // και αριστερότερα (διπλανή σελίδα)
-    if ((r.right - clientX) < e) return 'right';
+    // η διπλανή σελίδα πιάνεται ολόκληρη — αλλά μόνο όταν είναι άδεια·
+    // όταν δείχνει τους ορισμούς, τα πατήματα ανήκουν σε αυτούς
+    var f = target && target.closest && target.closest('#facing');
+    if (f) return f.classList.contains('blank') ? 'left' : null;
+    var r = stack.getBoundingClientRect();
+    var w = Math.max(34, Math.min(84, r.width * .18));
+    var h = Math.max(70, Math.min(180, r.height * .18));
+    if (clientY < r.bottom - h) return null;
+    if ((clientX - r.left) < w) return 'left';
+    if ((r.right - clientX) < w) return 'right';
     return null;
   }
 
-  function inEdgeZone(clientX) {
-    return edgeSide(clientX) !== null;
+  function inEdgeZone(clientX, clientY, target) {
+    return corner(clientX, clientY, target) !== null;
   }
 
   function canDrag(e) {
     if (busy) return false;
     if (e.target.closest('button')) return false;
-    if (inEdgeZone(e.clientX)) return true;          // από την άκρη, πάντα
+    if (inEdgeZone(e.clientX, e.clientY, e.target)) return true;  // από τη γωνία, πάντα
     if (e.target.closest('.gridwrap')) return false; // αλλιώς το πλέγμα κάνει pan
     if (e.target.closest('#dots-wrap')) return false;
     if (e.target.closest('.last')) return false;
@@ -117,7 +119,7 @@ window.Book = (function () {
   function down(e) {
     if (!canDrag(e)) return;
     drag = { x: e.clientX, y: e.clientY, leaf: null, back: false, deg: 0,
-             live: false, edge: edgeSide(e.clientX) };
+             live: false, edge: corner(e.clientX, e.clientY, e.target) };
   }
 
   function move(e) {
@@ -191,9 +193,11 @@ window.Book = (function () {
         var sh = document.createElement('div');
         sh.className = 'shade';
         front.appendChild(sh);
-        var hint = document.createElement('div');
-        hint.className = 'edge-hint';
-        front.appendChild(hint);
+        ['l', 'r'].forEach(function (side) {
+          var c = document.createElement('div');
+          c.className = 'corner ' + side;
+          front.appendChild(c);
+        });
         var back = document.createElement('div');
         back.className = 'face back';
         l.appendChild(back);
@@ -225,7 +229,6 @@ window.Book = (function () {
     },
     go: go,
     current: function () { return current; },
-    inEdgeZone: inEdgeZone,
-    edgeZone: edgeZone
+    inEdgeZone: inEdgeZone
   };
 })();

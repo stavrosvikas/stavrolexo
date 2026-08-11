@@ -116,6 +116,10 @@ body{
 
 #book{flex:1 1 auto;min-height:0;display:grid;place-items:center;
       perspective:2200px;perspective-origin:50% 50%}
+/* Το «άνοιγμα» — αριστερή σελίδα + δεξιά σελίδα. Κεντράρεται ολόκληρο,
+   ώστε σε laptop να μη βγαίνει το τεύχος δεξιά από το κέντρο. */
+#spread{display:flex;align-items:center;justify-content:center;gap:0;
+        height:100%;max-width:100%;transform-style:preserve-3d}
 #stack{position:relative;width:100%;height:100%;transform-style:preserve-3d}
 
 .leaf{
@@ -175,12 +179,24 @@ body{
       border-bottom-right-radius:calc(var(--curl) * 14px)}
 .face{border-top-right-radius:inherit;border-bottom-right-radius:inherit}
 
-/* διακριτική ένδειξη ότι η σελίδα πιάνεται από την άκρη */
-.face.front > .edge-hint{
-  position:absolute;top:0;bottom:0;right:0;width:22px;z-index:7;
-  background:linear-gradient(to left,rgba(0,0,0,.07),rgba(0,0,0,0));
-  pointer-events:none;
+/* Οι γωνίες που πιάνονται — μικρό τσακισμένο τριγωνάκι, όπως σε χαρτί
+   που το έχουν ξεφυλλίσει. Δείχνουν ακριβώς πού δουλεύει το γύρισμα. */
+.face.front > .corner{
+  position:absolute;bottom:0;z-index:7;pointer-events:none;
+  width:17%;max-width:80px;aspect-ratio:1;opacity:.6;
 }
+.face.front > .corner.r{
+  right:0;clip-path:polygon(100% 0,100% 100%,0 100%);
+  background:linear-gradient(225deg,#fff 0%,#f1eff1 40%,#dbd8db 52%,
+             rgba(0,0,0,.14) 56%,transparent 57%);
+}
+.face.front > .corner.l{
+  left:0;clip-path:polygon(0 0,100% 100%,0 100%);
+  background:linear-gradient(135deg,#fff 0%,#f1eff1 40%,#dbd8db 52%,
+             rgba(0,0,0,.14) 56%,transparent 57%);
+}
+/* στο εξώφυλλο μιλάει το animation, όχι στατικό τριγωνάκι */
+#app.at-cover .leaf[data-page="0"] .corner{opacity:0}
 
 /* ── εξώφυλλο ──────────────────────────────────────────────────── */
 
@@ -294,11 +310,13 @@ body{
            flex:1 1 auto;min-height:140px}
 #dots-wrap svg{display:block;width:100%;height:100%}
 .last.scrollable #dots-wrap{flex:none;height:46vh}
-.dot-pt{fill:#c9c9d2}
+.dot-pt{fill:#b6b6c0}
 .dot-pt.done{fill:var(--m-100)}
 .dot-pt.next{fill:var(--m-100)}
-.dot-num{font-family:"Roboto Mono",monospace;font-size:15px;fill:var(--ink-3)}
-.dot-num.done{fill:var(--m-40)}
+/* σε μονάδες viewBox (1080) — βγαίνει ~13px στην οθόνη του κινητού */
+.dot-num{font-family:"Roboto Mono",monospace;font-size:44px;font-weight:700;
+         fill:var(--ink-2);paint-order:stroke;stroke:#fff;stroke-width:7px}
+.dot-num.next{font-size:60px;fill:var(--m-100)}
 .dot-line{stroke:var(--m-100);stroke-width:2.5;fill:none;
           stroke-linejoin:round;stroke-linecap:round}
 .dot-reveal{stroke:var(--ink-1);stroke-width:1.5;fill:none;opacity:.28}
@@ -378,12 +396,39 @@ body{
 }
 #app:not(.at-cover) .cover-peel{animation:none;opacity:0}
 
-/* η αριστερή, ανοιχτή σελίδα σε desktop — πατιέται για να γυρίσεις πίσω */
+/* η αριστερή, ανοιχτή σελίδα σε μεγάλες οθόνες */
 #facing{
-  position:absolute;z-index:0;display:none;cursor:pointer;
-  background:linear-gradient(to left,#f4f2f4,#e9e7ea 70%);
-  box-shadow:inset -20px 0 26px rgba(0,0,0,.14);
+  position:relative;display:none;overflow:hidden;
+  background:var(--page);
+  box-shadow:inset -22px 0 26px rgba(0,0,0,.13),0 2px 30px rgba(0,0,0,.35);
 }
+#facing.blank{background:linear-gradient(to left,#f4f2f4,#e9e7ea 70%);cursor:pointer}
+#facing.blank .facing-inner{display:none}
+
+.facing-inner{position:absolute;inset:0;display:flex;flex-direction:column;
+              padding:16px 22px 14px 20px}
+.facing-inner h3{
+  margin:0 0 8px;font-size:10px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--m-ink);border-bottom:1px solid var(--hair);padding-bottom:6px;
+}
+.facing-cols{flex:1 1 auto;min-height:0;overflow-y:auto;
+             columns:2;column-gap:20px;column-rule:1px solid var(--hair)}
+.facing-cols::-webkit-scrollbar{width:8px}
+.facing-cols::-webkit-scrollbar-thumb{background:var(--m-20);border-radius:99px}
+.cl-group{break-inside:avoid-column;margin-bottom:12px}
+.cl-group > b{display:block;font-size:9px;letter-spacing:.2em;color:var(--ink-3);
+              margin-bottom:4px;text-transform:uppercase}
+.cl-item{
+  display:flex;gap:6px;font-size:12px;line-height:1.28;padding:2px 4px;
+  border-radius:3px;cursor:pointer;break-inside:avoid;
+}
+.cl-item:hover{background:var(--y-10)}
+.cl-item.on{background:var(--y-100)}
+.cl-item.done{color:var(--ink-3)}
+.cl-item.done .cl-t{text-decoration:line-through}
+.cl-n{font-family:"Roboto Mono",monospace;font-weight:700;color:var(--m-ink);
+      flex:0 0 auto}
+.cl-item.done .cl-n{color:var(--ink-3)}
 
 /* ── desktop ───────────────────────────────────────────────────── */
 
@@ -391,7 +436,7 @@ body{
   /* Το τεύχος κλειδώνει σε 3:4 — ίδια αναλογία με το artboard του εξωφύλλου,
      ώστε να μοιάζει περιοδικό και όχι άλμπουμ. */
   #stack{width:auto;aspect-ratio:3/4;height:100%;max-width:100%}
-  #facing{display:block;top:1.5%;bottom:1.5%;right:100%;width:96%}
+  #facing{display:block;height:97%;aspect-ratio:3/4;flex:0 1 auto;min-width:0}
   /* στο εξώφυλλο δεν υπάρχει διπλανή σελίδα — μόνο το γκρι */
   #app.at-cover #facing{display:none}
   .clue-text{font-size:20px}

@@ -387,8 +387,9 @@ window.Grid = (function () {
     var self = this, pts = {}, last = null, pinch = null, tap = null;
 
     this.wrap.addEventListener('pointerdown', function (e) {
-      // κοντά στην άκρη της σελίδας το gesture ανήκει στο γύρισμα, όχι στο pan
-      if (window.Book && Book.inEdgeZone && Book.inEdgeZone(e.clientX)) return;
+      // στην κάτω γωνία της σελίδας το gesture ανήκει στο γύρισμα, όχι στο pan
+      if (window.Book && Book.inEdgeZone &&
+          Book.inEdgeZone(e.clientX, e.clientY, e.target)) return;
       pts[e.pointerId] = { x: e.clientX, y: e.clientY };
       try { self.wrap.setPointerCapture(e.pointerId); } catch (err) {}
       var ids = Object.keys(pts);

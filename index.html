@@ -42,7 +42,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mynerve&family=Roboto:wght@400;500;700;900&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css?v=6">
+  <link rel="stylesheet" href="css/style.css?v=7">
 </head>
 <body>
 
@@ -66,10 +66,14 @@
 
   <!-- ── το περιοδικό ───────────────────────────────────────────── -->
   <div id="book">
-    <div id="stack">
+   <div id="spread">
 
-      <!-- η αριστερή ανοιχτή σελίδα σε desktop — πατιέται για γύρισμα πίσω -->
-      <div id="facing" aria-label="Προηγούμενη σελίδα"></div>
+    <!-- Η αριστερή ανοιχτή σελίδα (μόνο σε μεγάλες οθόνες). Στις σελίδες του
+         πλέγματος δείχνει τη λίστα των ορισμών· αλλού είναι άδεια και
+         πατιέται για γύρισμα πίσω. -->
+    <div id="facing" class="blank"></div>
+
+    <div id="stack">
 
       <!-- σελίδα 0 — εξώφυλλο -->
       <section class="leaf" data-page="0">
@@ -78,7 +82,7 @@
              bleed και γεμίζει με το --cover-bleed. -->
         <div class="face front cover" data-goto="1">
           <div class="cover-art">
-            <img src="assets/cover-web.jpg?v=6" alt="ΛΟΥΜΠΕΝΟΛΕΞΟ No 01 — Luben Summer 26">
+            <img src="assets/cover-web.jpg?v=7" alt="ΛΟΥΜΠΕΝΟΛΕΞΟ No 01 — Luben Summer 26">
             <div class="cover-peel"></div>
             <div class="cover-progress" id="cover-progress"></div>
           </div>
@@ -111,6 +115,7 @@
       </section>
 
     </div>
+   </div>
   </div>
 
   <!-- ── ελληνικό πληκτρολόγιο ─────────────────────────────────── -->
@@ -125,14 +130,14 @@
 
 </div>
 
-<script src="data/puzzle.js?v=6"></script>
-<script src="data/dots.js?v=6"></script>
-<script src="js/sfx.js?v=6"></script>
-<script src="js/storage.js?v=6"></script>
-<script src="js/book.js?v=6"></script>
-<script src="js/grid.js?v=6"></script>
-<script src="js/dots.js?v=6"></script>
-<script src="js/keyboard.js?v=6"></script>
-<script src="js/app.js?v=6"></script>
+<script src="data/puzzle.js?v=7"></script>
+<script src="data/dots.js?v=7"></script>
+<script src="js/sfx.js?v=7"></script>
+<script src="js/storage.js?v=7"></script>
+<script src="js/book.js?v=7"></script>
+<script src="js/grid.js?v=7"></script>
+<script src="js/dots.js?v=7"></script>
+<script src="js/keyboard.js?v=7"></script>
+<script src="js/app.js?v=7"></script>
 </body>
 </html>
