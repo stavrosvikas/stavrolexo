@@ -9,30 +9,47 @@ Static site — καθόλου build step, καθόλου dependencies. Ανοί
 ## Δομή
 
 ```
-index.html          το φυλλάδιο (header από luben-web-header-template.md)
-css/style.css       χαρτί, μελάνι, page-flip, πληκτρολόγιο
+index.html          το τεύχος (header από luben-web-header-template.md)
+css/style.css       χαρτί, μελάνι, γύρισμα σελίδας, πληκτρολόγιο
+js/sfx.js           ήχοι με WebAudio — κανένα αρχείο ήχου
 js/storage.js       localStorage — ό,τι γράφεις μένει γραμμένο
-js/book.js          οι 4 σελίδες, swipe + pager
-js/grid.js          πλέγμα, επιλογή λέξης, auto-zoom, έλεγχος
+js/book.js          τα 4 φύλλα σε 3D, σύρσιμο και γύρισμα από τη γωνία
+js/grid.js          πλέγμα, επιλογή λέξης, ζουμ, έλεγχος
+js/dots.js          ένωσε τις τελείες
 js/keyboard.js      ελληνικό πληκτρολόγιο (+ λατινικό mapping σε desktop)
 js/app.js           δέσιμο όλων
-data/questions.json οι 60 ερωτήσεις (πηγή αλήθειας)
+data/questions.json οι 60 ερωτήσεις — πηγή αλήθειας, γράφεται στο χέρι
 data/grids.json     τα 2 πλέγματα (παράγεται)
 data/puzzle.js      questions + grids μαζί, για να δουλεύει με file:// (παράγεται)
+data/dots.js        οι τελείες του προσώπου (παράγεται)
 tools/              οι γεννήτριες — τρέχουν offline, ποτέ στον browser
-assets/             εικόνες
+assets/             γραφιστικά: masters + web εκδοχές
 ```
 
-## Παραγωγή πλέγματος
+## Δομή του τεύχους
+
+Κάθε φύλλο έχει **δύο πραγματικές πλευρές**, όπως στο χαρτί: μπροστά η σελίδα
+του, πίσω η αριστερή σελίδα του επόμενου ανοίγματος. Οι ορισμοί κάθε
+σταυρόλεξου είναι τυπωμένοι στην **πίσω όψη του προηγούμενου φύλλου** — γυρνάς
+τη σελίδα και έρχονται μαζί της. Τα φύλλα τσακίζουν μόνο στην ελεύθερη ακμή
+τους, ποτέ από τη ράχη.
+
+## Εργαλεία
+
+Όλα τρέχουν offline. Το site δεν εκτελεί τίποτα από αυτά.
 
 ```bash
-python tools/optimize_grid.py    # φτιάχνει data/grids.json  (~8 λεπτά)
-python tools/export_js.py        # φτιάχνει data/puzzle.js
+python tools/optimize_grid.py     # data/grids.json  (~8 λεπτά)
+python tools/export_js.py         # data/puzzle.js  = questions + grids
+python tools/svg_to_dots.py       # data/dots.js    από το assets/dots-face.svg
+python tools/make_web_assets.py   # cover-web.jpg, og.jpg, q58-web.png
 ```
 
-`tools/generate_grid.py` είναι η πρώτη, απλή γεννήτρια (greedy). Το
-`optimize_grid.py` είναι αυτό που χρησιμοποιούμε — ruin & recreate, βγάζει
-αισθητά σφιχτότερο πλέγμα.
+Όταν αλλάξει το εξώφυλλο: αντικατέστησε το `assets/cover.png` (1200×1600) και
+τρέξε `make_web_assets.py` — φτιάχνει ξανά και το `og.jpg`.
+
+Τα πρωτότυπα (`cover.png`, `q58.png`) μένουν στο repo ως masters αλλά **δεν
+κατεβαίνουν** ποτέ στον χρήστη· το site σερβίρει τις web εκδοχές.
 
 ---
 

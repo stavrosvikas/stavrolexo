@@ -57,9 +57,8 @@ window.Grid = (function () {
       self.fit();
     });
 
-    this.gridEl.style.gridTemplateColumns = 'repeat(' + d.cols + ',' + CELL + 'px)';
-    this.gridEl.style.width = (d.cols * CELL) + 'px';
-    this.gridEl.style.height = (d.rows * CELL) + 'px';
+    this.baked = 1;                     // πόσο ζουμ είναι ήδη «ψημένο» στο layout
+    this.setUnit(1);
 
     d.words.forEach(function (w, i) {
       var cells = [], dr = w.dir === 'V' ? 1 : 0, dc = w.dir === 'H' ? 1 : 0;
@@ -126,10 +125,11 @@ window.Grid = (function () {
       var box = document.createElement('div');
       box.className = 'imgblock';
       box.dataset.imgid = b.id;
-      box.style.left = (b.c * CELL) + 'px';
-      box.style.top = (b.r * CELL) + 'px';
-      box.style.width = (b.size * CELL) + 'px';
-      box.style.height = (b.size * CELL) + 'px';
+      // σε μονάδες κελιού, ώστε να ακολουθεί το ψήσιμο του ζουμ
+      box.style.left = 'calc(var(--cell) * ' + b.c + ')';
+      box.style.top = 'calc(var(--cell) * ' + b.r + ')';
+      box.style.width = 'calc(var(--cell) * ' + b.size + ')';
+      box.style.height = 'calc(var(--cell) * ' + b.size + ')';
       box.innerHTML = '<img alt="" src="' + b.src + '"><span class="tag">' +
                       (w ? w.n : '') + (w && w.dir === 'H' ? ' →' : ' ↓') + '</span>';
       this.gridEl.appendChild(box);
@@ -139,6 +139,33 @@ window.Grid = (function () {
     this.bindInput();
     this.refreshAll(true);
     requestAnimationFrame(function () { self.fit(true); });
+  };
+
+  /* ── κρίσιμο για την ευκρίνεια ────────────────────────────────────
+     Το transform: scale() πάνω σε 3D layer δεν ξαναζωγραφίζει τα γράμματα —
+     ο browser τεντώνει το ήδη ζωγραφισμένο bitmap και βλέπεις pixels. Οπότε
+     όσο κινείσαι χρησιμοποιούμε transform (γρήγορο), και μόλις σταματήσεις
+     «ψήνουμε» το ζουμ στο layout: μεγαλώνει το ίδιο το κελί και τα γράμματα
+     ξαναστοιχειοθετούνται καθαρά. Η θέση στην οθόνη βγαίνει ίδια. */
+  Puzzle.prototype.setUnit = function (s) {
+    var px = CELL * s;
+    this.gridEl.style.setProperty('--cell', px + 'px');
+    this.gridEl.style.gridTemplateColumns = 'repeat(' + this.data.cols + ',var(--cell))';
+    this.gridEl.style.width = (this.data.cols * px) + 'px';
+    this.gridEl.style.height = (this.data.rows * px) + 'px';
+  };
+
+  Puzzle.prototype.bake = function () {
+    if (!this.view.s || Math.abs(this.baked - this.view.s) < 0.005) return;
+    this.baked = this.view.s;
+    this.setUnit(this.baked);
+    this.apply(true);
+  };
+
+  Puzzle.prototype.bakeSoon = function () {
+    var self = this;
+    clearTimeout(this._bakeT);
+    this._bakeT = setTimeout(function () { self.bake(); }, 160);
   };
 
   Puzzle.prototype.byId = function (id) {
@@ -329,8 +356,10 @@ window.Grid = (function () {
 
   Puzzle.prototype.apply = function (instant) {
     this.stage.classList.toggle('fx', !instant);
+    // μόνο η διαφορά από το ήδη ψημένο ζουμ πάει σε transform
+    var rel = this.view.s / (this.baked || 1);
     this.stage.style.transform =
-      'translate(' + this.view.x + 'px,' + this.view.y + 'px) scale(' + this.view.s + ')';
+      'translate(' + this.view.x + 'px,' + this.view.y + 'px) scale(' + rel + ')';
     if (this.fitBtn) {
       this.fitBtn.classList.toggle('on', this.view.s > this.fitScale * 1.04);
     }
@@ -400,6 +429,11 @@ window.Grid = (function () {
   Puzzle.prototype.bindInput = function () {
     var self = this, pts = {}, last = null, pinch = null, tap = null;
 
+    // μόλις ηρεμήσει η κίνηση, ψήσε το ζουμ ώστε τα γράμματα να ξαναγίνουν καθαρά
+    this.stage.addEventListener('transitionend', function (e) {
+      if (e.propertyName === 'transform') self.bake();
+    });
+
     this.wrap.addEventListener('pointerdown', function (e) {
       // στην κάτω γωνία της σελίδας το gesture ανήκει στο γύρισμα, όχι στο pan
       if (window.Book && Book.inEdgeZone &&
@@ -433,7 +467,7 @@ window.Grid = (function () {
         self.view.s = ns;
         self.view.x = mx - rect.left - gx * ns;
         self.view.y = my - rect.top - gy * ns;
-        self.clamp(); self.apply(true);
+        self.clamp(); self.apply(true); self.bakeSoon();
         return;
       }
       if (last) {
@@ -466,7 +500,7 @@ window.Grid = (function () {
       self.view.s = ns;
       self.view.x = e.clientX - rect.left - gx * ns;
       self.view.y = e.clientY - rect.top - gy * ns;
-      self.clamp(); self.apply(true);
+      self.clamp(); self.apply(true); self.bakeSoon();
     }, { passive: false });
   };
 

@@ -182,15 +182,18 @@ body{
 /* Οι γωνίες που πιάνονται — μικρό τσακισμένο τριγωνάκι, όπως σε χαρτί
    που το έχουν ξεφυλλίσει. Δείχνουν ακριβώς πού δουλεύει το γύρισμα. */
 .face > .corner{
-  position:absolute;bottom:0;z-index:7;pointer-events:none;
+  position:absolute;bottom:0;z-index:7;
   width:17%;max-width:80px;aspect-ratio:1;
-  opacity:0;transition:opacity .22s ease;
+  opacity:0;transition:opacity .2s ease;
+  pointer-events:auto;                  /* για να πιάνει το hover πάνω του */
 }
-/* με ποντίκι μόνο στο hover· σε αφή αναβοσβήνει μόνο στο εξώφυλλο */
+/* Το hover μπαίνει ΠΑΝΩ ΣΤΗΝ ΙΔΙΑ τη γωνία, όχι σε όλη τη σελίδα — το
+   clip-path κόβει και το hit-test, άρα αντιδρά μόνο το τριγωνάκι. */
 @media (hover:hover){
-  .leaf:hover > .face > .corner{opacity:.6}
+  .face > .corner:hover{opacity:.75}
 }
-.leaf.show-corners > .face > .corner{opacity:.55}
+/* Στο εξώφυλλο δεν χρειάζεται: εκεί μιλάει το animation που σηκώνει τη γωνία. */
+.leaf[data-page="0"] > .face.front > .corner{display:none}
 /* μπροστινή όψη: η ελεύθερη ακμή είναι δεξιά */
 .face.front > .corner.r{
   right:0;clip-path:polygon(100% 0,100% 100%,0 100%);
@@ -298,7 +301,7 @@ body{
 .imgblock img{width:100%;height:100%;object-fit:cover;display:block}
 .imgblock .tag{position:absolute;left:0;bottom:0;background:var(--rule);color:#fff;
                font-family:"Roboto Mono",monospace;font-weight:700;
-               font-size:10px;padding:1px 5px}
+               font-size:calc(var(--cell) * .26);padding:1px 5px}
 .imgblock.on{box-shadow:0 0 0 3px var(--m-100)}
 
 /* ── τελευταία σελίδα ──────────────────────────────────────────── */

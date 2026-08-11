@@ -4,6 +4,10 @@ Web εκδοχές των γραφιστικών. Τα πρωτότυπα δεν
 
   assets/cover.png   (1200x1600 PNG)  ->  assets/cover-web.jpg
   assets/cover.png                    ->  assets/og.jpg (1200x630)
+  assets/q58.png     (halftone)       ->  assets/q58-web.png (900px)
+
+Το q58 μένει PNG: είναι halftone με κουκκίδες, και το JPEG θα το γέμιζε
+artifacts. Τα 900px είναι ό,τι χρειάζεται στο μέγιστο ζουμ σε retina.
 
     python tools/make_web_assets.py
 """
@@ -42,6 +46,16 @@ def main():
     out = os.path.join(A, "og.jpg")
     og.save(out, "JPEG", quality=88, optimize=True, progressive=True)
     print("og.jpg: 1200x630  %.0f KB" % kb(out))
+
+    # 3) η φωτογραφία-ορισμός μέσα στο πλέγμα
+    qsrc = os.path.join(A, "q58.png")
+    if os.path.exists(qsrc):
+        q = Image.open(qsrc).convert("L")
+        q.thumbnail((900, 900), Image.LANCZOS)
+        out = os.path.join(A, "q58-web.png")
+        q.save(out, "PNG", optimize=True)
+        print("q58-web.png: %dx%d  %.0f KB  (-%.0f%%)"
+              % (q.size[0], q.size[1], kb(out), 100 - 100.0 * kb(out) / kb(qsrc)))
 
 
 if __name__ == "__main__":
