@@ -114,16 +114,30 @@ body{
 
 /* ── το τεύχος ─────────────────────────────────────────────────── */
 
-#book{flex:1 1 auto;min-height:0;display:grid;place-items:center;
-      perspective:2200px;perspective-origin:50% 50%}
-/* Το «άνοιγμα» — αριστερή σελίδα + δεξιά σελίδα. Κεντράρεται ολόκληρο,
-   ώστε σε laptop να μη βγαίνει το τεύχος δεξιά από το κέντρο. */
-/* ΠΡΟΣΟΧΗ: το #book είναι grid με place-items:center, άρα δεν τεντώνει τα
-   παιδιά του. Χωρίς ρητό width/height εδώ, το #stack{width:100%} ζητάει
-   πλάτος από γονιό που περιμένει το παιδί -> μηδενίζει σε κινητό. */
+#book{
+  flex:1 1 auto;min-height:0;display:grid;place-items:center;
+  perspective:2200px;perspective-origin:50% 50%;
+  container-type:size;              /* για να μετράμε σε cqw/cqh */
+  /* Πλάτος μιας σελίδας: όσο χωράει, αλλά πάντα σε λόγο 3:4.
+     Το min() κάνει «contain» χωρίς τις παγίδες του aspect-ratio. */
+  --pagew:min(100cqw, 75cqh);
+}
+/* Το «άνοιγμα» — αριστερή σελίδα + δεξιά σελίδα, κεντραρισμένο ολόκληρο.
+   Χρειάζεται ρητό width/height: το #book είναι grid με place-items:center
+   και δεν τεντώνει τα παιδιά του. */
 #spread{display:flex;align-items:center;justify-content:center;gap:0;
         width:100%;height:100%;transform-style:preserve-3d}
-#stack{position:relative;width:100%;height:100%;transform-style:preserve-3d}
+
+/* Η ΣΕΛΙΔΑ ΕΙΝΑΙ ΠΑΝΤΑ 3:4, σε κάθε οθόνη. Έτσι το εξώφυλλο τη γεμίζει
+   ακριβώς, οι τσακίσεις πέφτουν στις πραγματικές γωνίες, και δεν γίνεται
+   ποτέ άλμπουμ. Ό,τι δεν χωράει (η σελίδα των ορισμών) βγαίνει εκτός κάδρου. */
+#stack{
+  position:relative;transform-style:preserve-3d;
+  width:100%;height:100%;                       /* fallback χωρίς cq units */
+}
+@supports (width:1cqw){
+  #stack{width:var(--pagew);height:auto;aspect-ratio:3/4}
+}
 
 .leaf{
   position:absolute;inset:0;
@@ -222,7 +236,7 @@ body{
 .cover-art{position:relative;width:100%;height:100%;overflow:hidden}
 .cover-art img{
   width:100%;height:100%;display:block;
-  object-fit:contain;object-position:center;
+  object-fit:cover;object-position:center;
 }
 
 /* Η πρόοδος εμφανίζεται μόνο αφού ξεκινήσεις — μέχρι τότε το γραφιστικό
@@ -440,7 +454,7 @@ body{
 .facing-cols::-webkit-scrollbar{width:8px}
 .facing-cols::-webkit-scrollbar-thumb{background:var(--m-20);border-radius:99px}
 /* σε κινητό η πίσω όψη δεν φαίνεται ποτέ — μη χτίζεται καν οπτικά */
-@media (max-width:759px){.back-inner{display:none}}
+@media (max-width:899px){.back-inner{display:none}}
 .cl-group{break-inside:avoid-column;margin-bottom:12px}
 .cl-group > b{display:block;font-size:9px;letter-spacing:.2em;color:var(--ink-3);
               margin-bottom:4px;text-transform:uppercase}
@@ -458,11 +472,12 @@ body{
 
 /* ── desktop ───────────────────────────────────────────────────── */
 
-@media (min-width:760px){
-  /* Το τεύχος κλειδώνει σε 3:4 — ίδια αναλογία με το artboard του εξωφύλλου,
-     ώστε να μοιάζει περιοδικό και όχι άλμπουμ. */
-  #stack{width:auto;aspect-ratio:3/4;height:100%;max-width:100%}
-  #facing{display:block;height:97%;aspect-ratio:3/4;flex:0 1 auto;min-width:0}
+/* Σε φαρδιές οθόνες χωράει και η αριστερή σελίδα με τους ορισμούς. Τότε κάθε
+   σελίδα παίρνει τη μισή διαθέσιμη φάρδια — πάντα 3:4 και οι δύο. */
+@media (min-width:900px){
+  #book{--pagew:min(48cqw, 75cqh)}
+  #facing{display:block;width:var(--pagew);aspect-ratio:3/4;height:auto;
+          flex:0 0 auto}
   /* στο εξώφυλλο δεν υπάρχει διπλανή σελίδα — μόνο το γκρι */
   #app.at-cover #facing{display:none}
   .clue-text{font-size:20px}
