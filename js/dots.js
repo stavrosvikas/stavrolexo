@@ -43,7 +43,7 @@ window.Dots = (function () {
       g.appendChild(circle);
       g.appendChild(num);
       svg.appendChild(g);
-      self.nodes.push({ circle: circle, num: num, p: p });
+      self.nodes.push({ g: g, circle: circle, num: num, p: p });
     });
 
     this.host.appendChild(svg);
@@ -102,19 +102,38 @@ window.Dots = (function () {
      τα κάνεις. Οπότε δείχνουμε μόνο τα επόμενα LOOKAHEAD — μεγάλα και
      ευδιάκριτα. Το σχέδιο μένει πυκνό, τα νούμερα διαβάζονται. */
   var LOOKAHEAD = 10;
+  var BASE = 46;          // μονάδες viewBox
 
   Board.prototype.paint = function () {
     var pts = this.pts.slice(0, this.progress);
     this.line.setAttribute('points', pts.map(function (p) { return p.join(','); }).join(' '));
+
     for (var i = 0; i < this.nodes.length; i++) {
       var n = this.nodes[i];
       var done = i < this.progress;
       var next = i === this.progress;
-      var labelled = !done && i < this.progress + LOOKAHEAD;
+      var ahead = i - this.progress;                     // 0 = η επόμενη
+      var labelled = !done && ahead < LOOKAHEAD;
+
       n.circle.setAttribute('class', 'dot-pt' + (done ? ' done' : next ? ' next' : ''));
       n.circle.setAttribute('r', next ? 17 : 9);
       n.num.setAttribute('class', 'dot-num' + (next ? ' next' : ''));
       n.num.style.display = labelled ? '' : 'none';
+
+      if (labelled) {
+        // όσο πιο μακρινή η τελεία, τόσο πιο μικρό και ξεθωριασμένο το νούμερο
+        var k = Math.max(.62, 1 - ahead * .055);
+        n.num.style.fontSize = (BASE * (next ? 1.32 : k)).toFixed(1) + 'px';
+        n.num.style.opacity = Math.max(.45, 1 - ahead * .055).toFixed(2);
+      }
+    }
+
+    /* Όταν δύο νούμερα πέφτουν το ένα πάνω στο άλλο, θέλουμε από πάνω αυτό
+       που έρχεται πρώτο. Το SVG ζωγραφίζει με τη σειρά του DOM, οπότε
+       ξαναβάζουμε τα σημασμένα από το μακρινό προς το κοντινό. */
+    for (var j = Math.min(this.progress + LOOKAHEAD, this.nodes.length) - 1;
+         j >= this.progress; j--) {
+      if (this.nodes[j]) this.svg.appendChild(this.nodes[j].g);
     }
     if (this.hooks.onProgress) {
       this.hooks.onProgress(this.progress, this.pts.length);

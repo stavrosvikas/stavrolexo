@@ -7,6 +7,27 @@ window.Book = (function () {
   // σύρσιμο
   var drag = null, justDragged = false;
 
+  function mkCorner(side) {
+    var c = document.createElement('div');
+    c.className = 'corner ' + side;
+    return c;
+  }
+
+  /* Σε συσκευές αφής δεν υπάρχει hover, οπότε τα τσακίσματα εμφανίζονται για
+     λίγο σε κάθε νέα σελίδα και μετά σβήνουν — δείχνουν τη λογική χωρίς να
+     μένουν μόνιμα πάνω στη σελίδα. */
+  var hintTimer = null;
+  function flashCorners() {
+    if (hintTimer) clearTimeout(hintTimer);
+    leaves.forEach(function (l) { l.classList.remove('show-corners'); });
+    var cur = leaves[current];
+    if (!cur) return;
+    cur.classList.add('show-corners');
+    hintTimer = setTimeout(function () {
+      cur.classList.remove('show-corners');
+    }, 2600);
+  }
+
   // μετά από σύρσιμο ή πάτημα στην άκρη, το click που ακολουθεί δεν μετράει
   function suppressClick() {
     justDragged = true;
@@ -32,6 +53,10 @@ window.Book = (function () {
       if (!drag || drag.leaf !== el) {
         setLeaf(el, i < current ? -180 : 0);
       }
+      // Το γυρισμένο φύλλο κάθεται ακριβώς πάνω στην αριστερή σελίδα και
+      // έκρυβε τους ορισμούς. Αφού ολοκληρωθεί το γύρισμα το αποσύρουμε —
+      // στη διάρκεια της κίνησης παραμένει ορατό.
+      el.style.visibility = (i < current) ? 'hidden' : 'visible';
     }
   }
 
@@ -46,6 +71,7 @@ window.Book = (function () {
     busy = true;
     moving.classList.add('turning');
     moving.style.zIndex = count + 5;
+    moving.style.visibility = 'visible';   // αν ερχόταν από «γυρισμένο»
     if (opts.silent !== true) SFX.page(back);
 
     // ξεκίνα από τη σωστή γωνία και πήγαινε στην άλλη άκρη
@@ -63,6 +89,7 @@ window.Book = (function () {
       moving.classList.remove('turning');
       busy = false;
       restack();
+      flashCorners();
     }, 640);
   }
 
@@ -70,6 +97,7 @@ window.Book = (function () {
     current = Math.max(0, Math.min(count - 1, i));
     restack();
     paintNav();
+    flashCorners();
     if (onChange) onChange(current);
   }
 
@@ -133,6 +161,7 @@ window.Book = (function () {
           (!drag.back && current === count - 1)) { drag = null; return; }
       drag.leaf = leaves[idx];
       drag.leaf.style.zIndex = count + 5;
+      drag.leaf.style.visibility = 'visible';
       drag.leaf.classList.remove('turning');
       drag.live = true;
     }
@@ -188,16 +217,14 @@ window.Book = (function () {
 
       // Κάθε φύλλο αποκτά πίσω όψη: μόλις περάσει τις 90 μοίρες βλέπεις την
       // ανάποδη του χαρτιού, όχι κενό. Αυτό κάνει το γύρισμα να μοιάζει φύλλο.
-      leaves.forEach(function (l) {
+      leaves.forEach(function (l, i) {
         var front = l.querySelector('.face.front');
         var sh = document.createElement('div');
         sh.className = 'shade';
         front.appendChild(sh);
-        ['l', 'r'].forEach(function (side) {
-          var c = document.createElement('div');
-          c.className = 'corner ' + side;
-          front.appendChild(c);
-        });
+        // τσάκισμα μόνο εκεί που όντως υπάρχει σελίδα να πας
+        if (i > 0) front.appendChild(mkCorner('l'));
+        if (i < count - 1) front.appendChild(mkCorner('r'));
         var back = document.createElement('div');
         back.className = 'face back';
         l.appendChild(back);

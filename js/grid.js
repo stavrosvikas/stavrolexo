@@ -32,16 +32,27 @@ window.Grid = (function () {
     this.el.innerHTML =
       '<div class="puzzle-head">' +
         '<h2>' + d.label + '</h2>' +
-        '<button class="zoomout" type="button">όλο το πλέγμα</button>' +
         '<span class="score"></span>' +
       '</div>' +
-      '<div class="gridwrap"><div class="stage"><div class="grid"></div></div></div>';
+      '<div class="gridwrap">' +
+        '<div class="stage"><div class="grid"></div></div>' +
+        // εμφανίζεται μόνο όταν δεν βλέπεις όλο το πλέγμα, όπως το κουμπί
+        // εξόδου από πλήρη οθόνη σε player βίντεο
+        '<button class="fitbtn" type="button" aria-label="Δες όλο το πλέγμα">' +
+          '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+            '<path d="M9 3v4a2 2 0 0 1-2 2H3M15 3v4a2 2 0 0 0 2 2h4' +
+                   'M9 21v-4a2 2 0 0 0-2-2H3M15 21v-4a2 2 0 0 1 2-2h4"/>' +
+          '</svg>' +
+        '</button>' +
+      '</div>';
 
     this.wrap = this.el.querySelector('.gridwrap');
     this.stage = this.el.querySelector('.stage');
     this.gridEl = this.el.querySelector('.grid');
     this.scoreEl = this.el.querySelector('.score');
-    this.el.querySelector('.zoomout').addEventListener('click', function () {
+    this.fitBtn = this.el.querySelector('.fitbtn');
+    this.fitBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
       self.deselect();
       self.fit();
     });
@@ -320,6 +331,9 @@ window.Grid = (function () {
     this.stage.classList.toggle('fx', !instant);
     this.stage.style.transform =
       'translate(' + this.view.x + 'px,' + this.view.y + 'px) scale(' + this.view.s + ')';
+    if (this.fitBtn) {
+      this.fitBtn.classList.toggle('on', this.view.s > this.fitScale * 1.04);
+    }
   };
 
   Puzzle.prototype.computeFit = function () {
