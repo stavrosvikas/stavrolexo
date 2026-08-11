@@ -31,6 +31,11 @@ for page in grids["pages"]:
     anchors = [(cc["r"], cc["c"], cc) for cc in page["clueCells"]]
     ib = page.get("imageBlock")
     if ib:
+        # μία πηγή αλήθειας για το αρχείο εικόνας: το questions.json. Αλλιώς
+        # το grids.json κρατάει ό,τι ίσχυε όταν παρήχθη και ξεχνιέται.
+        q = questions.get(str(ib["id"]))
+        if q and q.get("image"):
+            ib["src"] = q["image"]
         anchors.append((ib["r"], ib["c"], ib))
     anchors.sort(key=lambda a: (a[0], a[1]))
 
