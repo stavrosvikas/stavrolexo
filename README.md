@@ -46,7 +46,11 @@ python tools/make_web_assets.py   # cover-web.jpg, og.jpg, q58-web.png
 ```
 
 Όταν αλλάξει το εξώφυλλο: αντικατέστησε το `assets/cover.png` (1200×1600) και
-τρέξε `make_web_assets.py` — φτιάχνει ξανά και το `og.jpg`.
+τρέξε `make_web_assets.py`.
+
+Το `make_web_assets.py` **δεν πατάει ποτέ αρχείο φτιαγμένο στο χέρι**: αν το
+παράγωγο (`cover-web.jpg`, `og.jpg`, `q58-web.png`) είναι πιο πρόσφατο από την
+πηγή του, το παραλείπει. Με `--force` ξαναφτιάχνονται όλα.
 
 Τα πρωτότυπα (`cover.png`, `q58.png`) μένουν στο repo ως masters αλλά **δεν
 κατεβαίνουν** ποτέ στον χρήστη· το site σερβίρει τις web εκδοχές.
