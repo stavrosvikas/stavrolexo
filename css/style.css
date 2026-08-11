@@ -37,6 +37,7 @@
   --ui:"Roboto", system-ui, sans-serif;
 
   --cell:40px;
+  --pager-h:50px;
   --pad-b:env(safe-area-inset-bottom,0px);
 }
 
@@ -384,10 +385,17 @@ body{
 
 /* ── πληκτρολόγιο — καθαρά γράμματα, όχι χειρόγραφα ────────────── */
 
-#keyboard{flex:0 0 auto;background:#ecebef;padding:6px 4px;user-select:none;
-          border-top:1px solid var(--hair)}
-#keyboard.empty{background:var(--bg);border-top-color:transparent}
-#keyboard.empty > *{visibility:hidden}
+/* Το πληκτρολόγιο ΕΠΙΚΑΘΕΤΑΙ, δεν δεσμεύει χώρο. Πριν κρατούσε 166px σε
+   κάθε σελίδα για να μην αλλάζει το ύψος — αλλά επειδή η σελίδα δένεται
+   στο ύψος, έχανε ταυτόχρονα και πλάτος. Έτσι το ύψος του τεύχους μένει
+   σταθερό ΚΑΙ η σελίδα παίρνει όλο τον διαθέσιμο χώρο. */
+#keyboard{
+  position:absolute;left:0;right:0;bottom:var(--pager-h);z-index:20;
+  background:#ecebef;padding:6px 4px;user-select:none;
+  border-top:1px solid var(--hair);
+  transition:transform .22s ease,opacity .22s ease;
+}
+#keyboard.empty{transform:translateY(110%);opacity:0;pointer-events:none}
 .krow{display:flex;gap:5px;justify-content:center;margin-bottom:5px}
 .key{
   flex:1 1 0;max-width:42px;height:46px;
@@ -403,7 +411,7 @@ body{
 /* ── pager ─────────────────────────────────────────────────────── */
 
 #pager{flex:0 0 auto;display:flex;align-items:center;gap:12px;
-       padding:8px 12px;background:var(--bg)}
+       height:var(--pager-h);padding:0 12px;background:var(--bg)}
 #pager button{width:42px;height:34px;border:1px solid #4a4a52;border-radius:8px;
               background:transparent;color:#fff;font-size:18px;cursor:pointer}
 #pager button:disabled{opacity:.22}

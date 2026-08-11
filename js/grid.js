@@ -354,6 +354,21 @@ window.Grid = (function () {
 
   /* ── zoom / pan ──────────────────────────────────────────────── */
 
+  /* Ύψος που ΒΛΕΠΕΙ πραγματικά ο χρήστης. Το πληκτρολόγιο επικάθεται στο
+     κάτω μέρος της σελίδας, οπότε το αφαιρούμε — αλλιώς θα κεντράραμε το
+     πλέγμα κάτω από αυτό. */
+  Puzzle.prototype.vh = function () {
+    var h = this.wrap.clientHeight;
+    var kb = document.getElementById('keyboard');
+    if (kb && !kb.classList.contains('empty') &&
+        getComputedStyle(kb).display !== 'none') {
+      var overlap = this.wrap.getBoundingClientRect().bottom -
+                    kb.getBoundingClientRect().top;
+      if (overlap > 0) h -= Math.min(overlap, h * .62);
+    }
+    return Math.max(60, h);
+  };
+
   Puzzle.prototype.apply = function (instant) {
     this.stage.classList.toggle('fx', !instant);
     // μόνο η διαφορά από το ήδη ψημένο ζουμ πάει σε transform
@@ -366,13 +381,13 @@ window.Grid = (function () {
   };
 
   Puzzle.prototype.computeFit = function () {
-    var vw = this.wrap.clientWidth, vh = this.wrap.clientHeight;
+    var vw = this.wrap.clientWidth, vh = this.vh();
     if (!vw || !vh) return .2;
     return Math.min(vw / (this.data.cols * CELL), vh / (this.data.rows * CELL)) * .97;
   };
 
   Puzzle.prototype.fit = function (instant) {
-    var vw = this.wrap.clientWidth, vh = this.wrap.clientHeight;
+    var vw = this.wrap.clientWidth, vh = this.vh();
     // δίχτυ ασφαλείας: αν το layout δεν έχει προλάβει, ξαναδοκίμασε
     if (!vw || !vh) {
       var self = this;
@@ -393,7 +408,7 @@ window.Grid = (function () {
   };
 
   Puzzle.prototype.zoomToWord = function (w) {
-    var vw = this.wrap.clientWidth, vh = this.wrap.clientHeight;
+    var vw = this.wrap.clientWidth, vh = this.vh();
     this.fitScale = this.computeFit();
     var rs = w.cells.map(function (rc) { return rc[0]; });
     var cs = w.cells.map(function (rc) { return rc[1]; });
@@ -412,7 +427,7 @@ window.Grid = (function () {
   Puzzle.prototype.ensureVisible = function () {
     if (!this.active) return;
     var rc = this.active.word.cells[this.active.idx];
-    var vw = this.wrap.clientWidth, vh = this.wrap.clientHeight, s = this.view.s;
+    var vw = this.wrap.clientWidth, vh = this.vh(), s = this.view.s;
     var x = rc[1] * CELL * s + this.view.x, y = rc[0] * CELL * s + this.view.y;
     var m = CELL * s * 1.2;
     if (x < m) this.view.x += m - x;
@@ -425,7 +440,7 @@ window.Grid = (function () {
 
   /* Το zoom-out σταματάει όταν το σταυρόλεξο γεμίσει την οθόνη. */
   Puzzle.prototype.clamp = function () {
-    var vw = this.wrap.clientWidth, vh = this.wrap.clientHeight;
+    var vw = this.wrap.clientWidth, vh = this.vh();
     this.view.s = Math.max(this.fitScale, Math.min(MAX_SCALE, this.view.s));
     var gw = this.data.cols * CELL * this.view.s, gh = this.data.rows * CELL * this.view.s;
     if (gw <= vw) this.view.x = (vw - gw) / 2;

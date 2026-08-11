@@ -116,7 +116,16 @@
     var onGrid = (i === 1 || i === 2);
     var p = activePuzzle();
     cluebar.classList.toggle('empty', !onGrid || !p || !p.active);
+
+    // Το πληκτρολόγιο επικάθεται, άρα όταν εμφανίζεται μικραίνει το ορατό
+    // ύψος της σελίδας — το πλέγμα πρέπει να ξανακεντραριστεί από πάνω του.
+    var before = kb.classList.contains('empty');
     kb.classList.toggle('empty', !onGrid || !Keyboard.wantsOnScreen());
+    if (p && before !== kb.classList.contains('empty')) {
+      requestAnimationFrame(function () {
+        if (p.active) p.zoomToWord(p.active.word); else p.fit();
+      });
+    }
   }
 
   // ── πλέγματα ────────────────────────────────────────────────────
