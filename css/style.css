@@ -181,28 +181,28 @@ body{
 
 /* Οι γωνίες που πιάνονται — μικρό τσακισμένο τριγωνάκι, όπως σε χαρτί
    που το έχουν ξεφυλλίσει. Δείχνουν ακριβώς πού δουλεύει το γύρισμα. */
-.face.front > .corner{
+.face > .corner{
   position:absolute;bottom:0;z-index:7;pointer-events:none;
   width:17%;max-width:80px;aspect-ratio:1;
   opacity:0;transition:opacity .22s ease;
 }
-/* με ποντίκι: μόνο στο hover. Σε αφή: αναβοσβήνει σε κάθε νέα σελίδα. */
+/* με ποντίκι μόνο στο hover· σε αφή αναβοσβήνει μόνο στο εξώφυλλο */
 @media (hover:hover){
-  .leaf:hover > .face.front > .corner{opacity:.6}
+  .leaf:hover > .face > .corner{opacity:.6}
 }
-.leaf.show-corners > .face.front > .corner{opacity:.55}
+.leaf.show-corners > .face > .corner{opacity:.55}
+/* μπροστινή όψη: η ελεύθερη ακμή είναι δεξιά */
 .face.front > .corner.r{
   right:0;clip-path:polygon(100% 0,100% 100%,0 100%);
   background:linear-gradient(225deg,#fff 0%,#f1eff1 40%,#dbd8db 52%,
              rgba(0,0,0,.14) 56%,transparent 57%);
 }
-.face.front > .corner.l{
+/* πίσω όψη = η αριστερή σελίδα· η ελεύθερη ακμή της είναι τέρμα αριστερά */
+.face.back > .corner.l{
   left:0;clip-path:polygon(0 0,100% 100%,0 100%);
   background:linear-gradient(135deg,#fff 0%,#f1eff1 40%,#dbd8db 52%,
              rgba(0,0,0,.14) 56%,transparent 57%);
 }
-/* στο εξώφυλλο μιλάει το animation, όχι στατικό τριγωνάκι */
-#app.at-cover .leaf[data-page="0"] .corner{opacity:0}
 
 /* ── εξώφυλλο ──────────────────────────────────────────────────── */
 
@@ -414,18 +414,16 @@ body{
 }
 #app:not(.at-cover) .cover-peel{animation:none;opacity:0}
 
-/* η αριστερή, ανοιχτή σελίδα σε μεγάλες οθόνες */
-#facing{
-  position:relative;display:none;overflow:hidden;
-  background:var(--page);
-  box-shadow:inset -22px 0 26px rgba(0,0,0,.13),0 2px 30px rgba(0,0,0,.35);
-}
-#facing.blank{background:linear-gradient(to left,#f4f2f4,#e9e7ea 70%);cursor:pointer}
-#facing.blank .facing-inner{display:none}
+/* Κρατάει τη θέση της αριστερής σελίδας ώστε το άνοιγμα να κεντράρεται.
+   Το περιεχόμενο δεν μπαίνει εδώ — το τυπώνει η πίσω όψη του φύλλου. */
+#facing{position:relative;display:none;visibility:hidden;pointer-events:none}
 
-.facing-inner{position:absolute;inset:0;display:flex;flex-direction:column;
-              padding:16px 22px 14px 20px}
-.facing-inner h3{
+/* ── η πίσω όψη του φύλλου: εδώ τυπώνονται οι ορισμοί ──────────── */
+
+.back-inner{position:absolute;inset:0;display:flex;flex-direction:column;
+            padding:16px 22px 14px 20px;overflow:hidden}
+.back-inner:empty{display:none}
+.back-inner h3{
   margin:0 0 8px;font-size:10px;letter-spacing:.24em;text-transform:uppercase;
   color:var(--m-ink);border-bottom:1px solid var(--hair);padding-bottom:6px;
 }
@@ -433,6 +431,8 @@ body{
              columns:2;column-gap:20px;column-rule:1px solid var(--hair)}
 .facing-cols::-webkit-scrollbar{width:8px}
 .facing-cols::-webkit-scrollbar-thumb{background:var(--m-20);border-radius:99px}
+/* σε κινητό η πίσω όψη δεν φαίνεται ποτέ — μη χτίζεται καν οπτικά */
+@media (max-width:759px){.back-inner{display:none}}
 .cl-group{break-inside:avoid-column;margin-bottom:12px}
 .cl-group > b{display:block;font-size:9px;letter-spacing:.2em;color:var(--ink-3);
               margin-bottom:4px;text-transform:uppercase}

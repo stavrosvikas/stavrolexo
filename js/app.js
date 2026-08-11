@@ -13,67 +13,61 @@
   var list = document.getElementById('solutions-list');
   var revealBtn = document.getElementById('btn-reveal');
   var lastPage = document.querySelector('.last');
-  var facing = document.getElementById('facing');
+  /* Οι ορισμοί ΤΥΠΩΝΟΝΤΑΙ στην πίσω όψη του προηγούμενου φύλλου — δηλαδή
+     πάνω στην ίδια τη σελίδα που γυρνάει και καταλήγει αριστερά, όπως σε
+     αληθινό τεύχος. Η πίσω όψη του φύλλου i είναι η αριστερή σελίδα όταν
+     βρίσκεσαι στη σελίδα i+1, άρα εκεί πάνε οι ορισμοί του πλέγματος i. */
+  function buildBacks() {
+    puzzles.forEach(function (p, idx) {
+      var host = Book.back(idx);
+      if (!host) return;
+      host.innerHTML = '';
+      var h = document.createElement('h3');
+      h.textContent = p.data.label + ' · Ορισμοί';
+      host.appendChild(h);
 
-  /* Σε μεγάλες οθόνες η αριστερή σελίδα ήταν άδειο γκρι. Τη γεμίζουμε με τη
-     λίστα ορισμών — έτσι σε laptop βλέπεις όλο το σταυρόλεξο σαν σελίδα
-     περιοδικού, χωρίς να κυνηγάς ορισμούς έναν-έναν στη μπάρα. */
-  function buildFacing() {
-    var i = Book.current();
-    if (i !== 1 && i !== 2) {
-      facing.classList.add('blank');
-      facing.innerHTML = '';
-      return;
-    }
-    var p = puzzles[i - 1];
-    var inner = document.createElement('div');
-    inner.className = 'facing-inner';
-    var h = document.createElement('h3');
-    h.textContent = p.data.label + ' · Ορισμοί';
-    inner.appendChild(h);
-
-    var cols = document.createElement('div');
-    cols.className = 'facing-cols';
-    [['Οριζόντια', 'H'], ['Κάθετα', 'V']].forEach(function (g) {
-      var box = document.createElement('div');
-      box.className = 'cl-group';
-      var b = document.createElement('b');
-      b.textContent = g[0];
-      box.appendChild(b);
-      p.words.filter(function (w) { return w.dir === g[1]; })
-             .sort(function (a, b2) { return a.n - b2.n; })
-             .forEach(function (w) {
-        var it = document.createElement('div');
-        it.className = 'cl-item';
-        it.dataset.id = w.id;
-        it.innerHTML = '<span class="cl-n"></span><span class="cl-t"></span>';
-        it.querySelector('.cl-n').textContent = w.n;
-        it.querySelector('.cl-t').textContent = P.questions[w.id].clue;
-        it.addEventListener('click', function () { p.select(w, 0); });
-        box.appendChild(it);
+      var cols = document.createElement('div');
+      cols.className = 'facing-cols';
+      [['Οριζόντια', 'H'], ['Κάθετα', 'V']].forEach(function (g) {
+        var box = document.createElement('div');
+        box.className = 'cl-group';
+        var b = document.createElement('b');
+        b.textContent = g[0];
+        box.appendChild(b);
+        p.words.filter(function (w) { return w.dir === g[1]; })
+               .sort(function (a, b2) { return a.n - b2.n; })
+               .forEach(function (w) {
+          var it = document.createElement('div');
+          it.className = 'cl-item';
+          it.dataset.id = w.id;
+          it.innerHTML = '<span class="cl-n"></span><span class="cl-t"></span>';
+          it.querySelector('.cl-n').textContent = w.n;
+          it.querySelector('.cl-t').textContent = P.questions[w.id].clue;
+          it.addEventListener('click', function () {
+            if (Book.current() !== idx + 1) Book.go(idx + 1);
+            p.select(w, 0);
+          });
+          box.appendChild(it);
+        });
+        cols.appendChild(box);
       });
-      cols.appendChild(box);
+      host.appendChild(cols);
     });
-    inner.appendChild(cols);
-    facing.innerHTML = '';
-    facing.appendChild(inner);
-    facing.classList.remove('blank');
-    paintFacing();
+    paintClues();
   }
 
-  function paintFacing() {
-    var i = Book.current();
-    if (i !== 1 && i !== 2) return;
-    var p = puzzles[i - 1];
-    var activeId = p.active ? p.active.word.id : null;
-    facing.querySelectorAll('.cl-item').forEach(function (it) {
-      var w = p.byId(+it.dataset.id);
-      it.classList.toggle('done', !!w && w.state === 'ok');
-      var on = (+it.dataset.id === activeId);
-      it.classList.toggle('on', on);
-      if (on && it.scrollIntoView) {
-        it.scrollIntoView({ block: 'nearest' });
-      }
+  function paintClues() {
+    puzzles.forEach(function (p, idx) {
+      var host = Book.back(idx);
+      if (!host) return;
+      var activeId = p.active ? p.active.word.id : null;
+      host.querySelectorAll('.cl-item').forEach(function (it) {
+        var w = p.byId(+it.dataset.id);
+        it.classList.toggle('done', !!w && w.state === 'ok');
+        var on = (+it.dataset.id === activeId);
+        it.classList.toggle('on', on);
+        if (on && it.scrollIntoView) it.scrollIntoView({ block: 'nearest' });
+      });
     });
   }
 
@@ -129,8 +123,8 @@
   P.pages.forEach(function (pageData, i) {
     var el = document.querySelector('.face[data-grid="' + i + '"]');
     puzzles.push(new Grid.Puzzle(el, pageData, P.questions, i, {
-      onClue: function (w, q) { showClue(w, q); syncChrome(); paintFacing(); },
-      onProgress: function () { updateCover(); paintFacing(); }
+      onClue: function (w, q) { showClue(w, q); syncChrome(); paintClues(); },
+      onProgress: function () { updateCover(); paintClues(); }
     }));
   });
 
@@ -144,7 +138,7 @@
       puzzles.forEach(function (p) { p.deselect(); });
       showClue(null, null);
       syncChrome();
-      buildFacing();
+      paintClues();
       if (i === 1 || i === 2) {
         var p = puzzles[i - 1];
         requestAnimationFrame(function () { p.fit(); });
@@ -152,6 +146,9 @@
       updateCover();
     }
   });
+
+  // οι πίσω όψεις υπάρχουν μόνο αφού τρέξει το Book.init
+  buildBacks();
 
   // ── πληκτρολόγιο ────────────────────────────────────────────────
   Keyboard.init(kb, {

@@ -2,6 +2,7 @@
    Το σύρσιμο ακολουθεί το δάχτυλο — δεν είναι απλό slide. */
 window.Book = (function () {
   var stack, leaves, nav, prevBtn, nextBtn;
+  var backs = [];                 // η πίσω όψη κάθε φύλλου (= η αριστερή σελίδα)
   var current = 0, count = 0, onChange = null, busy = false;
 
   // σύρσιμο
@@ -13,19 +14,19 @@ window.Book = (function () {
     return c;
   }
 
-  /* Σε συσκευές αφής δεν υπάρχει hover, οπότε τα τσακίσματα εμφανίζονται για
-     λίγο σε κάθε νέα σελίδα και μετά σβήνουν — δείχνουν τη λογική χωρίς να
-     μένουν μόνιμα πάνω στη σελίδα. */
+  /* Το τσάκισμα αναβοσβήνει ΜΟΝΟ στο εξώφυλλο, για να μάθει ο χρήστης την
+     κίνηση. Μέσα στα σταυρόλεξα θα ήταν σκέτη ενόχληση όσο λύνεις. */
   var hintTimer = null;
   function flashCorners() {
     if (hintTimer) clearTimeout(hintTimer);
     leaves.forEach(function (l) { l.classList.remove('show-corners'); });
-    var cur = leaves[current];
+    if (current !== 0) return;
+    var cur = leaves[0];
     if (!cur) return;
     cur.classList.add('show-corners');
     hintTimer = setTimeout(function () {
       cur.classList.remove('show-corners');
-    }, 2600);
+    }, 3200);
   }
 
   // μετά από σύρσιμο ή πάτημα στην άκρη, το click που ακολουθεί δεν μετράει
@@ -53,10 +54,9 @@ window.Book = (function () {
       if (!drag || drag.leaf !== el) {
         setLeaf(el, i < current ? -180 : 0);
       }
-      // Το γυρισμένο φύλλο κάθεται ακριβώς πάνω στην αριστερή σελίδα και
-      // έκρυβε τους ορισμούς. Αφού ολοκληρωθεί το γύρισμα το αποσύρουμε —
-      // στη διάρκεια της κίνησης παραμένει ορατό.
-      el.style.visibility = (i < current) ? 'hidden' : 'visible';
+      // Μόνο το τελευταίο γυρισμένο φύλλο μένει ορατό — αυτό είναι η αριστερή
+      // σελίδα. Τα από κάτω του κρύβονται, αλλιώς μαυρίζουν τη στοίβα.
+      el.style.visibility = (i < current - 1) ? 'hidden' : 'visible';
     }
   }
 
@@ -117,16 +117,15 @@ window.Book = (function () {
      σταυρόλεξου, και συμπίπτει με το σημείο που δείχνει το animation. */
   function corner(clientX, clientY, target) {
     if (!stack) return null;
-    // η διπλανή σελίδα πιάνεται ολόκληρη — αλλά μόνο όταν είναι άδεια·
-    // όταν δείχνει τους ορισμούς, τα πατήματα ανήκουν σε αυτούς
-    var f = target && target.closest && target.closest('#facing');
-    if (f) return f.classList.contains('blank') ? 'left' : null;
     var r = stack.getBoundingClientRect();
     var w = Math.max(34, Math.min(84, r.width * .18));
     var h = Math.max(70, Math.min(180, r.height * .18));
     if (clientY < r.bottom - h) return null;
-    if ((clientX - r.left) < w) return 'left';
-    if ((r.right - clientX) < w) return 'right';
+    if (clientX >= r.right - w) return 'right';
+    // Η ελεύθερη ακμή της αριστερής σελίδας είναι ΤΕΡΜΑ ΑΡΙΣΤΕΡΑ, όχι στη
+    // ράχη — από εκεί την πιάνεις για να γυρίσεις πίσω.
+    var leftEdge = Math.max(0, r.left - r.width);
+    if (clientX <= leftEdge + w) return 'left';
     return null;
   }
 
@@ -215,19 +214,26 @@ window.Book = (function () {
       count = leaves.length;
       onChange = opts && opts.onChange;
 
-      // Κάθε φύλλο αποκτά πίσω όψη: μόλις περάσει τις 90 μοίρες βλέπεις την
-      // ανάποδη του χαρτιού, όχι κενό. Αυτό κάνει το γύρισμα να μοιάζει φύλλο.
+      /* Κάθε φύλλο έχει δύο ΠΡΑΓΜΑΤΙΚΕΣ πλευρές, όπως στο χαρτί: μπροστά η
+         σελίδα του, πίσω η σελίδα που βλέπεις αριστερά αφού το γυρίσεις.
+         Τα φύλλα δεν τσακίζουν από τη ράχη, οπότε τσάκισμα μπαίνει μόνο στην
+         ελεύθερη ακμή — δεξιά μπροστά, και στην πίσω όψη δεξιά τοπικά, που
+         λόγω του καθρεφτίσματος εμφανίζεται τέρμα αριστερά. */
       leaves.forEach(function (l, i) {
         var front = l.querySelector('.face.front');
         var sh = document.createElement('div');
         sh.className = 'shade';
         front.appendChild(sh);
-        // τσάκισμα μόνο εκεί που όντως υπάρχει σελίδα να πας
-        if (i > 0) front.appendChild(mkCorner('l'));
         if (i < count - 1) front.appendChild(mkCorner('r'));
+
         var back = document.createElement('div');
         back.className = 'face back';
+        var inner = document.createElement('div');
+        inner.className = 'back-inner';
+        back.appendChild(inner);
+        if (i < count - 1) back.appendChild(mkCorner('l'));
         l.appendChild(back);
+        backs.push(inner);
       });
 
       for (var i = 0; i < count; i++) {
@@ -256,6 +262,9 @@ window.Book = (function () {
     },
     go: go,
     current: function () { return current; },
-    inEdgeZone: inEdgeZone
+    inEdgeZone: inEdgeZone,
+    /* Η πίσω όψη του φύλλου i — δηλαδή η αριστερή σελίδα που βλέπεις όταν
+       είσαι στη σελίδα i+1. Εκεί τυπώνονται οι ορισμοί. */
+    back: function (i) { return backs[i] || null; }
   };
 })();
