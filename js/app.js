@@ -116,16 +116,26 @@
     var onGrid = (i === 1 || i === 2);
     var p = activePuzzle();
     cluebar.classList.toggle('empty', !onGrid || !p || !p.active);
-
-    // Το πληκτρολόγιο επικάθεται, άρα όταν εμφανίζεται μικραίνει το ορατό
-    // ύψος της σελίδας — το πλέγμα πρέπει να ξανακεντραριστεί από πάνω του.
-    var before = kb.classList.contains('empty');
     kb.classList.toggle('empty', !onGrid || !Keyboard.wantsOnScreen());
-    if (p && before !== kb.classList.contains('empty')) {
-      requestAnimationFrame(function () {
-        if (p.active) p.zoomToWord(p.active.word); else p.fit();
-      });
-    }
+  }
+
+  /* Η αριστερή σελίδα με τους ορισμούς μπαίνει μόνο όταν ΔΕΝ κοστίζει:
+     δηλαδή όταν η οθόνη είναι τόσο φαρδιά που η σελίδα δένεται στο ύψος
+     ούτως ή άλλως, οπότε η δεύτερη σελίδα γεμίζει άδειο πλάι χωρίς να
+     μικρύνει το σταυρόλεξο. Δεν γίνεται με media query γιατί εξαρτάται
+     από το ύψος του τεύχους, όχι από το πλάτος του παραθύρου. */
+  function syncSpread() {
+    var book = document.getElementById('book');
+    var w = book.clientWidth, h = book.clientHeight;
+    if (!w || !h) return;
+    var alone = Math.min(w, h * .75);
+    var withFacing = Math.min(w * .48, h * .75);
+    var app = document.getElementById('app');
+    var was = app.classList.contains('spread');
+    var now = withFacing >= alone - 1;
+    if (was === now) return;
+    app.classList.toggle('spread', now);
+    if (Book.restack) Book.restack();     // αλλάζει ποιο φύλλο μένει ορατό
   }
 
   // ── πλέγματα ────────────────────────────────────────────────────
@@ -243,6 +253,7 @@
   window.addEventListener('resize', function () {
     clearTimeout(rt);
     rt = setTimeout(function () {
+      syncSpread();
       syncChrome();
       var p = activePuzzle();
       if (!p) return;
@@ -250,6 +261,13 @@
     }, 140);
   });
 
+  syncSpread();
   syncChrome();
   updateCover();
+  // το layout μπορεί να μην έχει σταθεροποιηθεί στο πρώτο frame
+  requestAnimationFrame(function () {
+    syncSpread();
+    var p = activePuzzle();
+    if (p) p.fit(true);
+  });
 })();

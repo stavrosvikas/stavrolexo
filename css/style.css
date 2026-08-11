@@ -385,17 +385,13 @@ body{
 
 /* ── πληκτρολόγιο — καθαρά γράμματα, όχι χειρόγραφα ────────────── */
 
-/* Το πληκτρολόγιο ΕΠΙΚΑΘΕΤΑΙ, δεν δεσμεύει χώρο. Πριν κρατούσε 166px σε
-   κάθε σελίδα για να μην αλλάζει το ύψος — αλλά επειδή η σελίδα δένεται
-   στο ύψος, έχανε ταυτόχρονα και πλάτος. Έτσι το ύψος του τεύχους μένει
-   σταθερό ΚΑΙ η σελίδα παίρνει όλο τον διαθέσιμο χώρο. */
-#keyboard{
-  position:absolute;left:0;right:0;bottom:var(--pager-h);z-index:20;
-  background:#ecebef;padding:6px 4px;user-select:none;
-  border-top:1px solid var(--hair);
-  transition:transform .22s ease,opacity .22s ease;
-}
-#keyboard.empty{transform:translateY(110%);opacity:0;pointer-events:none}
+/* Το πληκτρολόγιο κρατάει τον χώρο του πάντα. Δοκιμάστηκε να επικάθεται
+   ώστε να μεγαλώσει η σελίδα — αλλά τότε το κενό απλώς μετακόμιζε στην
+   κορυφή και τα πλήκτρα έκρυβαν το κάτω μέρος του πλέγματος. */
+#keyboard{flex:0 0 auto;background:#ecebef;padding:6px 4px;user-select:none;
+          border-top:1px solid var(--hair)}
+#keyboard.empty{background:var(--bg);border-top-color:transparent}
+#keyboard.empty > *{visibility:hidden}
 .krow{display:flex;gap:5px;justify-content:center;margin-bottom:5px}
 .key{
   flex:1 1 0;max-width:42px;height:46px;
@@ -462,7 +458,8 @@ body{
 .facing-cols::-webkit-scrollbar{width:8px}
 .facing-cols::-webkit-scrollbar-thumb{background:var(--m-20);border-radius:99px}
 /* σε κινητό η πίσω όψη δεν φαίνεται ποτέ — μη χτίζεται καν οπτικά */
-@media (max-width:899px){.back-inner{display:none}}
+/* οι ορισμοί ζωγραφίζονται μόνο όταν φαίνεται η αριστερή σελίδα */
+#app:not(.spread) .back-inner{display:none}
 .cl-group{break-inside:avoid-column;margin-bottom:12px}
 .cl-group > b{display:block;font-size:9px;letter-spacing:.2em;color:var(--ink-3);
               margin-bottom:4px;text-transform:uppercase}
@@ -480,16 +477,16 @@ body{
 
 /* ── desktop ───────────────────────────────────────────────────── */
 
-/* Σε φαρδιές οθόνες χωράει και η αριστερή σελίδα με τους ορισμούς. Τότε κάθε
-   σελίδα παίρνει τη μισή διαθέσιμη φάρδια — πάντα 3:4 και οι δύο. */
-@media (min-width:900px){
-  #book{--pagew:min(48cqw, 75cqh)}
-  #facing{display:block;width:var(--pagew);aspect-ratio:3/4;height:auto;
-          flex:0 0 auto}
-  /* στο εξώφυλλο δεν υπάρχει διπλανή σελίδα — μόνο το γκρι */
-  #app.at-cover #facing{display:none}
-  .clue-text{font-size:20px}
-}
+/* Η αριστερή σελίδα με τους ορισμούς εμφανίζεται ΜΟΝΟ όταν είναι τζάμπα:
+   όταν η οθόνη είναι αρκετά φαρδιά ώστε να χωρέσει δεύτερη σελίδα χωρίς
+   να μικρύνει η πρώτη. Το κρίνει η JS μετρώντας το #book, γιατί εξαρτάται
+   από το ύψος του τεύχους και όχι από το πλάτος του παραθύρου. */
+#app.spread #book{--pagew:min(48cqw, 75cqh)}
+#app.spread #facing{display:block;width:var(--pagew);aspect-ratio:3/4;
+                    height:auto;flex:0 0 auto}
+/* στο εξώφυλλο δεν υπάρχει διπλανή σελίδα — μόνο το γκρι */
+#app.spread.at-cover #facing{display:none}
+@media (min-width:900px){.clue-text{font-size:20px}}
 @media (min-width:900px){#keyboard{display:none!important}}
 
 /* ── λιγότερη κίνηση ───────────────────────────────────────────── */

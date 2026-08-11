@@ -54,9 +54,12 @@ window.Book = (function () {
       if (!drag || drag.leaf !== el) {
         setLeaf(el, i < current ? -180 : 0);
       }
-      // Μόνο το τελευταίο γυρισμένο φύλλο μένει ορατό — αυτό είναι η αριστερή
-      // σελίδα. Τα από κάτω του κρύβονται, αλλιώς μαυρίζουν τη στοίβα.
-      el.style.visibility = (i < current - 1) ? 'hidden' : 'visible';
+      // Σε άνοιγμα, το τελευταίο γυρισμένο φύλλο μένει ορατό — αυτό είναι η
+      // αριστερή σελίδα. Χωρίς άνοιγμα δεν έχει λόγο να προεξέχει άδειο
+      // αριστερά και να βγάζει τη σύνθεση εκτός κέντρου.
+      var keep = document.getElementById('app').classList.contains('spread')
+                 ? current - 1 : current;
+      el.style.visibility = (i < keep) ? 'hidden' : 'visible';
     }
   }
 
@@ -263,6 +266,7 @@ window.Book = (function () {
     go: go,
     current: function () { return current; },
     inEdgeZone: inEdgeZone,
+    restack: restack,
     /* Η πίσω όψη του φύλλου i — δηλαδή η αριστερή σελίδα που βλέπεις όταν
        είσαι στη σελίδα i+1. Εκεί τυπώνονται οι ορισμοί. */
     back: function (i) { return backs[i] || null; }
