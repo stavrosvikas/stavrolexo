@@ -118,8 +118,11 @@ body{
       perspective:2200px;perspective-origin:50% 50%}
 /* Το «άνοιγμα» — αριστερή σελίδα + δεξιά σελίδα. Κεντράρεται ολόκληρο,
    ώστε σε laptop να μη βγαίνει το τεύχος δεξιά από το κέντρο. */
+/* ΠΡΟΣΟΧΗ: το #book είναι grid με place-items:center, άρα δεν τεντώνει τα
+   παιδιά του. Χωρίς ρητό width/height εδώ, το #stack{width:100%} ζητάει
+   πλάτος από γονιό που περιμένει το παιδί -> μηδενίζει σε κινητό. */
 #spread{display:flex;align-items:center;justify-content:center;gap:0;
-        height:100%;max-width:100%;transform-style:preserve-3d}
+        width:100%;height:100%;transform-style:preserve-3d}
 #stack{position:relative;width:100%;height:100%;transform-style:preserve-3d}
 
 .leaf{
@@ -209,16 +212,18 @@ body{
 
 /* ── εξώφυλλο ──────────────────────────────────────────────────── */
 
-.cover{display:grid;place-items:center;background:var(--cover-bleed);cursor:pointer}
+.cover{display:grid;background:var(--cover-bleed);cursor:pointer}
 
-/* Το artboard: σταθερή αναλογία 3:4, χωράει πάντα ολόκληρο μέσα στη σελίδα.
-   Σχεδιασμένο στα 1200x1600. Safe zone = το εσωτερικό 90% (1080x1440). */
-.cover-art{
-  position:relative;aspect-ratio:3/4;
-  width:100%;max-width:100%;max-height:100%;min-width:0;min-height:0;
-  overflow:hidden;background:var(--page);
+/* Το artboard είναι 3:4 (1200x1600, safe zone το εσωτερικό 90% = 1080x1440).
+   ΔΕΝ το επιβάλλουμε με aspect-ratio: όταν συνυπάρχει ρητό width με
+   max-height, το CSS παρατάει τον λόγο και η εικόνα πετσοκόβεται. Αντ' αυτού
+   το object-fit:contain κρατάει πάντα τον λόγο της ίδιας της εικόνας, και
+   ό,τι περισσεύει γύρω γεμίζει με το --cover-bleed. */
+.cover-art{position:relative;width:100%;height:100%;overflow:hidden}
+.cover-art img{
+  width:100%;height:100%;display:block;
+  object-fit:contain;object-position:center;
 }
-.cover-art img{width:100%;height:100%;object-fit:cover;display:block}
 
 /* Η πρόοδος εμφανίζεται μόνο αφού ξεκινήσεις — μέχρι τότε το γραφιστικό
    μένει καθαρό, χωρίς τίποτα από πάνω του. */

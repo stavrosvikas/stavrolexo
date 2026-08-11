@@ -373,7 +373,15 @@ window.Grid = (function () {
 
   Puzzle.prototype.fit = function (instant) {
     var vw = this.wrap.clientWidth, vh = this.wrap.clientHeight;
-    if (!vw || !vh) return;
+    // δίχτυ ασφαλείας: αν το layout δεν έχει προλάβει, ξαναδοκίμασε
+    if (!vw || !vh) {
+      var self = this;
+      if ((this._fitTries = (this._fitTries || 0) + 1) < 30) {
+        requestAnimationFrame(function () { self.fit(instant); });
+      }
+      return;
+    }
+    this._fitTries = 0;
     this.fitScale = this.computeFit();
     var gw = this.data.cols * CELL, gh = this.data.rows * CELL;
     this.view = {
