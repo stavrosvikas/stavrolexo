@@ -164,8 +164,11 @@
     var withFacing = Math.min(w * .48, h * .75);
     var app = document.getElementById('app');
     var was = app.classList.contains('spread');
-    // και αρκετά μεγάλη ώστε οι ορισμοί να διαβάζονται χωρίς scroll
-    var now = withFacing >= alone - 1 && withFacing >= 360;
+    /* Ανοχή 10%: η διπλανή σελίδα αξίζει μια μικρή σμίκρυνση. Με το παλιό
+       «ούτε ένα pixel» η σελίδα των ορισμών εξαφανιζόταν σε πλατιές οθόνες:
+       όταν η μπάρα βγήκε από το layout το #book ψήλωσε, και η μονή σελίδα
+       άρχισε να βγαίνει οριακά μεγαλύτερη από τη διπλή. */
+    var now = withFacing >= alone * .90 && withFacing >= 360;
     if (was === now) return;
     app.classList.toggle('spread', now);
     if (Book.restack) Book.restack();     // αλλάζει ποιο φύλλο μένει ορατό
