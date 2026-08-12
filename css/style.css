@@ -460,7 +460,8 @@ body{
 
 /* Κρατάει τη θέση της αριστερής σελίδας ώστε το άνοιγμα να κεντράρεται.
    Το περιεχόμενο δεν μπαίνει εδώ — το τυπώνει η πίσω όψη του φύλλου. */
-#facing{position:relative;display:none;visibility:hidden;pointer-events:none}
+#facing{position:relative;display:none;visibility:hidden;pointer-events:none;
+        overflow:hidden;transition:width .62s cubic-bezier(.36,.06,.24,1)}
 
 /* ── η πίσω όψη του φύλλου: εδώ τυπώνονται οι ορισμοί ──────────── */
 
@@ -503,9 +504,18 @@ body{
 #app.spread #facing{display:block;width:var(--pagew);aspect-ratio:3/4;
                     height:auto;flex:0 0 auto}
 /* στο εξώφυλλο δεν υπάρχει διπλανή σελίδα — μόνο το γκρι */
-#app.spread.at-cover #facing{display:none}
+/* Στο εξώφυλλο δεν υπάρχει διπλανή σελίδα. Δεν την κρύβουμε όμως απότομα:
+   μαζεύεται σε μηδενικό πλάτος με την ίδια διάρκεια που γυρνάει η σελίδα,
+   ώστε το τεύχος να ξανακεντράρεται ομαλά αντί να τινάζεται. */
+#app.spread.at-cover #facing{width:0}
 @media (min-width:900px){.clue-text{font-size:20px}}
-@media (min-width:900px){#keyboard{display:none!important}}
+/* Το πληκτρολόγιο κρύβεται ΜΟΝΟ σε συσκευή με ποντίκι/trackpad, όχι με βάση
+   το πλάτος. Ένα οριζόντιο tablet ξεπερνά τα 900px αλλά ΔΕΝ έχει φυσικό
+   πληκτρολόγιο — και επειδή δεν υπάρχει <input> πουθενά, δεν άνοιγε ούτε το
+   δικό του. Ο χρήστης δεν μπορούσε να γράψει καθόλου. */
+@media (min-width:900px) and (hover:hover) and (pointer:fine){
+  #keyboard{display:none!important}
+}
 
 /* ── λιγότερη κίνηση ───────────────────────────────────────────── */
 
