@@ -122,7 +122,10 @@
     // Το κουμπί εστίασης υπάρχει σε ΟΛΗ τη διάρκεια των σταυρολέξων, ώστε να
     // μπορείς πάντα να ξαναφέρεις το τεύχος στο καρέ που σερβίρουμε.
     document.getElementById('fitbtn').classList.toggle('on', onGrid);
-    kb.classList.toggle('empty', !onGrid || !Keyboard.wantsOnScreen());
+    /* ΜΟΝΟ όταν υπάρχει επιλεγμένη λέξη. Όταν στεκόταν μόνιμα στις σελίδες
+       με σταυρόλεξο, έτρωγε το κάτω τρίτο: τα τελευταία κελιά δεν φαίνονταν
+       ούτε πατιόνταν, και όλο το κενό της σελίδας μαζευόταν επάνω. */
+    kb.classList.toggle('empty', !picked || !Keyboard.wantsOnScreen());
     syncSpace();
   }
 

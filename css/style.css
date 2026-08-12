@@ -90,18 +90,17 @@ body{
 /* Η μπάρα κρατάει ΠΑΝΤΑ τον χώρο της, ακόμα κι όταν δεν δείχνει ορισμό —
    αλλιώς η σελίδα άλλαζε ύψος από σελίδα σε σελίδα και έσπαγε η αίσθηση
    του τεύχους. Το ίδιο και το πληκτρολόγιο πιο κάτω. */
+/* ΕΠΙΚΑΘΕΤΑΙ, δεν κρατάει χώρο. Όταν κρατούσε, έμενε λωρίδα στο χρώμα του
+   φόντου πάνω από το τεύχος και όλο το κενό της σελίδας μαζευόταν επάνω. */
 #cluebar{
-  flex:0 0 auto;display:flex;align-items:stretch;
+  position:absolute;top:0;left:0;right:0;z-index:12;
+  display:flex;align-items:stretch;
   background:var(--m-05);border-bottom:1px solid var(--m-20);
   min-height:66px;
-  /* κάθεται ΠΑΝΩ από το περιοδικό, οπότε ρίχνει σκιά πάνω του */
-  position:relative;z-index:12;
   box-shadow:0 6px 14px rgba(0,0,0,.30);
+  transition:transform .22s ease,opacity .22s ease;
 }
-/* .empty = εκτός σελίδων πλέγματος -> τελείως άδεια, μόνο κρατάει τον χώρο.
-   .hint  = σε σελίδα πλέγματος χωρίς επιλεγμένη λέξη -> δείχνει τι να κάνεις. */
-#cluebar.empty{background:var(--bg);border-bottom-color:transparent;box-shadow:none}
-#cluebar.empty > *{visibility:hidden}
+#cluebar.empty{transform:translateY(-110%);opacity:0;pointer-events:none}
 
 .clue-hint{
   display:none;align-items:center;gap:9px;
@@ -560,7 +559,10 @@ body{
    το πλάτος. Ένα οριζόντιο tablet ξεπερνά τα 900px αλλά ΔΕΝ έχει φυσικό
    πληκτρολόγιο — και επειδή δεν υπάρχει <input> πουθενά, δεν άνοιγε ούτε το
    δικό του. Ο χρήστης δεν μπορούσε να γράψει καθόλου. */
-@media (min-width:900px) and (hover:hover) and (pointer:fine){
+/* Ποντίκι ή trackpad -> ποτέ πληκτρολόγιο οθόνης, όσο στενό κι αν είναι το
+   παράθυρο. Με το παλιό min-width:900px, ένα μικρό παράθυρο σε laptop
+   έβγαζε πληκτρολόγιο και έκοβε το σταυρόλεξο. */
+@media (hover:hover) and (pointer:fine){
   #keyboard{display:none!important}
 }
 
