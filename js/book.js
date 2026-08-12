@@ -47,19 +47,31 @@ window.Book = (function () {
     if (sh) sh.style.opacity = curl * .7;
   }
 
+  var animating = null;        // το φύλλο που γυρνάει αυτή τη στιγμή
+
+  function zFor(i) { return (i < current) ? i : (count - i); }
+
+  /* Ορατά: το τρέχον φύλλο, το επόμενο, και το τελευταίο γυρισμένο — αυτό
+     είναι η αριστερή σελίδα. Τα από κάτω κρύβονται, αλλιώς στοιβάζονται
+     τέσσερα χαρτιά και μαυρίζει η άκρη. Το `from` επιτρέπει να κρατήσουμε
+     ορατά ΚΑΙ τα φύλλα της προηγούμενης κατάστασης όσο διαρκεί η κίνηση,
+     ώστε τίποτα να μην ξεπροβάλλει ή να χάνεται απότομα. */
+  function applyVisibility(from) {
+    var edge = Math.min(from === undefined ? current : from, current) - 1;
+    for (var i = 0; i < count; i++) {
+      leaves[i].style.visibility = (i < edge) ? 'hidden' : 'visible';
+    }
+  }
+
   function restack() {
     for (var i = 0; i < count; i++) {
       var el = leaves[i];
-      el.style.zIndex = (i < current) ? i : (count - i);
-      if (!drag || drag.leaf !== el) {
-        setLeaf(el, i < current ? -180 : 0);
+      if (el !== animating) {
+        el.style.zIndex = zFor(i);
+        if (!drag || drag.leaf !== el) setLeaf(el, i < current ? -180 : 0);
       }
-      // Το τελευταίο γυρισμένο φύλλο ΜΕΝΕΙ ΠΑΝΤΑ ορατό — είναι η αριστερή
-      // σελίδα, ξαπλωμένη όπως σε ανοιχτό τεύχος. Αν η οθόνη δεν τη χωράει,
-      // απλώς βγαίνει εκτός κάδρου. Τα από κάτω της κρύβονται, αλλιώς
-      // στοιβάζονται και μαυρίζουν την άκρη.
-      el.style.visibility = (i < current - 1) ? 'hidden' : 'visible';
     }
+    applyVisibility();
   }
 
   function go(i, opts) {
@@ -69,11 +81,12 @@ window.Book = (function () {
     if (busy) return;
 
     var back = i < current;
-    var moving = back ? leaves[i] : leaves[current];
+    var from = current, movingIdx = back ? i : current;
+    var moving = leaves[movingIdx];
     busy = true;
+    animating = moving;
     moving.classList.add('turning');
     moving.style.zIndex = count + 5;
-    moving.style.visibility = 'visible';   // αν ερχόταν από «γυρισμένο»
     if (opts.silent !== true) SFX.page(back);
 
     // ξεκίνα από τη σωστή γωνία και πήγαινε στην άλλη άκρη
@@ -84,11 +97,21 @@ window.Book = (function () {
     });
 
     current = i;
+    // Η αριστερή σελίδα ξεκλειδώνεται ΑΜΕΣΩΣ, όχι στο τέλος της κίνησης —
+    // αλλιώς πηγαίνοντας πίσω ξεπρόβαλλε καθυστερημένα.
+    applyVisibility(from);
     if (onChange) onChange(i);
     paintNav();
 
+    // Στη μέση της διαδρομής το φύλλο περνάει τη ράχη: εκεί κατεβαίνει στο
+    // τελικό του επίπεδο, ώστε η σκιά να μη «διορθώνεται» μετά το τέλος.
+    setTimeout(function () {
+      if (animating === moving) moving.style.zIndex = zFor(movingIdx);
+    }, 330);
+
     setTimeout(function () {
       moving.classList.remove('turning');
+      animating = null;
       busy = false;
       restack();
       flashCorners();
@@ -162,9 +185,10 @@ window.Book = (function () {
           (!drag.back && current === count - 1)) { drag = null; return; }
       drag.leaf = leaves[idx];
       drag.leaf.style.zIndex = count + 5;
-      drag.leaf.style.visibility = 'visible';
       drag.leaf.classList.remove('turning');
       drag.live = true;
+      // ξεκλείδωσε από τώρα ό,τι θα φανεί, ώστε να μη ξεπροβάλλει στο τέλος
+      applyVisibility(drag.back ? current - 1 : current);
     }
     var w = stack.clientWidth || 1;
     var frac = Math.max(0, Math.min(1, Math.abs(dx) / w));
@@ -193,8 +217,10 @@ window.Book = (function () {
     var complete = d.back ? d.deg > -90 : d.deg < -90;
     if (complete) {
       SFX.page(d.back);
+      var from = current;
       current = d.back ? current - 1 : current + 1;
       setLeaf(d.leaf, d.back ? 0 : -180);
+      applyVisibility(from);
       if (onChange) onChange(current);
       paintNav();
     } else {
