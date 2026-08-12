@@ -382,11 +382,10 @@ window.Grid = (function () {
     var rel = this.view.s / (this.baked || 1);
     this.stage.style.transform =
       'translate(' + this.view.x + 'px,' + this.view.y + 'px) scale(' + rel + ')';
-    if (this.fitBtn && window.Book && Book.zoomLevel) {
-      var zed = Book.atFit ? !Book.atFit() : Book.zoomLevel() > 1.03;
-      // Είναι κουμπί ΕΣΤΙΑΣΗΣ, όχι μόνο εξόδου: όσο υπάρχει επιλεγμένη λέξη
-      // πρέπει να φαίνεται, αλλιώς σε desktop (που δεν ζουμάρει) δεν υπήρχε.
-      this.fitBtn.classList.toggle('on', zed || !!this.active);
+    // Την ορατότητα του κουμπιού την ορίζει το syncChrome (φαίνεται σε όλες
+    // τις σελίδες με σταυρόλεξο) -- εδώ αλλάζει μόνο τι κάνει.
+    if (this.fitBtn && window.Book && Book.atFit) {
+      var zed = !Book.atFit();
       this.fitBtn.classList.toggle('back', zed);
       this.fitBtn.setAttribute('aria-label',
         zed ? 'Δες όλο το τεύχος' : 'Εστίασε στη λέξη');
@@ -419,19 +418,27 @@ window.Grid = (function () {
     this.fitScale = k;
     this.apply(true);
     if (window.Book && Book.zoomReset) Book.zoomReset(instant);
-    if (this.fitBtn && !this.active) this.fitBtn.classList.remove('on');
   };
 
   /* Το ζουμ δένεται στο ΜΕΓΕΘΟΣ ΚΕΛΙΟΥ, όχι στο πλάτος της λέξης: στόχος
      είναι ένα άνετο κελί ~34px. Έτσι σε desktop, όπου τα κελιά είναι ήδη
      μεγάλα, σχεδόν δεν ζουμάρει· σε κινητό πλησιάζει όσο χρειάζεται. */
+  /* Η εστίαση κουνάει το τεύχος ΜΟΝΟ όταν χρειάζεται. Πριν, κάθε κλικ σε
+     κελί μετατόπιζε ολόκληρο το περιοδικό ακόμα κι όταν η λέξη ήταν ήδη
+     μπροστά στα μάτια σου και σε αναγνώσιμο μέγεθος. */
   Puzzle.prototype.zoomToWord = function (w) {
     if (!window.Book || !Book.zoomAt) return;
     var z = Book.zoomLevel();
     var cellPx = CELL * this.baked * z;
-    var target = z * (34 / Math.max(4, cellPx));
+    var band = this.band();
     var r = this.wordRect(w);
-    Book.zoomAt(target, (r.left + r.right) / 2, (r.top + r.bottom) / 2, this.band());
+    var readable = cellPx >= 26;
+    var inside = r.left >= band.left + 6 && r.right <= band.right - 6 &&
+                 r.top >= band.top + 6 && r.bottom <= band.bottom - 6;
+    if (readable && inside) return;                       // τίποτα δεν κουνιέται
+    if (readable) { Book.keepInside(r, band, 16); return; } // μόνο μετατόπιση
+    var target = z * (34 / Math.max(4, cellPx));
+    Book.zoomAt(target, (r.left + r.right) / 2, (r.top + r.bottom) / 2, band);
   };
 
   Puzzle.prototype.ensureVisible = function () {

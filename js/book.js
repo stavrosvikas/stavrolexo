@@ -13,7 +13,7 @@ window.Book = (function () {
      περιοδικό, με το χαρτί, τις ακμές και τη σκιά του. Το #book κόβει. */
   var zoom = { z: 1, x: 0, y: 0 };
   var applied = { z: 1, x: 0, y: 0 };   // τι είναι ΠΡΑΓΜΑΤΙ περασμένο στο DOM
-  var fitZ = 1;              // το ζουμ που «σερβίρουμε» -- ενημερώνεται στο clamp
+  var fitZ = 1;              // το ζουμ που «σερβίρουμε»
   function atFitFlag() { return zoom.z <= fitZ + .02; }
   var MAXZ = 2.6;
 
@@ -42,46 +42,22 @@ window.Book = (function () {
              width: ri - l, height: b - t };
   }
 
-  /* Το τυπωμένο περιεχόμενο σε συντεταγμένες του #spread -- ΧΩΡΙΣ το ζουμ.
-     Μετριέται με offsetWidth/Height, όχι με getBoundingClientRect: το rect
-     επιστρέφει την ΤΡΕΧΟΥΣΑ τιμή του transition, οπότε κάθε υπολογισμός
-     έπαιρνε μια ενδιάμεση κλίμακα και το τεύχος μίκραινε μέχρι να χαθεί.
-     Το #spread είναι flex, κεντραρισμένο -- άρα η θέση βγαίνει αναλυτικά. */
-  function contentBox() {
-    var sw = spread.offsetWidth, sh = spread.offsetHeight;
-    if (!sw || !sh) return null;
-    var f = document.getElementById('facing'), st = document.getElementById('stack');
-    var fw = (f && f.offsetWidth) || 0, fh = (f && f.offsetHeight) || 0;
-    var tw = (st && st.offsetWidth) || 0, th = (st && st.offsetHeight) || 0;
-    var w = fw + tw, h = Math.max(fh, th);
-    if (!w || !h) return null;
-    return { x: (sw - w) / 2, y: (sh - h) / 2, w: w, h: h };
-  }
-
-  /* Το «σερβιρισμένο» ζουμ: ολόκληρο το τεύχος, κεντραρισμένο στην ορατή
-     ζώνη. Είναι ΚΑΙ το κατώτατο όριο -- πιο έξω δεν σμικραίνεις. */
-  function fitState() {
-    var c = contentBox();
-    if (!c) return { z: 1, x: 0, y: 0 };
-    var band = bandRect();
-    var z = Math.min(1, band.width / c.w, band.height / c.h);
-    var sp = spread.getBoundingClientRect();
-    var o = { x: sp.left - applied.x, y: sp.top - applied.y };  // αρχή χωρίς μετατόπιση
-    return {
-      z: z,
-      x: band.left + (band.width  - c.w * z) / 2 - (o.x + c.x * z),
-      y: band.top  + (band.height - c.h * z) / 2 - (o.y + c.y * z)
-    };
-  }
+  /* ΤΟ ΚΑΡΕ ΠΟΥ ΣΕΡΒΙΡΟΥΜΕ. Είναι ΕΝΑ και σταθερό ανά οθόνη: το #stack
+     είναι ήδη χτισμένο ώστε να χωράει ολόκληρο στο #book σε λόγο 3:4, άρα
+     το σερβιριστό καρέ είναι απλώς «καμία μετατόπιση, καμία κλίμακα».
+     ΔΕΝ εξαρτάται από τη μπάρα ή το πληκτρολόγιο -- όταν εξαρτιόταν,
+     ξαναϋπολογιζόταν σε κάθε εμφάνισή τους και το τεύχος τιναζόταν σε
+     κάθε γύρισμα σελίδας και σε κάθε κλικ σε κελί. */
+  var SERVED = { z: 1, x: 0, y: 0 };
 
   /* Μαγνήτης: όσο κι αν σύρεις ή ζουμάρεις, το τεύχος δεν φεύγει από το
      κάδρο -- κρατάμε πάντα ένα κομμάτι του μέσα στη ζώνη. */
   function clampZoom() {
     var book = document.getElementById('book');
     if (!book) return;
-    var f = fitState();
-    fitZ = f.z;
-    if (zoom.z <= f.z + 1e-4) { zoom.z = f.z; zoom.x = f.x; zoom.y = f.y; return; }
+    if (zoom.z <= SERVED.z + 1e-4) {
+      zoom.z = SERVED.z; zoom.x = SERVED.x; zoom.y = SERVED.y; return;
+    }
     zoom.z = Math.min(zoom.z, MAXZ);
     var band = bandRect();
     var b = { x: spread.getBoundingClientRect().left - zoom.x,
@@ -157,9 +133,7 @@ window.Book = (function () {
   }
 
   function zoomReset(instant) {
-    zoom = { z: 1, x: 0, y: 0 };
-    var f = fitState();
-    zoom = { z: f.z, x: f.x, y: f.y };
+    zoom = { z: SERVED.z, x: SERVED.x, y: SERVED.y };
     applyZoom(instant);
   }
   function atFit() { return atFitFlag(); }
@@ -250,6 +224,14 @@ window.Book = (function () {
     i = Math.max(0, Math.min(count - 1, i));
     if (i === current) { restack(); return; }
     if (busy) return;
+    /* Πρώτα το τεύχος επιστρέφει οργανικά στο καρέ που σερβίρουμε, ΜΕΤΑ
+       γυρίζει η σελίδα. Αλλιώς η σελίδα γύριζε μέσα σε ζουμαρισμένο κάδρο. */
+    if (!opts._settled && !atFitFlag()) {
+      zoomReset();
+      opts._settled = true;
+      setTimeout(function () { go(i, opts); }, 210);
+      return;
+    }
 
     var back = i < current;
     var from = current, movingIdx = back ? i : current;
