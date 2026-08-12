@@ -213,14 +213,16 @@ body{
 
 /* Οι γωνίες που πιάνονται — μικρό τσακισμένο τριγωνάκι, όπως σε χαρτί
    που το έχουν ξεφυλλίσει. Δείχνουν ακριβώς πού δουλεύει το γύρισμα. */
-/* Η ΓΩΝΙΑ: τετράγωνο που πιάνει το hover, με το τρίγωνο ζωγραφισμένο σε
-   ψευδοστοιχείο. Το clip-path πρέπει να είναι ΜΟΝΟ στο τρίγωνο -- αν μπει
-   στο ίδιο το στοιχείο κόβει και την περιοχή του ποντικιού, αν λείψει
-   εντελώς το gradient γεμίζει και το αντίθετο τρίγωνο και φαίνεται ανάποδη. */
+/* Η ΓΩΝΙΑ πιάνεται ΜΟΝΟ στο τρίγωνο. Ως τετράγωνο, το hitbox κάθεται πάνω
+   σε κελιά του σταυρόλεξου και τα έκανε αδύνατο να επιλεγούν -- το clip-path
+   κόβει και το hit-testing, που εδώ είναι ακριβώς ό,τι θέλουμε. Το ίδιο
+   σχήμα μπαίνει και στο ψευδοστοιχείο, που ζωγραφίζει την τσάκιση. */
 .face > .corner{
   position:absolute;bottom:0;z-index:7;pointer-events:auto;
-  width:17%;max-width:80px;aspect-ratio:1;
+  width:15%;max-width:68px;aspect-ratio:1;
 }
+.face.front > .corner.r{clip-path:polygon(100% 0,100% 100%,0 100%)}
+.face.back  > .corner.l{clip-path:polygon(0 0,100% 100%,0 100%)}
 .face > .corner::before{
   content:"";position:absolute;inset:0;
   opacity:0;transition:opacity .2s ease;pointer-events:none;

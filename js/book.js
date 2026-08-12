@@ -325,18 +325,26 @@ window.Book = (function () {
   function corner(clientX, clientY, target) {
     if (!stack) return null;
     /* Όσο είσαι ζουμαρισμένος ΔΕΝ γυρίζει σελίδα: προσπαθώντας να εστιάσεις
-       με το δάχτυλο ή το ποντίκι κατέληγες σε άλλη σελίδα. Η αλλαγή σελίδας
-       γίνεται τότε μόνο από τα βελάκια, που είναι ρητή πράξη. */
+       με το δάχτυλο ή το ποντίκι κατέληγες σε άλλη σελίδα. */
     if (!atFitFlag()) return null;
     var r = stack.getBoundingClientRect();
-    var w = Math.max(34, Math.min(84, r.width * .18));
-    var h = Math.max(70, Math.min(180, r.height * .18));
-    if (clientY < r.bottom - h) return null;
-    if (clientX >= r.right - w) return 'right';
+    /* ΤΡΙΓΩΝΟ, όχι ορθογώνιο, και στο ίδιο μέγεθος με τη ζωγραφισμένη
+       τσάκιση. Το παλιό ορθογώνιο έπιανε 18% του ύψους σε όλο το πλάι και
+       κάθονταν πάνω σε κελιά -- δεν μπορούσες να τα επιλέξεις. */
+    var side = Math.min(68, r.width * .15);
+    if (clientY < r.bottom - side) return null;
+    var dy = (r.bottom - clientY) / side;          // 0 στη βάση, 1 στην κορυφή
+    if (clientX >= r.right - side) {
+      var dxr = (clientX - (r.right - side)) / side;
+      return dxr >= dy ? 'right' : null;
+    }
     // Η ελεύθερη ακμή της αριστερής σελίδας είναι ΤΕΡΜΑ ΑΡΙΣΤΕΡΑ, όχι στη
     // ράχη — από εκεί την πιάνεις για να γυρίσεις πίσω.
     var leftEdge = Math.max(0, r.left - r.width);
-    if (clientX <= leftEdge + w) return 'left';
+    if (clientX <= leftEdge + side) {
+      var dxl = (leftEdge + side - clientX) / side;
+      return dxl >= dy ? 'left' : null;
+    }
     return null;
   }
 
