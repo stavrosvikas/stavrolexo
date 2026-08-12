@@ -358,9 +358,12 @@ body{
 
 /* Σκρολάρει το ΠΕΡΙΕΧΟΜΕΝΟ μέσα στη σελίδα, όχι η σελίδα. Αλλιώς έφευγε
    μαζί και η σκιά της ράχης, και έμενε κομμένη ακμή στο πλάι. */
+/* Το περιεχόμενο κυλάει ΠΑΝΤΑ όταν δεν χωράει -- σε μικρές ή περίεργες
+   οθόνες κοβόταν το κουμπί των λύσεων και δεν υπήρχε τρόπος να το φτάσεις.
+   Όταν χωράει, δεν εμφανίζεται μπάρα. */
 .last{overflow:hidden}
-.last.scrollable .sheet{overflow-y:auto;-webkit-overflow-scrolling:touch;
-                        scroll-behavior:smooth}
+.last .sheet{overflow-y:auto;-webkit-overflow-scrolling:touch;
+             scroll-behavior:smooth}
 .sheet::-webkit-scrollbar{width:10px}
 .sheet::-webkit-scrollbar-track{background:var(--m-05)}
 .sheet::-webkit-scrollbar-thumb{background:var(--m-20);border-radius:99px;
