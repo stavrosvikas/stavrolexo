@@ -199,35 +199,39 @@ body{
 
 /* Οι γωνίες που πιάνονται — μικρό τσακισμένο τριγωνάκι, όπως σε χαρτί
    που το έχουν ξεφυλλίσει. Δείχνουν ακριβώς πού δουλεύει το γύρισμα. */
+/* Η ΓΩΝΙΑ: τετράγωνο που πιάνει το hover, με το τρίγωνο ζωγραφισμένο σε
+   ψευδοστοιχείο. Το clip-path πρέπει να είναι ΜΟΝΟ στο τρίγωνο -- αν μπει
+   στο ίδιο το στοιχείο κόβει και την περιοχή του ποντικιού, αν λείψει
+   εντελώς το gradient γεμίζει και το αντίθετο τρίγωνο και φαίνεται ανάποδη. */
 .face > .corner{
-  position:absolute;bottom:0;z-index:7;
+  position:absolute;bottom:0;z-index:7;pointer-events:auto;
   width:17%;max-width:80px;aspect-ratio:1;
-  opacity:0;transition:opacity .2s ease;
-  pointer-events:auto;                  /* για να πιάνει το hover πάνω του */
 }
-/* Το hover μπαίνει ΠΑΝΩ ΣΤΗΝ ΙΔΙΑ τη γωνία, όχι σε όλη τη σελίδα — το
-   clip-path κόβει και το hit-test, άρα αντιδρά μόνο το τριγωνάκι. */
-@media (hover:hover){
-  .face > .corner:hover{opacity:.75}
+.face > .corner::before{
+  content:"";position:absolute;inset:0;
+  opacity:0;transition:opacity .2s ease;pointer-events:none;
 }
-/* Στο εξώφυλλο δεν χρειάζεται: εκεί μιλάει το animation που σηκώνει τη γωνία. */
-.leaf[data-page="0"] > .face.front > .corner{display:none}
-/* Το τρίγωνο το φτιάχνει το ίδιο το gradient (σκληρό stop στο 57%), οπότε
-   ΔΕΝ βάζουμε clip-path: θα έκοβε και την περιοχή που πιάνει το ποντίκι και
-   θα έπρεπε να πετύχεις ακριβώς μέσα στο τριγωνάκι. Έτσι το hover πιάνει
-   όλο το τετράγωνο της γωνίας — ίδια περιοχή με τη ζώνη γυρίσματος. */
 /* μπροστινή όψη: η ελεύθερη ακμή είναι δεξιά */
-.face.front > .corner.r{
-  right:0;
+.face.front > .corner.r{right:0}
+.face.front > .corner.r::before{
+  clip-path:polygon(100% 0,100% 100%,0 100%);
   background:linear-gradient(225deg,#fff 0%,#f1eff1 40%,#dbd8db 52%,
              rgba(0,0,0,.14) 56%,transparent 57%);
 }
 /* πίσω όψη = η αριστερή σελίδα· η ελεύθερη ακμή της είναι τέρμα αριστερά */
-.face.back > .corner.l{
-  left:0;
+.face.back > .corner.l{left:0}
+.face.back > .corner.l::before{
+  clip-path:polygon(0 0,100% 100%,0 100%);
   background:linear-gradient(135deg,#fff 0%,#f1eff1 40%,#dbd8db 52%,
              rgba(0,0,0,.14) 56%,transparent 57%);
 }
+/* με ποντίκι μόνο στο hover· σε αφή αναβοσβήνει μόνο στο εξώφυλλο */
+@media (hover:hover){
+  .face > .corner:hover::before{opacity:.75}
+}
+.leaf.show-corners > .face > .corner::before{opacity:.55}
+/* Στο εξώφυλλο δεν χρειάζεται: εκεί μιλάει το animation που σηκώνει τη γωνία. */
+.leaf[data-page="0"] > .face.front > .corner{display:none}
 
 /* ── εξώφυλλο ──────────────────────────────────────────────────── */
 
