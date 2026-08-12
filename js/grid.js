@@ -36,26 +36,13 @@ window.Grid = (function () {
       '</div>' +
       '<div class="gridwrap">' +
         '<div class="stage"><div class="grid"></div></div>' +
-        // εμφανίζεται μόνο όταν δεν βλέπεις όλο το πλέγμα, όπως το κουμπί
-        // εξόδου από πλήρη οθόνη σε player βίντεο
-        '<button class="fitbtn" type="button" aria-label="Δες όλο το πλέγμα">' +
-          '<svg viewBox="0 0 24 24" aria-hidden="true">' +
-            '<path d="M9 3v4a2 2 0 0 1-2 2H3M15 3v4a2 2 0 0 0 2 2h4' +
-                   'M9 21v-4a2 2 0 0 0-2-2H3M15 21v-4a2 2 0 0 1 2-2h4"/>' +
-          '</svg>' +
-        '</button>' +
       '</div>';
 
     this.wrap = this.el.querySelector('.gridwrap');
     this.stage = this.el.querySelector('.stage');
     this.gridEl = this.el.querySelector('.grid');
     this.scoreEl = this.el.querySelector('.score');
-    this.fitBtn = this.el.querySelector('.fitbtn');
-    this.fitBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      self.deselect();
-      self.fit();
-    });
+    this.fitBtn = document.getElementById('fitbtn');
 
     this.baked = 1;                     // πόσο ζουμ είναι ήδη «ψημένο» στο layout
     this.setUnit(1);
@@ -369,14 +356,33 @@ window.Grid = (function () {
     return Math.max(60, h);
   };
 
+  /* ── ΖΟΥΜ: πλέον το κάνει το ΤΕΥΧΟΣ, όχι το παράθυρο του πλέγματος ──
+     Το πλέγμα κάθεται πάντα ολόκληρο μέσα στη σελίδα του σε κλίμακα 1·
+     όταν εστιάζεις λέξη, πλησιάζει το ίδιο το περιοδικό. */
+  Puzzle.prototype.band = function () {
+    return document.getElementById('book').getBoundingClientRect();
+  };
+
+  Puzzle.prototype.wordRect = function (w) {
+    var self = this, l = 1e9, t = 1e9, r = -1e9, b = -1e9;
+    w.cells.forEach(function (rc) {
+      var cell = self.cells[key(rc[0], rc[1])];
+      if (!cell) return;
+      var q = cell.el.getBoundingClientRect();
+      l = Math.min(l, q.left); t = Math.min(t, q.top);
+      r = Math.max(r, q.right); b = Math.max(b, q.bottom);
+    });
+    return { left: l, top: t, right: r, bottom: b, width: r - l, height: b - t };
+  };
+
   Puzzle.prototype.apply = function (instant) {
     this.stage.classList.toggle('fx', !instant);
     // μόνο η διαφορά από το ήδη ψημένο ζουμ πάει σε transform
     var rel = this.view.s / (this.baked || 1);
     this.stage.style.transform =
       'translate(' + this.view.x + 'px,' + this.view.y + 'px) scale(' + rel + ')';
-    if (this.fitBtn) {
-      this.fitBtn.classList.toggle('on', this.view.s > this.fitScale * 1.04);
+    if (this.fitBtn && window.Book && Book.zoomLevel) {
+      this.fitBtn.classList.toggle('on', Book.zoomLevel() > 1.03);
     }
   };
 
@@ -387,8 +393,7 @@ window.Grid = (function () {
   };
 
   Puzzle.prototype.fit = function (instant) {
-    var vw = this.wrap.clientWidth, vh = this.vh();
-    // δίχτυ ασφαλείας: αν το layout δεν έχει προλάβει, ξαναδοκίμασε
+    var vw = this.wrap.clientWidth, vh = this.wrap.clientHeight;
     if (!vw || !vh) {
       var self = this;
       if ((this._fitTries = (this._fitTries || 0) + 1) < 30) {
@@ -397,45 +402,36 @@ window.Grid = (function () {
       return;
     }
     this._fitTries = 0;
-    this.fitScale = this.computeFit();
-    var gw = this.data.cols * CELL, gh = this.data.rows * CELL;
-    this.view = {
-      s: this.fitScale,
-      x: (vw - gw * this.fitScale) / 2,
-      y: (vh - gh * this.fitScale) / 2
-    };
-    this.apply(instant);
+    // το κελί υπολογίζεται ώστε το πλέγμα να γεμίζει τη σελίδα -- καμία
+    // κλίμακα με transform, άρα τα γράμματα είναι πάντα καθαρά
+    var k = Math.min(vw / (this.data.cols * CELL), vh / (this.data.rows * CELL)) * .97;
+    this.baked = k; this.view = { s: k, x: 0, y: 0 };
+    this.setUnit(k);
+    var gw = this.data.cols * CELL * k, gh = this.data.rows * CELL * k;
+    this.view.x = (vw - gw) / 2; this.view.y = (vh - gh) / 2;
+    this.fitScale = k;
+    this.apply(true);
+    if (window.Book && Book.zoomReset) Book.zoomReset(instant);
+    if (this.fitBtn) this.fitBtn.classList.remove('on');
   };
 
+  /* Το ζουμ δένεται στο ΜΕΓΕΘΟΣ ΚΕΛΙΟΥ, όχι στο πλάτος της λέξης: στόχος
+     είναι ένα άνετο κελί ~34px. Έτσι σε desktop, όπου τα κελιά είναι ήδη
+     μεγάλα, σχεδόν δεν ζουμάρει· σε κινητό πλησιάζει όσο χρειάζεται. */
   Puzzle.prototype.zoomToWord = function (w) {
-    var vw = this.wrap.clientWidth, vh = this.vh();
-    this.fitScale = this.computeFit();
-    var rs = w.cells.map(function (rc) { return rc[0]; });
-    var cs = w.cells.map(function (rc) { return rc[1]; });
-    var r0 = Math.min.apply(null, rs), r1 = Math.max.apply(null, rs);
-    var c0 = Math.min.apply(null, cs), c1 = Math.max.apply(null, cs);
-    var pad = 1.3;
-    var bw = (c1 - c0 + 1 + pad * 2) * CELL, bh = (r1 - r0 + 1 + pad * 2) * CELL;
-    var s = Math.min(vw / bw, vh / bh, MAX_SCALE);
-    s = Math.max(s, this.fitScale);
-    var cx = (c0 + (c1 - c0 + 1) / 2) * CELL, cy = (r0 + (r1 - r0 + 1) / 2) * CELL;
-    this.view = { s: s, x: vw / 2 - cx * s, y: vh / 2 - cy * s };
-    this.clamp();
-    this.apply();
+    if (!window.Book || !Book.zoomAt) return;
+    var z = Book.zoomLevel();
+    var cellPx = CELL * this.baked * z;
+    var target = z * (34 / Math.max(4, cellPx));
+    var r = this.wordRect(w);
+    Book.zoomAt(target, (r.left + r.right) / 2, (r.top + r.bottom) / 2, this.band());
   };
 
   Puzzle.prototype.ensureVisible = function () {
-    if (!this.active) return;
+    if (!this.active || !window.Book || !Book.keepInside) return;
     var rc = this.active.word.cells[this.active.idx];
-    var vw = this.wrap.clientWidth, vh = this.vh(), s = this.view.s;
-    var x = rc[1] * CELL * s + this.view.x, y = rc[0] * CELL * s + this.view.y;
-    var m = CELL * s * 1.2;
-    if (x < m) this.view.x += m - x;
-    if (x + m > vw - m) this.view.x -= (x + m) - (vw - m);
-    if (y < m) this.view.y += m - y;
-    if (y + m > vh - m) this.view.y -= (y + m) - (vh - m);
-    this.clamp();
-    this.apply();
+    var cell = this.cells[key(rc[0], rc[1])];
+    if (cell) Book.keepInside(cell.el.getBoundingClientRect(), this.band(), 28);
   };
 
   /* Το zoom-out σταματάει όταν το σταυρόλεξο γεμίσει την οθόνη. */
@@ -470,7 +466,7 @@ window.Grid = (function () {
       }
       if (ids.length === 2) {
         var a = pts[ids[0]], b = pts[ids[1]];
-        pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, s: self.view.s };
+        pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, last: 1 };
         tap = null;
       }
     });
@@ -482,23 +478,15 @@ window.Grid = (function () {
       if (ids.length >= 2 && pinch) {
         var a = pts[ids[0]], b = pts[ids[1]];
         var d = Math.hypot(a.x - b.x, a.y - b.y);
-        var ns = pinch.s * (d / pinch.d);
-        var mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
-        var rect = self.wrap.getBoundingClientRect();
-        var gx = (mx - rect.left - self.view.x) / self.view.s;
-        var gy = (my - rect.top - self.view.y) / self.view.s;
-        self.view.s = ns;
-        self.view.x = mx - rect.left - gx * ns;
-        self.view.y = my - rect.top - gy * ns;
-        self.clamp(); self.apply(true); self.bakeSoon();
+        var f = (d / pinch.d) / (pinch.last || 1);
+        pinch.last = d / pinch.d;
+        if (window.Book) Book.zoomBy(f, (a.x + b.x) / 2, (a.y + b.y) / 2);
         return;
       }
       if (last) {
         if (tap) tap.moved += Math.abs(e.clientX - last.x) + Math.abs(e.clientY - last.y);
-        self.view.x += e.clientX - last.x;
-        self.view.y += e.clientY - last.y;
+        if (window.Book) Book.panBy(e.clientX - last.x, e.clientY - last.y);
         last = { x: e.clientX, y: e.clientY };
-        self.clamp(); self.apply(true);
       }
     });
 
@@ -516,14 +504,7 @@ window.Grid = (function () {
 
     this.wrap.addEventListener('wheel', function (e) {
       e.preventDefault();
-      var rect = self.wrap.getBoundingClientRect();
-      var gx = (e.clientX - rect.left - self.view.x) / self.view.s;
-      var gy = (e.clientY - rect.top - self.view.y) / self.view.s;
-      var ns = self.view.s * (e.deltaY > 0 ? .88 : 1.14);
-      self.view.s = ns;
-      self.view.x = e.clientX - rect.left - gx * ns;
-      self.view.y = e.clientY - rect.top - gy * ns;
-      self.clamp(); self.apply(true); self.bakeSoon();
+      if (window.Book) Book.zoomBy(e.deltaY > 0 ? .9 : 1.12, e.clientX, e.clientY);
     }, { passive: false });
   };
 

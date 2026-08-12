@@ -94,10 +94,13 @@ body{
   flex:0 0 auto;display:flex;align-items:stretch;
   background:var(--m-05);border-bottom:1px solid var(--m-20);
   min-height:66px;
+  /* κάθεται ΠΑΝΩ από το περιοδικό, οπότε ρίχνει σκιά πάνω του */
+  position:relative;z-index:12;
+  box-shadow:0 6px 14px rgba(0,0,0,.30);
 }
 /* .empty = εκτός σελίδων πλέγματος -> τελείως άδεια, μόνο κρατάει τον χώρο.
    .hint  = σε σελίδα πλέγματος χωρίς επιλεγμένη λέξη -> δείχνει τι να κάνεις. */
-#cluebar.empty{background:var(--bg);border-bottom-color:transparent}
+#cluebar.empty{background:var(--bg);border-bottom-color:transparent;box-shadow:none}
 #cluebar.empty > *{visibility:hidden}
 
 .clue-hint{
@@ -130,6 +133,7 @@ body{
 
 #book{
   flex:1 1 auto;min-height:0;display:grid;place-items:center;
+  overflow:hidden;                  /* το τεύχος ζουμάρει μέσα του */
   perspective:2200px;perspective-origin:50% 50%;
   container-type:size;              /* για να μετράμε σε cqw/cqh */
   /* Πλάτος μιας σελίδας: όσο χωράει, αλλά πάντα σε λόγο 3:4.
@@ -139,8 +143,12 @@ body{
 /* Το «άνοιγμα» — αριστερή σελίδα + δεξιά σελίδα, κεντραρισμένο ολόκληρο.
    Χρειάζεται ρητό width/height: το #book είναι grid με place-items:center
    και δεν τεντώνει τα παιδιά του. */
+/* Το ζουμ εφαρμόζεται ΕΔΩ, σε ολόκληρο το άνοιγμα — πλησιάζει το περιοδικό,
+   δεν μεγαλώνει ένα παράθυρο μέσα στη σελίδα. */
 #spread{display:flex;align-items:center;justify-content:center;gap:0;
-        width:100%;height:100%;transform-style:preserve-3d}
+        width:100%;height:100%;transform-style:preserve-3d;
+        transform-origin:0 0;will-change:transform;--z:1}
+#spread.zfx{transition:transform .36s cubic-bezier(.22,.61,.36,1)}
 
 /* Η ΣΕΛΙΔΑ ΕΙΝΑΙ ΠΑΝΤΑ 3:4, σε κάθε οθόνη. Έτσι το εξώφυλλο τη γεμίζει
    ακριβώς, οι τσακίσεις πέφτουν στις πραγματικές γωνίες, και δεν γίνεται
@@ -165,11 +173,13 @@ body{
   background:var(--page);
   display:flex;flex-direction:column;
   backface-visibility:hidden;
-  box-shadow:0 2px 30px rgba(0,0,0,.45);
+  /* διαιρούμε με το ζουμ, ώστε η σκιά να μη μεγεθύνεται μαζί με το χαρτί */
+  box-shadow:0 calc(2px / var(--z)) calc(30px / var(--z)) rgba(0,0,0,.45);
 }
 /* σκιά ράχης */
 .face::before{
-  content:"";position:absolute;left:0;top:0;bottom:0;width:30px;
+  content:"";position:absolute;left:0;top:0;bottom:0;
+  width:calc(30px / var(--z));
   background:linear-gradient(to right,rgba(0,0,0,.16),rgba(0,0,0,.03) 45%,rgba(0,0,0,0));
   pointer-events:none;z-index:4;
 }
@@ -291,7 +301,8 @@ body{
 /* «δες όλο το πλέγμα» — εικονίδιο σμίκρυνσης, εμφανίζεται μόνο όταν είσαι
    ζουμαρισμένος. Ίδια λογική με το κουμπί εξόδου από πλήρη οθόνη. */
 .fitbtn{
-  position:absolute;top:10px;right:10px;z-index:8;
+  position:absolute;top:calc(66px + env(safe-area-inset-top,0px) + 10px);
+  right:12px;z-index:30;
   width:38px;height:38px;border-radius:50%;border:0;padding:0;
   background:rgba(20,20,24,.72);color:#fff;cursor:pointer;
   display:grid;place-items:center;
@@ -420,8 +431,10 @@ body{
    ώστε να μεγαλώσει η σελίδα — αλλά τότε το κενό απλώς μετακόμιζε στην
    κορυφή και τα πλήκτρα έκρυβαν το κάτω μέρος του πλέγματος. */
 #keyboard{flex:0 0 auto;background:#ecebef;padding:6px 4px;user-select:none;
-          border-top:1px solid var(--hair)}
-#keyboard.empty{background:var(--bg);border-top-color:transparent}
+          border-top:1px solid var(--hair);
+          position:relative;z-index:12;
+          box-shadow:0 -6px 14px rgba(0,0,0,.30)}
+#keyboard.empty{background:var(--bg);border-top-color:transparent;box-shadow:none}
 #keyboard.empty > *{visibility:hidden}
 .krow{display:flex;gap:5px;justify-content:center;margin-bottom:5px}
 .key{
@@ -450,10 +463,12 @@ body{
 #app.kbside #book   {grid-area:book;min-width:0}
 #app.kbside #pager  {grid-area:pager}
 #app.kbside #keyboard{
-  grid-area:kb;align-self:center;
+  grid-area:kb;align-self:stretch;display:flex;flex-direction:column;
+  justify-content:center;
   width:clamp(280px, 34vw, 430px);
   border-top:0;border-left:1px solid var(--hair);
   padding:10px 8px;
+  box-shadow:-6px 0 14px rgba(0,0,0,.30);
 }
 #app.kbside #keyboard.empty{border-left-color:transparent}
 
@@ -504,7 +519,7 @@ body{
    είναι το πλάτος της σελίδας, οπότε οι ορισμοί κλιμακώνονται μαζί της. */
 .back-inner{position:absolute;inset:0;display:flex;flex-direction:column;
             padding:16px 22px 14px 20px;overflow:hidden;
-            font-size:clamp(8.5px, calc(var(--pagew) * .0255), 13px)}
+            font-size:clamp(7.5px, calc(var(--pagew) * .0248), 13px)}
 .back-inner:empty{display:none}
 .back-inner h3{
   margin:0 0 8px;font-size:.8em;letter-spacing:.24em;text-transform:uppercase;
@@ -514,19 +529,19 @@ body{
    έφτιαχνε ΝΕΑ στήλη δεξιά: εμφανιζόταν οριζόντια μπάρα κύλισης και τα
    ΚΑΘΕΤΑ έφευγαν εκτός κάδρου. */
 .facing-cols{flex:1 1 auto;min-height:0;display:flex;gap:14px;overflow:hidden}
-.cl-group{flex:1 1 0;min-width:0;overflow-y:auto;overflow-x:hidden;
-          padding-right:4px}
+ /* ΧΩΡΙΣ scroll: μέσα σε 3D-περιστραμμένη όψη το scroll δεν αποκρίνεται
+    αξιόπιστα, οπότε η μπάρα φαινόταν και δεν δούλευε. Αντ' αυτού τα
+    γράμματα μικραίνουν, και αν η σελίδα είναι πολύ μικρή δεν εμφανίζεται
+    καθόλου (βλ. syncSpread). */
+.cl-group{flex:1 1 0;min-width:0;overflow:hidden;padding-right:4px}
 .cl-group + .cl-group{border-left:1px solid var(--hair);padding-left:14px}
-.cl-group::-webkit-scrollbar{width:6px}
-.cl-group::-webkit-scrollbar-thumb{background:var(--m-20);border-radius:99px}
-.cl-group{scrollbar-width:thin;scrollbar-color:var(--m-20) transparent}
 /* οι ορισμοί ζωγραφίζονται μόνο όταν φαίνεται η αριστερή σελίδα */
 #app:not(.spread) .back-inner{display:none}
 .cl-group > b{display:block;font-size:.72em;letter-spacing:.2em;color:var(--ink-3);
               margin-bottom:4px;text-transform:uppercase;position:sticky;top:0;
               background:#fff;padding-bottom:2px}
 .cl-item{
-  display:flex;gap:6px;font-size:1em;line-height:1.3;padding:2px 4px;
+  display:flex;gap:6px;font-size:1em;line-height:1.24;padding:1px 4px;
   border-radius:3px;cursor:pointer;
 }
 .cl-item:hover{background:var(--y-10)}

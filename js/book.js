@@ -1,12 +1,110 @@
 /* Το τεύχος: φύλλα στοιβαγμένα σε 3D, γυρνάνε γύρω από τη ράχη.
    Το σύρσιμο ακολουθεί το δάχτυλο — δεν είναι απλό slide. */
 window.Book = (function () {
-  var stack, leaves, nav, prevBtn, nextBtn;
+  var stack, spread, leaves, nav, prevBtn, nextBtn;
   var backs = [];                 // η πίσω όψη κάθε φύλλου (= η αριστερή σελίδα)
   var current = 0, count = 0, onChange = null, busy = false;
 
   // σύρσιμο
   var drag = null, justDragged = false;
+
+  /* ── ΖΟΥΜ ΟΛΟΚΛΗΡΟΥ ΤΟΥ ΤΕΥΧΟΥΣ ──────────────────────────────────
+     Δεν μεγαλώνει ένα παράθυρο μέσα στη σελίδα: πλησιάζει το ίδιο το
+     περιοδικό, με το χαρτί, τις ακμές και τη σκιά του. Το #book κόβει. */
+  var zoom = { z: 1, x: 0, y: 0 };
+  var MAXZ = 2.6;
+
+  /* Μαγνήτης: όσο κι αν σύρεις ή ζουμάρεις, το τεύχος δεν φεύγει από το
+     κάδρο -- κρατάμε πάντα ένα κομμάτι του μέσα στη ζώνη. */
+  function clampZoom() {
+    var book = document.getElementById('book');
+    if (!book) return;
+    var band = book.getBoundingClientRect();
+    var b = { x: spread.getBoundingClientRect().left - zoom.x,
+              y: spread.getBoundingClientRect().top - zoom.y };
+    var w = spread.offsetWidth * zoom.z, h = spread.offsetHeight * zoom.z;
+    var keep = .35;                       // τουλάχιστον 35% να παραμένει ορατό
+    var minX = band.left - b.x - w * (1 - keep);
+    var maxX = band.right - b.x - w * keep;
+    var minY = band.top - b.y - h * (1 - keep);
+    var maxY = band.bottom - b.y - h * keep;
+    if (w <= band.width) { minX = maxX = (band.left + band.width / 2) - b.x - w / 2; }
+    if (h <= band.height) { minY = maxY = (band.top + band.height / 2) - b.y - h / 2; }
+    zoom.x = Math.max(Math.min(zoom.x, maxX), minX);
+    zoom.y = Math.max(Math.min(zoom.y, maxY), minY);
+  }
+
+  function applyZoom(instant) {
+    clampZoom();
+    spread.classList.toggle('zfx', !instant);
+    spread.style.setProperty('--z', zoom.z.toFixed(4));
+    spread.style.transform =
+      'translate(' + zoom.x.toFixed(1) + 'px,' + zoom.y.toFixed(1) + 'px) ' +
+      'scale(' + zoom.z.toFixed(4) + ')';
+  }
+
+  function baseOrigin() {                       // θέση χωρίς το translate
+    var o = spread.getBoundingClientRect();
+    return { x: o.left - zoom.x, y: o.top - zoom.y, o: o };
+  }
+
+  function toLocal(cx, cy, o) {                 // client -> τοπικές του spread
+    return { x: (cx - o.left) / zoom.z, y: (cy - o.top) / zoom.z };
+  }
+
+  /* Φέρνει το rect (σε client συντεταγμένες) στο κέντρο της ορατής ζώνης. */
+  function zoomToRect(r, band, opts) {
+    opts = opts || {};
+    var b = baseOrigin();
+    var bw = band.width, bh = band.height, pad = opts.pad || 1.35;
+    var k = Math.min(bw / (r.width * pad), bh / (r.height * pad));
+    var nz = Math.max(1, Math.min(MAXZ, zoom.z * k));
+    var p = toLocal((r.left + r.right) / 2, (r.top + r.bottom) / 2, b.o);
+    zoom.z = nz;
+    zoom.x = (band.left + band.width / 2) - b.x - nz * p.x;
+    zoom.y = (band.top + band.height / 2) - b.y - nz * p.y;
+    applyZoom(opts.instant);
+  }
+
+  /* Ορίζει κλίμακα και φέρνει το σημείο (cx,cy) στο κέντρο της ζώνης. */
+  function zoomAt(nz, cx, cy, band) {
+    var b = baseOrigin();
+    var p = toLocal(cx, cy, b.o);
+    zoom.z = Math.max(1, Math.min(MAXZ, nz));
+    zoom.x = (band.left + band.width / 2) - b.x - zoom.z * p.x;
+    zoom.y = (band.top + band.height / 2) - b.y - zoom.z * p.y;
+    applyZoom();
+  }
+
+  /* Πανοραμική μόνο: κρατάει το rect μέσα στη ζώνη χωρίς να αλλάξει κλίμακα. */
+  function keepInside(r, band, m) {
+    m = m || 24;
+    var dx = 0, dy = 0;
+    if (r.left < band.left + m) dx = band.left + m - r.left;
+    else if (r.right > band.right - m) dx = band.right - m - r.right;
+    if (r.top < band.top + m) dy = band.top + m - r.top;
+    else if (r.bottom > band.bottom - m) dy = band.bottom - m - r.bottom;
+    if (!dx && !dy) return;
+    zoom.x += dx; zoom.y += dy;
+    applyZoom();
+  }
+
+  function zoomReset(instant) {
+    zoom = { z: 1, x: 0, y: 0 };
+    applyZoom(instant);
+  }
+
+  function zoomBy(f, cx, cy) {                  // pinch / wheel γύρω από σημείο
+    var b = baseOrigin();
+    var p = toLocal(cx, cy, b.o);
+    var nz = Math.max(1, Math.min(MAXZ, zoom.z * f));
+    zoom.z = nz;
+    zoom.x = cx - b.x - nz * p.x;
+    zoom.y = cy - b.y - nz * p.y;
+    applyZoom(true);
+  }
+
+  function panBy(dx, dy) { zoom.x += dx; zoom.y += dy; applyZoom(true); }
 
   function mkCorner(side) {
     var c = document.createElement('div');
@@ -238,6 +336,7 @@ window.Book = (function () {
   return {
     init: function (opts) {
       stack = document.getElementById('stack');
+      spread = document.getElementById('spread');
       leaves = Array.prototype.slice.call(stack.querySelectorAll('.leaf'));
       nav = document.getElementById('dots-nav');
       prevBtn = document.getElementById('prev');
@@ -295,6 +394,13 @@ window.Book = (function () {
     current: function () { return current; },
     inEdgeZone: inEdgeZone,
     restack: restack,
+    zoomToRect: zoomToRect,
+    zoomAt: zoomAt,
+    zoomReset: zoomReset,
+    zoomBy: zoomBy,
+    panBy: panBy,
+    keepInside: keepInside,
+    zoomLevel: function () { return zoom.z; },
     /* Η πίσω όψη του φύλλου i — δηλαδή η αριστερή σελίδα που βλέπεις όταν
        είσαι στη σελίδα i+1. Εκεί τυπώνονται οι ορισμοί. */
     back: function (i) { return backs[i] || null; }

@@ -1,0 +1,14 @@
+<!DOCTYPE html><meta charset="utf-8">
+<style>html,body{margin:0;background:#666;display:flex;gap:10px;padding:10px}
+figure{margin:0;font:11px monospace;color:#fff}iframe{border:0;display:block}</style>
+<figure><figcaption>κινητό — χωρίς επιλογή</figcaption><iframe id="a" src="index.html" width="390" height="760"></iframe></figure>
+<figure><figcaption>κινητό — εστίαση σε λέξη</figcaption><iframe id="b" src="index.html" width="390" height="760"></iframe></figure>
+<figure><figcaption>desktop — εστίαση σε λέξη</figcaption><iframe id="c" src="index.html" width="1100" height="760"></iframe></figure>
+<script>window.addEventListener('load',function(){setTimeout(function(){
+ [a,b,c].forEach(function(f){try{f.contentWindow.Book.go(1)}catch(e){}});
+ setTimeout(function(){
+   [b,c].forEach(function(f){ try{
+     var w=f.contentWindow, d=f.contentDocument;
+     d.getElementById('clue-hint').click();
+   }catch(e){} });
+ },1300);},700)});</script>

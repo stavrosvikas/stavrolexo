@@ -67,7 +67,9 @@
         it.classList.toggle('done', !!w && w.state === 'ok');
         var on = (+it.dataset.id === activeId);
         it.classList.toggle('on', on);
-        if (on && it.scrollIntoView) it.scrollIntoView({ block: 'nearest' });
+        // όχι scrollIntoView: οι στήλες δεν σκρολάρουν πια, και μέσα σε
+        // μετασχηματισμένο τεύχος θα μετακινούσε τα πάντα
+
       });
     });
   }
@@ -133,7 +135,8 @@
     var withFacing = Math.min(w * .48, h * .75);
     var app = document.getElementById('app');
     var was = app.classList.contains('spread');
-    var now = withFacing >= alone - 1;
+    // και αρκετά μεγάλη ώστε οι ορισμοί να διαβάζονται χωρίς scroll
+    var now = withFacing >= alone - 1 && withFacing >= 360;
     if (was === now) return;
     app.classList.toggle('spread', now);
     if (Book.restack) Book.restack();     // αλλάζει ποιο φύλλο μένει ορατό
@@ -188,6 +191,12 @@
     letter: function (ch) { var p = activePuzzle(); if (p) p.type(ch); },
     del: function () { var p = activePuzzle(); if (p) p.backspace(); },
     step: function (d) { var p = activePuzzle(); if (p) p.step(d); }
+  });
+
+  document.getElementById('fitbtn').addEventListener('click', function () {
+    var p = activePuzzle();
+    if (p) { p.deselect(); p.fit(); }
+    else if (window.Book) Book.zoomReset();
   });
 
   document.getElementById('clue-hint').addEventListener('click', function () {
