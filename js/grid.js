@@ -359,8 +359,9 @@ window.Grid = (function () {
   /* ── ΖΟΥΜ: πλέον το κάνει το ΤΕΥΧΟΣ, όχι το παράθυρο του πλέγματος ──
      Το πλέγμα κάθεται πάντα ολόκληρο μέσα στη σελίδα του σε κλίμακα 1·
      όταν εστιάζεις λέξη, πλησιάζει το ίδιο το περιοδικό. */
+  /* Μία πηγή αλήθειας για την ορατή ζώνη -- ζει στο Book. */
   Puzzle.prototype.band = function () {
-    return document.getElementById('book').getBoundingClientRect();
+    return Book.band();
   };
 
   Puzzle.prototype.wordRect = function (w) {
@@ -382,7 +383,13 @@ window.Grid = (function () {
     this.stage.style.transform =
       'translate(' + this.view.x + 'px,' + this.view.y + 'px) scale(' + rel + ')';
     if (this.fitBtn && window.Book && Book.zoomLevel) {
-      this.fitBtn.classList.toggle('on', Book.zoomLevel() > 1.03);
+      var zed = Book.atFit ? !Book.atFit() : Book.zoomLevel() > 1.03;
+      // Είναι κουμπί ΕΣΤΙΑΣΗΣ, όχι μόνο εξόδου: όσο υπάρχει επιλεγμένη λέξη
+      // πρέπει να φαίνεται, αλλιώς σε desktop (που δεν ζουμάρει) δεν υπήρχε.
+      this.fitBtn.classList.toggle('on', zed || !!this.active);
+      this.fitBtn.classList.toggle('back', zed);
+      this.fitBtn.setAttribute('aria-label',
+        zed ? 'Δες όλο το τεύχος' : 'Εστίασε στη λέξη');
     }
   };
 
@@ -412,7 +419,7 @@ window.Grid = (function () {
     this.fitScale = k;
     this.apply(true);
     if (window.Book && Book.zoomReset) Book.zoomReset(instant);
-    if (this.fitBtn) this.fitBtn.classList.remove('on');
+    if (this.fitBtn && !this.active) this.fitBtn.classList.remove('on');
   };
 
   /* Το ζουμ δένεται στο ΜΕΓΕΘΟΣ ΚΕΛΙΟΥ, όχι στο πλάτος της λέξης: στόχος

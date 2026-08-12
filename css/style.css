@@ -294,7 +294,7 @@ body{
 /* «δες όλο το πλέγμα» — εικονίδιο σμίκρυνσης, εμφανίζεται μόνο όταν είσαι
    ζουμαρισμένος. Ίδια λογική με το κουμπί εξόδου από πλήρη οθόνη. */
 .fitbtn{
-  position:absolute;top:calc(66px + env(safe-area-inset-top,0px) + 10px);
+  position:absolute;top:calc(var(--chrome-t,0px) + env(safe-area-inset-top,0px) + 10px);
   right:12px;z-index:30;
   width:38px;height:38px;border-radius:50%;border:0;padding:0;
   background:rgba(20,20,24,.72);color:#fff;cursor:pointer;
@@ -426,12 +426,14 @@ body{
 /* Το πληκτρολόγιο κρατάει τον χώρο του πάντα. Δοκιμάστηκε να επικάθεται
    ώστε να μεγαλώσει η σελίδα — αλλά τότε το κενό απλώς μετακόμιζε στην
    κορυφή και τα πλήκτρα έκρυβαν το κάτω μέρος του πλέγματος. */
-#keyboard{flex:0 0 auto;background:#ecebef;padding:6px 4px;user-select:none;
-          border-top:1px solid var(--hair);
-          position:relative;z-index:12;
-          box-shadow:0 -6px 14px rgba(0,0,0,.30)}
-#keyboard.empty{background:var(--bg);border-top-color:transparent;box-shadow:none}
-#keyboard.empty > *{visibility:hidden}
+#keyboard{
+  position:absolute;left:0;right:0;bottom:var(--pager-h);z-index:12;
+  background:#ecebef;padding:6px 4px;user-select:none;
+  border-top:1px solid var(--hair);
+  box-shadow:0 -6px 14px rgba(0,0,0,.30);
+  transition:transform .22s ease,opacity .22s ease;
+}
+#keyboard.empty{transform:translateY(115%);opacity:0;pointer-events:none}
 .krow{display:flex;gap:5px;justify-content:center;margin-bottom:5px}
 .key{
   flex:1 1 0;max-width:42px;height:46px;
@@ -449,24 +451,15 @@ body{
    σελίδα δένεται στο ύψος έβγαινε μικρότερη κι από κινητό — ενώ περίσσευαν
    ~300px πλάτος. Εδώ μπαίνει στο πλάι και η σελίδα παίρνει όλο το ύψος.
    Ενεργοποιείται ΜΟΝΟ σε coarse pointer: ποντίκι/trackpad δεν το βλέπουν. */
-#app.kbside{
-  display:grid;
-  grid-template-columns:1fr auto;
-  grid-template-rows:auto minmax(0,1fr) auto;
-  grid-template-areas:"clue clue" "book kb" "pager pager";
-}
-#app.kbside #cluebar{grid-area:clue}
-#app.kbside #book   {grid-area:book;min-width:0}
-#app.kbside #pager  {grid-area:pager}
 #app.kbside #keyboard{
-  grid-area:kb;align-self:stretch;display:flex;flex-direction:column;
-  justify-content:center;
+  left:auto;right:0;top:0;bottom:var(--pager-h);
   width:clamp(280px, 34vw, 430px);
+  display:flex;flex-direction:column;justify-content:center;
   border-top:0;border-left:1px solid var(--hair);
   padding:10px 8px;
   box-shadow:-6px 0 14px rgba(0,0,0,.30);
 }
-#app.kbside #keyboard.empty{border-left-color:transparent}
+#app.kbside #keyboard.empty{transform:translateX(115%)}
 
 /* ── pager ─────────────────────────────────────────────────────── */
 
@@ -580,3 +573,6 @@ body{
   .leaf{border-radius:0}
   .last.scrollable .sheet{scroll-behavior:auto}
 }
+
+/* Ζουμαρισμένος: οι τσακίσεις φεύγουν -- εκεί σέρνεις για να μετακινηθείς. */
+#app.zoomed .corner{display:none}

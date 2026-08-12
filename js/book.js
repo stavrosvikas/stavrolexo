@@ -12,14 +12,78 @@ window.Book = (function () {
      Δεν μεγαλώνει ένα παράθυρο μέσα στη σελίδα: πλησιάζει το ίδιο το
      περιοδικό, με το χαρτί, τις ακμές και τη σκιά του. Το #book κόβει. */
   var zoom = { z: 1, x: 0, y: 0 };
+  var applied = { z: 1, x: 0, y: 0 };   // τι είναι ΠΡΑΓΜΑΤΙ περασμένο στο DOM
+  var fitZ = 1;              // το ζουμ που «σερβίρουμε» -- ενημερώνεται στο clamp
+  function atFitFlag() { return zoom.z <= fitZ + .02; }
   var MAXZ = 2.6;
+
+  /* Η ΟΡΑΤΗ ζώνη: το #book μείον ό,τι κάθεται από πάνω του (μπάρα ερώτησης,
+     πληκτρολόγιο). Δεν κρατούν χώρο στο layout -- αλλιώς άλλαζε το μέγεθος
+     της σελίδας από σελίδα σε σελίδα και τιναζόταν όλο το τεύχος.
+     Μετριούνται με offsetHeight/Width και όχι με getBoundingClientRect:
+     όσο τρέχει η κίνησή τους το rect δίνει ενδιάμεση θέση, και πάνω σε
+     εκείνη τη στιγμή η ζώνη έβγαινε 54px και το τεύχος μίκραινε στο 10%. */
+  function bandRect() {
+    var book = document.getElementById('book');
+    var r = book.getBoundingClientRect();
+    var l = r.left, t = r.top, ri = r.right, b = r.bottom;
+    var app = document.getElementById('app');
+    var side = app && app.classList.contains('kbside');
+    var cb = document.getElementById('cluebar');
+    var kb = document.getElementById('keyboard');
+    if (cb && !cb.classList.contains('empty')) t += cb.offsetHeight;
+    if (kb && !kb.classList.contains('empty') && kb.offsetWidth) {
+      if (side) ri -= kb.offsetWidth; else b -= kb.offsetHeight;
+    }
+    // δικλείδα: ό,τι κι αν συμβεί, η ζώνη δεν εκφυλίζεται
+    if (b - t < r.height * .3) b = t + r.height * .3;
+    if (ri - l < r.width * .3) ri = l + r.width * .3;
+    return { left: l, top: t, right: ri, bottom: b,
+             width: ri - l, height: b - t };
+  }
+
+  /* Το τυπωμένο περιεχόμενο σε συντεταγμένες του #spread -- ΧΩΡΙΣ το ζουμ.
+     Μετριέται με offsetWidth/Height, όχι με getBoundingClientRect: το rect
+     επιστρέφει την ΤΡΕΧΟΥΣΑ τιμή του transition, οπότε κάθε υπολογισμός
+     έπαιρνε μια ενδιάμεση κλίμακα και το τεύχος μίκραινε μέχρι να χαθεί.
+     Το #spread είναι flex, κεντραρισμένο -- άρα η θέση βγαίνει αναλυτικά. */
+  function contentBox() {
+    var sw = spread.offsetWidth, sh = spread.offsetHeight;
+    if (!sw || !sh) return null;
+    var f = document.getElementById('facing'), st = document.getElementById('stack');
+    var fw = (f && f.offsetWidth) || 0, fh = (f && f.offsetHeight) || 0;
+    var tw = (st && st.offsetWidth) || 0, th = (st && st.offsetHeight) || 0;
+    var w = fw + tw, h = Math.max(fh, th);
+    if (!w || !h) return null;
+    return { x: (sw - w) / 2, y: (sh - h) / 2, w: w, h: h };
+  }
+
+  /* Το «σερβιρισμένο» ζουμ: ολόκληρο το τεύχος, κεντραρισμένο στην ορατή
+     ζώνη. Είναι ΚΑΙ το κατώτατο όριο -- πιο έξω δεν σμικραίνεις. */
+  function fitState() {
+    var c = contentBox();
+    if (!c) return { z: 1, x: 0, y: 0 };
+    var band = bandRect();
+    var z = Math.min(1, band.width / c.w, band.height / c.h);
+    var sp = spread.getBoundingClientRect();
+    var o = { x: sp.left - applied.x, y: sp.top - applied.y };  // αρχή χωρίς μετατόπιση
+    return {
+      z: z,
+      x: band.left + (band.width  - c.w * z) / 2 - (o.x + c.x * z),
+      y: band.top  + (band.height - c.h * z) / 2 - (o.y + c.y * z)
+    };
+  }
 
   /* Μαγνήτης: όσο κι αν σύρεις ή ζουμάρεις, το τεύχος δεν φεύγει από το
      κάδρο -- κρατάμε πάντα ένα κομμάτι του μέσα στη ζώνη. */
   function clampZoom() {
     var book = document.getElementById('book');
     if (!book) return;
-    var band = book.getBoundingClientRect();
+    var f = fitState();
+    fitZ = f.z;
+    if (zoom.z <= f.z + 1e-4) { zoom.z = f.z; zoom.x = f.x; zoom.y = f.y; return; }
+    zoom.z = Math.min(zoom.z, MAXZ);
+    var band = bandRect();
     var b = { x: spread.getBoundingClientRect().left - zoom.x,
               y: spread.getBoundingClientRect().top - zoom.y };
     var w = spread.offsetWidth * zoom.z, h = spread.offsetHeight * zoom.z;
@@ -36,20 +100,23 @@ window.Book = (function () {
 
   function applyZoom(instant) {
     clampZoom();
+    var app = document.getElementById('app');
+    if (app) app.classList.toggle('zoomed', !atFitFlag());
     spread.classList.toggle('zfx', !instant);
     spread.style.setProperty('--z', zoom.z.toFixed(4));
     spread.style.transform =
       'translate(' + zoom.x.toFixed(1) + 'px,' + zoom.y.toFixed(1) + 'px) ' +
       'scale(' + zoom.z.toFixed(4) + ')';
+    applied = { z: zoom.z, x: zoom.x, y: zoom.y };
   }
 
   function baseOrigin() {                       // θέση χωρίς το translate
     var o = spread.getBoundingClientRect();
-    return { x: o.left - zoom.x, y: o.top - zoom.y, o: o };
+    return { x: o.left - applied.x, y: o.top - applied.y, o: o };
   }
 
   function toLocal(cx, cy, o) {                 // client -> τοπικές του spread
-    return { x: (cx - o.left) / zoom.z, y: (cy - o.top) / zoom.z };
+    return { x: (cx - o.left) / applied.z, y: (cy - o.top) / applied.z };
   }
 
   /* Φέρνει το rect (σε client συντεταγμένες) στο κέντρο της ορατής ζώνης. */
@@ -58,7 +125,7 @@ window.Book = (function () {
     var b = baseOrigin();
     var bw = band.width, bh = band.height, pad = opts.pad || 1.35;
     var k = Math.min(bw / (r.width * pad), bh / (r.height * pad));
-    var nz = Math.max(1, Math.min(MAXZ, zoom.z * k));
+    var nz = Math.max(fitZ, Math.min(MAXZ, zoom.z * k));
     var p = toLocal((r.left + r.right) / 2, (r.top + r.bottom) / 2, b.o);
     zoom.z = nz;
     zoom.x = (band.left + band.width / 2) - b.x - nz * p.x;
@@ -70,7 +137,7 @@ window.Book = (function () {
   function zoomAt(nz, cx, cy, band) {
     var b = baseOrigin();
     var p = toLocal(cx, cy, b.o);
-    zoom.z = Math.max(1, Math.min(MAXZ, nz));
+    zoom.z = Math.max(fitZ, Math.min(MAXZ, nz));
     zoom.x = (band.left + band.width / 2) - b.x - zoom.z * p.x;
     zoom.y = (band.top + band.height / 2) - b.y - zoom.z * p.y;
     applyZoom();
@@ -91,8 +158,11 @@ window.Book = (function () {
 
   function zoomReset(instant) {
     zoom = { z: 1, x: 0, y: 0 };
+    var f = fitState();
+    zoom = { z: f.z, x: f.x, y: f.y };
     applyZoom(instant);
   }
+  function atFit() { return atFitFlag(); }
 
   function zoomBy(f, cx, cy) {                  // pinch / wheel γύρω από σημείο
     var b = baseOrigin();
@@ -243,6 +313,10 @@ window.Book = (function () {
      σταυρόλεξου, και συμπίπτει με το σημείο που δείχνει το animation. */
   function corner(clientX, clientY, target) {
     if (!stack) return null;
+    /* Όσο είσαι ζουμαρισμένος ΔΕΝ γυρίζει σελίδα: προσπαθώντας να εστιάσεις
+       με το δάχτυλο ή το ποντίκι κατέληγες σε άλλη σελίδα. Η αλλαγή σελίδας
+       γίνεται τότε μόνο από τα βελάκια, που είναι ρητή πράξη. */
+    if (!atFitFlag()) return null;
     var r = stack.getBoundingClientRect();
     var w = Math.max(34, Math.min(84, r.width * .18));
     var h = Math.max(70, Math.min(180, r.height * .18));
@@ -261,6 +335,7 @@ window.Book = (function () {
 
   function canDrag(e) {
     if (busy) return false;
+    if (!atFitFlag()) return false;          // ζουμαρισμένος → σέρνεις, δεν γυρνάς
     if (e.target.closest('button')) return false;
     if (inEdgeZone(e.clientX, e.clientY, e.target)) return true;  // από τη γωνία, πάντα
     if (e.target.closest('.gridwrap')) return false; // αλλιώς το πλέγμα κάνει pan
@@ -398,6 +473,8 @@ window.Book = (function () {
     zoomAt: zoomAt,
     zoomReset: zoomReset,
     zoomBy: zoomBy,
+    band: bandRect,
+    atFit: atFit,
     panBy: panBy,
     keepInside: keepInside,
     zoomLevel: function () { return zoom.z; },

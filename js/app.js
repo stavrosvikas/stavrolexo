@@ -120,7 +120,40 @@
     cluebar.classList.toggle('empty', !onGrid);
     cluebar.classList.toggle('hint', onGrid && !picked);
     kb.classList.toggle('empty', !onGrid || !Keyboard.wantsOnScreen());
+    syncSpace();
   }
+
+  /* Η μπάρα και το πληκτρολόγιο ΕΠΙΚΑΘΟΝΤΑΙ (δεν κρατούν χώρο όταν λείπουν,
+     αλλιώς φαινόταν λωρίδα στο χρώμα του φόντου να κόβει το εξώφυλλο).
+     Όταν όμως υπάρχουν, το τεύχος πρέπει να χωράει ΑΝΑΜΕΣΑ τους: το ότι
+     κάθονται από πάνω δεν σημαίνει ότι επιτρέπεται να το κρύβουν σε
+     κατάσταση zoom-out. Γι' αυτό δίνουμε στο #book padding όσο το πραγματικό
+     ύψος/πλάτος τους -- μετρημένο, όχι μαντεμένο. */
+  function syncSpace() {
+    var app = document.getElementById('app');
+    var side = app.classList.contains('kbside');
+    var kbOn = !kb.classList.contains('empty') &&
+               getComputedStyle(kb).display !== 'none';
+    var t = cluebar.classList.contains('empty') ? 0 : cluebar.offsetHeight;
+    var b = (kbOn && !side) ? kb.offsetHeight : 0;
+    var r = (kbOn && side)  ? kb.offsetWidth  : 0;
+    var key = t + '/' + b + '/' + r;
+    if (key === lastSpace) return;
+    lastSpace = key;
+    app.style.setProperty('--chrome-t', t + 'px');
+    app.style.setProperty('--chrome-b', b + 'px');
+    app.style.setProperty('--chrome-r', r + 'px');
+    // Το layout ΔΕΝ αλλάζει -- αλλάζει μόνο η ορατή ζώνη, άρα αρκεί να
+    // ξαναϋπολογιστεί το ζουμ. (Padding στο #book τίναζε το τεύχος σε κάθε
+    // γύρισμα σελίδας.)
+    clearTimeout(spaceT);
+    spaceT = setTimeout(function () {
+      var q = activePuzzle();
+      if (q && q.active) q.zoomToWord(q.active.word);
+      else if (window.Book && Book.zoomReset) Book.zoomReset();
+    }, 30);
+  }
+  var lastSpace = '', spaceT;
 
   /* Η αριστερή σελίδα με τους ορισμούς μπαίνει μόνο όταν ΔΕΝ κοστίζει:
      δηλαδή όταν η οθόνη είναι τόσο φαρδιά που η σελίδα δένεται στο ύψος
@@ -152,6 +185,7 @@
     var wide = window.innerWidth >= 820;
     document.getElementById('app')
             .classList.toggle('kbside', touch && landscape && wide);
+    syncSpace();
   }
 
   // ── πλέγματα ────────────────────────────────────────────────────
@@ -195,8 +229,10 @@
 
   document.getElementById('fitbtn').addEventListener('click', function () {
     var p = activePuzzle();
-    if (p) { p.deselect(); p.fit(); }
-    else if (window.Book) Book.zoomReset();
+    if (!p) return;
+    // ζουμαρισμένος → δες όλο το τεύχος· αλλιώς → ξαναεστίασε στη λέξη
+    if (window.Book && !Book.atFit()) p.fit();
+    else if (p.active) p.zoomToWord(p.active.word);
   });
 
   document.getElementById('clue-hint').addEventListener('click', function () {
