@@ -583,3 +583,20 @@ body{
 
 /* Ζουμαρισμένος: το σύρσιμο ανήκει στην πανοραμική, όχι στο scroll. */
 #app.zoomed #book{touch-action:none}
+
+/* ── βοήθειες: δύο ανά λέξη ────────────────────────────────────── */
+.hint-btn{
+  align-self:flex-start;margin-top:4px;
+  border:1px solid var(--m-40);background:transparent;color:var(--m-100);
+  font:700 12px/1 'Roboto',sans-serif;letter-spacing:.02em;
+  padding:5px 9px;border-radius:999px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:5px;
+}
+.hint-btn:hover:not(:disabled){background:var(--m-10)}
+.hint-btn:disabled{opacity:.35;cursor:default}
+#cluebar.hint .hint-btn,#cluebar.empty .hint-btn{display:none}
+#hint-count{font-family:'Roboto Mono',monospace}
+
+/* Το δοσμένο γράμμα δεν είναι δικό σου κατόρθωμα -- φαίνεται πιο αχνό
+   και δεν σβήνεται. */
+.c.letter.given > .ink{opacity:.55}

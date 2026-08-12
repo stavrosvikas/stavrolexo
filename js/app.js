@@ -9,6 +9,8 @@
   var clueText = document.getElementById('clue-text');
   var clueLen = document.getElementById('clue-len');
   var clueImg = document.getElementById('clue-image');
+  var hintBtn = document.getElementById('hint-btn');
+  var hintCount = document.getElementById('hint-count');
   var kb = document.getElementById('keyboard');
   var list = document.getElementById('solutions-list');
   var revealBtn = document.getElementById('btn-reveal');
@@ -74,6 +76,17 @@
     });
   }
 
+  /* Πόσες βοήθειες μένουν στη λέξη που δουλεύεις. Κλείνει και όταν δεν
+     έχει πια νόημα: λυμένη λέξη ή γεμάτη χωρίς κενά. */
+  function syncHint() {
+    var p = activePuzzle();
+    var w = p && p.active ? p.active.word : null;
+    if (!w) { hintBtn.disabled = true; hintCount.textContent = '0/2'; return; }
+    var left = p.hintsLeft(w);
+    hintCount.textContent = left + '/2';
+    hintBtn.disabled = left <= 0 || w.state === 'ok' || !p.emptyCells(w).length;
+  }
+
   function activePuzzle() {
     var p = Book.current();
     return (p === 1 || p === 2) ? puzzles[p - 1] : null;
@@ -93,6 +106,7 @@
     clueN.textContent = w.n + (w.dir === 'H' ? ' ΟΡΙΖΟΝΤΙΑ' : ' ΚΑΘΕΤΑ');
     clueText.textContent = q.clue;
     clueLen.textContent = w.answer.length + ' γράμματα';
+    syncHint();
     if (q.image) {
       clueImg.src = q.image;
       clueImg.hidden = false;
@@ -191,7 +205,7 @@
   P.pages.forEach(function (pageData, i) {
     var el = document.querySelector('.face[data-grid="' + i + '"]');
     puzzles.push(new Grid.Puzzle(el, pageData, P.questions, i, {
-      onClue: function (w, q) { showClue(w, q); syncChrome(); paintClues(); },
+      onClue: function (w, q) { showClue(w, q); syncChrome(); paintClues(); syncHint(); },
       onProgress: function () { updateCover(); paintClues(); }
     }));
   });
@@ -221,9 +235,15 @@
 
   // ── πληκτρολόγιο ────────────────────────────────────────────────
   Keyboard.init(kb, {
-    letter: function (ch) { var p = activePuzzle(); if (p) p.type(ch); },
-    del: function () { var p = activePuzzle(); if (p) p.backspace(); },
+    letter: function (ch) { var p = activePuzzle(); if (p) { p.type(ch); syncHint(); } },
+    del: function () { var p = activePuzzle(); if (p) { p.backspace(); syncHint(); } },
     step: function (d) { var p = activePuzzle(); if (p) p.step(d); }
+  });
+
+  hintBtn.addEventListener('click', function () {
+    var p = activePuzzle();
+    if (p && p.useHint()) { paintClues(); }
+    syncHint();
   });
 
   document.getElementById('fitbtn').addEventListener('click', function () {
@@ -342,6 +362,10 @@
   requestAnimationFrame(function () {
     syncKbSide();
     syncSpread();
+    // #1..#3 στο URL ανοίγει κατευθείαν τη σελίδα. ΠΡΕΠΕΙ να είναι εδώ και
+    // όχι νωρίτερα: πριν στηθεί το τεύχος, το Book.go δεν έχει πού να πάει.
+    var hash = parseInt((location.hash || '').slice(1), 10);
+    if (hash >= 1 && hash <= 3) Book.go(hash, { silent: true });
     var p = activePuzzle();
     if (p) p.fit(true);
   });

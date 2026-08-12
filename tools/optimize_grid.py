@@ -78,9 +78,27 @@ def dims(cells):
 
 
 def cost(placements):
+    """Μικρότερο = καλύτερο.
+
+    Εκτός από το μέγεθος, τιμωρεί βαριά τις λέξεις που δεν διασταυρώνονται
+    με καμία άλλη. Μια ορφανή λέξη κάθεται μόνη της στο πλέγμα: δεν παίρνει
+    ούτε δίνει ούτε ένα γράμμα, οπότε ή την ξέρεις ή κοιτάς άδεια κελιά.
+    Πριν μπει αυτό, κάθε σελίδα έβγαζε από μία."""
     cells = rebuild(placements)
     h, w = dims(cells)
-    return max(h, w) * 1000 + h * w
+    own = {}
+    for i, p in enumerate(placements):
+        dr, dc = DIRS[p["dir"]]
+        for k in range(len(p["answer"])):
+            own.setdefault((p["r"] + dr * k, p["c"] + dc * k), []).append(i)
+    per = [0] * len(placements)
+    for ws in own.values():
+        if len(ws) > 1:
+            for i in ws:
+                per[i] += 1
+    lonely = sum(1 for x in per if x == 0)
+    thin = sum(1 for x in per if x == 1)
+    return max(h, w) * 1000 + h * w + lonely * 60000 + thin * 2500
 
 
 def insert_all(words, placements, rnd, max_dim, greed=1):

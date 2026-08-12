@@ -18,6 +18,8 @@ window.Grid = (function () {
     this.gridIndex = gridIndex;
     this.hooks = hooks || {};
     this.letters = Store.letters(gridIndex);
+    this.hintsUsed = Store.hints(gridIndex);   // ανά λέξη
+    this.given = Store.given(gridIndex);       // κελιά που δόθηκαν
     this.cells = {};
     this.words = [];
     this.active = null;
@@ -245,6 +247,12 @@ window.Grid = (function () {
   Puzzle.prototype.type = function (ch) {
     if (!this.active) return;
     var w = this.active.word, rc = w.cells[this.active.idx];
+    // πάνω από δοσμένο γράμμα δεν γράφεις -- προσπέρασέ το
+    while (this.given[key(rc[0], rc[1])] && this.active.idx < w.cells.length - 1) {
+      this.active.idx++;
+      rc = w.cells[this.active.idx];
+    }
+    if (this.given[key(rc[0], rc[1])]) return;
     this.letters[key(rc[0], rc[1])] = ch;
     Store.save();
     SFX.key();
@@ -261,6 +269,66 @@ window.Grid = (function () {
     }
   };
 
+  /* ── βοήθειες ────────────────────────────────────────────────
+     Δύο ανά λέξη, και τις ξοδεύεις εσύ. Κάθε μία αποκαλύπτει ένα γράμμα:
+     πρώτα το κελί που έχεις επιλεγμένο αν είναι άδειο, αλλιώς το πρώτο
+     άδειο της λέξης -- ώστε το κουμπί να κάνει αυτό που περιμένεις. */
+  var HINTS = 2;
+
+  Puzzle.prototype.hintsLeft = function (w) {
+    if (!w) return 0;
+    return Math.max(0, HINTS - (this.hintsUsed[w.id] || 0));
+  };
+
+  Puzzle.prototype.emptyCells = function (w) {
+    var self = this;
+    return w.cells.filter(function (rc) { return !self.letters[key(rc[0], rc[1])]; });
+  };
+
+  Puzzle.prototype.useHint = function () {
+    if (!this.active) return false;
+    var w = this.active.word;
+    var left = this.hintsLeft(w);
+    if (left <= 0) return false;
+    var empty = this.emptyCells(w);
+    if (!empty.length) return false;
+
+    /* Η ΠΡΩΤΗ βοήθεια δίνει ΤΥΧΑΙΟ γράμμα -- στη σειρά θα ήταν βαρετό και
+       θα ξεκίναγε πάντα από την αρχή. Η ΔΕΥΤΕΡΗ δίνει το πρώτο γράμμα, που
+       είναι και το πιο χρήσιμο για να πιάσεις τη λέξη. */
+    var self = this, pick;
+    var first = w.cells[0];
+    var firstEmpty = !this.letters[key(first[0], first[1])];
+    if (left === 1 && firstEmpty) {
+      pick = first;
+    } else {
+      var pool = empty.filter(function (rc) {
+        return !(left === 2 && firstEmpty && rc[0] === first[0] && rc[1] === first[1]);
+      });
+      if (!pool.length) pool = empty;
+      pick = pool[Math.floor(Math.random() * pool.length)];
+    }
+
+    var i = w.cells.findIndex(function (rc) {
+      return rc[0] === pick[0] && rc[1] === pick[1];
+    });
+    var k = key(pick[0], pick[1]);
+    this.letters[k] = w.answer[i];
+    this.given[k] = 1;
+    this.hintsUsed[w.id] = (this.hintsUsed[w.id] || 0) + 1;
+    Store.save();
+    SFX.key();
+    var next = this.emptyCells(w)[0];
+    if (next) {
+      this.active.idx = w.cells.findIndex(function (rc) {
+        return rc[0] === next[0] && rc[1] === next[1];
+      });
+    }
+    this.refreshAll();
+    this.paintSelection();
+    return true;
+  };
+
   Puzzle.prototype.nextUnsolved = function () {
     var start = this.active ? this.words.indexOf(this.active.word) : -1;
     for (var k = 1; k <= this.words.length; k++) {
@@ -275,12 +343,13 @@ window.Grid = (function () {
     if (!this.active) return;
     var w = this.active.word, rc = w.cells[this.active.idx];
     var k = key(rc[0], rc[1]);
-    if (this.letters[k]) {
+    if (this.letters[k] && !this.given[k]) {
       delete this.letters[k];
     } else if (this.active.idx > 0) {
       this.active.idx--;
       rc = w.cells[this.active.idx];
-      delete this.letters[key(rc[0], rc[1])];
+      var pk = key(rc[0], rc[1]);
+      if (!this.given[pk]) delete this.letters[pk];
     }
     Store.save();
     SFX.key();
@@ -318,6 +387,7 @@ window.Grid = (function () {
         if (self.words[i].state === 'ok') ok = true;
       });
       cell.el.classList.toggle('wrong', bad);
+      cell.el.classList.toggle('given', !!self.given[k]);
       cell.el.classList.toggle('solved', !bad && ok);
     });
 

@@ -28,6 +28,21 @@ window.Store = (function () {
       if (!s.grids[gridIndex]) s.grids[gridIndex] = {};
       return s.grids[gridIndex];
     },
+    /* Πόσες βοήθειες έχει κάψει κάθε λέξη, και ποια κελιά αποκαλύφθηκαν.
+       Χωριστά από τα γράμματα, γιατί ένα δοσμένο γράμμα δεν είναι το ίδιο
+       πράγμα με ένα που έγραψες μόνος σου -- και φαίνεται διαφορετικά. */
+    hints: function (gridIndex) {
+      var s = read();
+      if (!s.hints) s.hints = {};
+      if (!s.hints[gridIndex]) s.hints[gridIndex] = {};
+      return s.hints[gridIndex];
+    },
+    given: function (gridIndex) {
+      var s = read();
+      if (!s.given) s.given = {};
+      if (!s.given[gridIndex]) s.given[gridIndex] = {};
+      return s.given[gridIndex];
+    },
     page: function (v) {
       var s = read();
       if (v === undefined) return s.page || 0;
@@ -52,7 +67,7 @@ window.Store = (function () {
       pending = setTimeout(flush, 250);
     },
     reset: function () {
-      mem = { grids: {} };
+      mem = { grids: {}, hints: {}, given: {} };
       flush();
     }
   };
