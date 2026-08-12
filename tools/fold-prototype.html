@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<title>Πρωτότυπο τσάκισης — μέτρηση</title>
+<style>
+  body{margin:0;background:#2a2a2f;font:13px "Roboto",system-ui,sans-serif;color:#eee}
+  #wrap{padding:16px;display:flex;gap:20px;align-items:flex-start}
+  .book{position:relative;width:390px;height:520px;flex:0 0 auto}
+  /* η επόμενη σελίδα, από κάτω */
+  .under{position:absolute;inset:0;background:#fff;overflow:hidden;
+         box-shadow:0 2px 20px rgba(0,0,0,.4)}
+  .under .lbl{position:absolute;top:44%;width:100%;text-align:center;
+              color:#c8102a;font-weight:900;font-size:22px;letter-spacing:.1em}
+  /* η τρέχουσα σελίδα */
+  .page{position:absolute;inset:0;background:#fff;overflow:hidden;
+        box-shadow:0 2px 20px rgba(0,0,0,.4)}
+  .grid{display:grid;grid-template-columns:repeat(22,17px);gap:0;
+        padding:14px;position:absolute;inset:0}
+  .c{width:17px;height:17px;border:1px solid #15151a;margin:-1px 0 0 -1px;
+     background:#fff;font:9px "Roboto";display:flex;align-items:center;
+     justify-content:center;color:#1a1a1e}
+  .c.k{background:#15151a}
+  /* το τσακισμένο τριγωνάκι: δείχνει την ΠΙΣΩ όψη, καθρεφτισμένη */
+  .flap{position:absolute;inset:0;background:linear-gradient(#fbfbfc,#efedf0);
+        transform-origin:0 0;will-change:transform,clip-path;
+        filter:drop-shadow(-2px 2px 6px rgba(0,0,0,.35));display:none}
+  .flap .fl-in{position:absolute;inset:0;padding:16px 18px;
+               color:#5c5c68;font-size:11px;line-height:1.5}
+  .flap .fl-in b{display:block;color:#c8102a;font-size:9px;letter-spacing:.22em;
+                 margin-bottom:8px}
+  .sheen{position:absolute;inset:0;pointer-events:none;display:none}
+  #hud{background:#111;padding:14px 16px;border-radius:8px;line-height:1.7;
+       font-family:"Roboto Mono",monospace;white-space:pre;min-width:320px}
+  b.ok{color:#7ee08a}b.bad{color:#ff6b6b}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div class="book" id="book">
+    <div class="under"><div class="lbl">ΕΠΟΜΕΝΗ ΣΕΛΙΔΑ</div></div>
+    <div class="page" id="page"><div class="grid" id="grid"></div></div>
+    <div class="flap" id="flap">
+      <div class="fl-in"><b>ΟΡΙΣΜΟΙ</b>
+        1 ΣΗΜΑΙΝΕΙ "ΤΙ ΕΙΠΑ"<br>2 ΒΕΒΗΛΩΝΟΥΝ ΕΚΚΛΗΣΙΕΣ<br>
+        3 Ο INSIDER ΤΟΥ ΝΑΝΟΥ<br>4 ΔΕΝ ΕΙΧΕ Η ΖΗΝΑ<br>
+        5 SAY THE LINE ΜΠΑΡΤΖΩΚΑΣ<br>6 ΤΟ ΤΡΩΕΙ Ο GIO KAY;
+      </div>
+    </div>
+  </div>
+  <div id="hud">μετράω…</div>
+</div>
+
+<script>
+/* ── γεωμετρία τσάκισης ────────────────────────────────────────────
+   Πιάνεις τη γωνία C και τη σέρνεις στο P. Η γραμμή τσάκισης είναι η
+   μεσοκάθετος του CP. Ό,τι μένει από την πλευρά της γωνίας διπλώνει:
+   είναι η ΑΝΑΚΛΑΣΗ του ως προς αυτή τη γραμμή. */
+var W = 390, H = 520;
+var page = document.getElementById('page'),
+    flap = document.getElementById('flap'),
+    grid = document.getElementById('grid');
+
+// γέμισε το πλέγμα με 22x22 κελιά, ίδιο βάρος με το πραγματικό
+(function () {
+  var f = document.createDocumentFragment();
+  for (var i = 0; i < 22 * 22; i++) {
+    var d = document.createElement('div');
+    d.className = 'c' + (Math.random() < .18 ? ' k' : '');
+    if (Math.random() < .25) d.textContent = 'ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ'[i % 24];
+    f.appendChild(d);
+  }
+  grid.appendChild(f);
+})();
+
+/* Κόβει το ορθογώνιο της σελίδας με ένα ημιεπίπεδο (Sutherland-Hodgman).
+   keep > 0 -> κρατάει την πλευρά της γωνίας. */
+function halfPlane(mx, my, ux, uy, keep) {
+  var poly = [[0, 0], [W, 0], [W, H], [0, H]], out = [];
+  function side(p) { return ((p[0] - mx) * ux + (p[1] - my) * uy) * keep; }
+  for (var i = 0; i < poly.length; i++) {
+    var a = poly[i], b = poly[(i + 1) % poly.length];
+    var sa = side(a), sb = side(b);
+    if (sa >= 0) out.push(a);
+    if ((sa >= 0) !== (sb >= 0)) {
+      var t = sa / (sa - sb);
+      out.push([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]);
+    }
+  }
+  if (!out.length) return 'polygon(0 0,0 0,0 0)';
+  return 'polygon(' + out.map(function (p) {
+    return p[0].toFixed(1) + 'px ' + p[1].toFixed(1) + 'px';
+  }).join(',') + ')';
+}
+
+function fold(px, py) {
+  var cx = W, cy = H;                       // γωνία κάτω δεξιά
+  var dx = px - cx, dy = py - cy;
+  var len = Math.hypot(dx, dy);
+  if (len < 4) { flap.style.display = 'none'; page.style.clipPath = 'none'; return; }
+  var ux = dx / len, uy = dy / len;         // κάθετη της γραμμής τσάκισης
+  var mx = (cx + px) / 2, my = (cy + py) / 2;
+
+  // η σελίδα κρατάει την πλευρά ΜΑΚΡΙΑ από τη γωνία
+  page.style.clipPath = halfPlane(mx, my, ux, uy, 1);
+
+  // το τριγωνάκι: κόβεται στην πλευρά της γωνίας και ανακλάται
+  flap.style.display = 'block';
+  flap.style.clipPath = halfPlane(mx, my, ux, uy, -1);
+  var a = 1 - 2 * ux * ux, b = -2 * ux * uy, c = b, d = 1 - 2 * uy * uy;
+  var e = mx - (a * mx + c * my), f = my - (b * mx + d * my);
+  flap.style.transform = 'matrix(' + [a, b, c, d, e, f].map(function (v) {
+    return v.toFixed(4);
+  }).join(',') + ')';
+}
+
+/* ── μέτρηση ─────────────────────────────────────────────────────── */
+var frames = [], t0 = performance.now(), last = t0, DUR = 4000;
+function loop(now) {
+  frames.push(now - last); last = now;
+  var t = (now - t0) / DUR;
+  if (t >= 1) { report(); return; }
+  // σέρνει τη γωνία σε τόξο, από μικρό σε μεγάλο τσάκισμα
+  var ang = -Math.PI * (0.15 + 0.55 * (0.5 - 0.5 * Math.cos(t * Math.PI * 4)));
+  var dist = W * (0.15 + 1.15 * (0.5 - 0.5 * Math.cos(t * Math.PI * 4)));
+  fold(W + Math.cos(ang) * dist * -1, H + Math.sin(ang) * dist);
+  requestAnimationFrame(loop);
+}
+function report() {
+  frames = frames.slice(3).sort(function (a, b) { return a - b; });
+  var p = function (q) { return frames[Math.floor(frames.length * q)].toFixed(1); };
+  var over = frames.filter(function (v) { return v > 16.7; }).length;
+  var html =
+    'καρέ: ' + frames.length + '\n' +
+    'διάμεσος : ' + p(.5) + ' ms\n' +
+    'p90      : ' + p(.9) + ' ms\n' +
+    'p99      : ' + p(.99) + ' ms\n' +
+    'χειρότερο: ' + frames[frames.length - 1].toFixed(1) + ' ms\n' +
+    'πάνω από 16.7ms: ' + over + ' (' +
+      (100 * over / frames.length).toFixed(1) + '%)\n' +
+    'ΕΤΥΜΗΓΟΡΙΑ: ' + (p(.9) < 16.7
+      ? '<b class="ok">ΚΑΘΑΡΟ 60fps</b>' : '<b class="bad">ΚΟΛΛΑΕΙ</b>');
+  document.getElementById('hud').innerHTML = 'FOLDSTART\n' + html + '\nFOLDEND';
+}
+requestAnimationFrame(function (t) { last = t; t0 = t; requestAnimationFrame(loop); });
+</script>
+</body>
+</html>
