@@ -164,8 +164,11 @@
     var withFacing = Math.min(w * .48, h * .75);
     var app = document.getElementById('app');
     var was = app.classList.contains('spread');
-    // και αρκετά μεγάλη ώστε οι ορισμοί να διαβάζονται χωρίς scroll
-    var now = withFacing >= alone - 1 && withFacing >= 360;
+    /* Ανοχή 10%: η διπλανή σελίδα αξίζει μια μικρή σμίκρυνση. Με το παλιό
+       «ούτε ένα pixel» η σελίδα των ορισμών εξαφανιζόταν σε πλατιές οθόνες
+       -- και στην κλασική σελίδα οι ορισμοί ΜΟΝΟ εκεί ζουν, αφού δεν
+       υπάρχουν βελάκια μέσα στο πλέγμα. */
+    var now = withFacing >= alone * .90 && withFacing >= 360;
     if (was === now) return;
     app.classList.toggle('spread', now);
     if (Book.restack) Book.restack();     // αλλάζει ποιο φύλλο μένει ορατό
@@ -208,7 +211,11 @@
         var p = puzzles[i - 1];
         requestAnimationFrame(function () { p.fit(); });
       }
-      updateCover();
+      // #1..#3 στο URL ανοίγει κατευθείαν τη σελίδα -- βολικό για να στέλνεις
+  // σύνδεσμο σε συγκεκριμένο σταυρόλεξο, και για δοκιμές.
+  var hash = parseInt((location.hash || '').slice(1), 10);
+  if (hash >= 1 && hash <= 3) Book.go(hash, { silent: true });
+  updateCover();
     }
   });
 

@@ -59,6 +59,19 @@ window.Grid = (function () {
     var clueAt = {};
     d.clueCells.forEach(function (cc) { clueAt[key(cc.r, cc.c)] = cc; });
 
+    /* ΚΛΑΣΙΚΗ σελίδα: δεν υπάρχουν κελιά-ορισμοί μέσα στο πλέγμα. Στη θέση
+       τους μπαίνει αριθμός στην αρχή κάθε λέξης και οι ορισμοί διαβάζονται
+       έξω -- στη μπάρα όταν πατάς κελί, και στη διπλανή σελίδα σε πλατιά
+       οθόνη. Δύο λέξεις που ξεκινούν στο ίδιο κελί μοιράζονται αριθμό. */
+    var classic = d.style === 'classic';
+    var startAt = {};
+    if (classic) {
+      d.words.forEach(function (w) {
+        var k = key(w.r, w.c);
+        if (startAt[k] === undefined) startAt[k] = w.n;
+      });
+    }
+
     var owner = {};
     this.words.forEach(function (w) {
       w.cells.forEach(function (rc) {
@@ -80,6 +93,12 @@ window.Grid = (function () {
           ink.style.setProperty('--jit', ((h - 5) * .9) + 'deg');
           ink.style.setProperty('--jit-y', (((r * 13 + c * 7) % 5) - 2) * .4 + 'px');
           el.appendChild(ink);
+          if (classic && startAt[k] !== undefined) {
+            var no = document.createElement('span');
+            no.className = 'no';
+            no.textContent = startAt[k];
+            el.appendChild(no);
+          }
           this.cells[k] = { el: el, ink: ink, words: owner[k] };
         } else if (clueAt[k]) {
           var cc = clueAt[k];

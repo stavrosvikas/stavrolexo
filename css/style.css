@@ -583,3 +583,12 @@ body{
 
 /* Ζουμαρισμένος: το σύρσιμο ανήκει στην πανοραμική, όχι στο scroll. */
 #app.zoomed #book{touch-action:none}
+
+/* ── κλασική σελίδα: αριθμός στην αρχή κάθε λέξης ─────────────────
+   Παίρνει τη θέση των κελιών-ορισμού. Δένεται στο --cell ώστε να μένει
+   αναλογικός σε κάθε οθόνη, όπως όλο το πλέγμα. */
+.c.letter > .no{
+  position:absolute;top:calc(var(--cell) * .04);left:calc(var(--cell) * .08);
+  font:700 calc(var(--cell) * .30)/1 'Roboto Mono',monospace;
+  color:var(--m-100);pointer-events:none;user-select:none;
+}

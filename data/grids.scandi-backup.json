@@ -1,0 +1,1390 @@
+{
+ "pages": [
+  {
+   "label": "ΣΕΛΙΔΑ 1",
+   "rows": 23,
+   "cols": 23,
+   "words": [
+    {
+     "id": 58,
+     "answer": "ΓΚΡΙΝΤΖΥ",
+     "r": 10,
+     "c": 7,
+     "dir": "H",
+     "crossings": 0,
+     "cluePos": [
+      8,
+      2
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 44,
+     "answer": "ΣΛΑΤΙΝΑ",
+     "r": 21,
+     "c": 14,
+     "dir": "H",
+     "crossings": 2,
+     "cluePos": [
+      21,
+      13
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 14,
+     "answer": "ΟΡΝΙΘΙΑ",
+     "r": 5,
+     "c": 20,
+     "dir": "V",
+     "crossings": 2,
+     "cluePos": [
+      4,
+      20
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 40,
+     "answer": "ΖΩΝΗ",
+     "r": 7,
+     "c": 18,
+     "dir": "H",
+     "crossings": 1,
+     "cluePos": [
+      7,
+      17
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 48,
+     "answer": "ΤΕΛΕΙΩΣΑΤΕ",
+     "r": 6,
+     "c": 10,
+     "dir": "V",
+     "crossings": 3,
+     "cluePos": [
+      5,
+      10
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 32,
+     "answer": "ΚΡΙΣΙΜΕΣ",
+     "r": 13,
+     "c": 14,
+     "dir": "H",
+     "crossings": 5,
+     "cluePos": [
+      13,
+      13
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 43,
+     "answer": "ΜΠΟΓΡΙΝΙΟ",
+     "r": 8,
+     "c": 16,
+     "dir": "V",
+     "crossings": 2,
+     "cluePos": [
+      7,
+      16
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 42,
+     "answer": "ΜΠΟΧΟΥ",
+     "r": 3,
+     "c": 14,
+     "dir": "V",
+     "crossings": 1,
+     "cluePos": [
+      2,
+      14
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 4,
+     "answer": "ΕΛΑΦΙ",
+     "r": 3,
+     "c": 7,
+     "dir": "V",
+     "crossings": 1,
+     "cluePos": [
+      2,
+      7
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 33,
+     "answer": "ΜΑΣΧΑΛΗ",
+     "r": 13,
+     "c": 19,
+     "dir": "V",
+     "crossings": 3,
+     "cluePos": [
+      12,
+      19
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 45,
+     "answer": "ΛΑΓΟΚΕΦΑΛΟΣ",
+     "r": 5,
+     "c": 11,
+     "dir": "H",
+     "crossings": 3,
+     "cluePos": [
+      5,
+      10
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 22,
+     "answer": "ΓΤΧΣ",
+     "r": 2,
+     "c": 21,
+     "dir": "V",
+     "crossings": 1,
+     "cluePos": [
+      1,
+      21
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 29,
+     "answer": "ΜΠΑΧΑΛΟΣΑΤΑΝΙΣΤΡΙΕΣ",
+     "r": 1,
+     "c": 12,
+     "dir": "V",
+     "crossings": 6,
+     "cluePos": [
+      0,
+      12
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 36,
+     "answer": "ΧΑΜΠΟΥΡΓΚΕΡ",
+     "r": 1,
+     "c": 10,
+     "dir": "H",
+     "crossings": 1,
+     "cluePos": [
+      1,
+      9
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 46,
+     "answer": "ΦΟΡΤΩΜΑΤΑ",
+     "r": 13,
+     "c": 2,
+     "dir": "H",
+     "crossings": 2,
+     "cluePos": [
+      13,
+      1
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 54,
+     "answer": "ΕΛΛΑΔΑ",
+     "r": 3,
+     "c": 7,
+     "dir": "H",
+     "crossings": 2,
+     "cluePos": [
+      3,
+      6
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 50,
+     "answer": "ΦΙΛΟΣ",
+     "r": 17,
+     "c": 11,
+     "dir": "H",
+     "crossings": 1,
+     "cluePos": [
+      17,
+      10
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 34,
+     "answer": "ΚΡΕΠΑΤΖΗΣ",
+     "r": 1,
+     "c": 18,
+     "dir": "V",
+     "crossings": 3,
+     "cluePos": [
+      0,
+      18
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 11,
+     "answer": "ΚΑΤΑΝΤΙΑ",
+     "r": 10,
+     "c": 8,
+     "dir": "V",
+     "crossings": 2,
+     "cluePos": [
+      9,
+      8
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 9,
+     "answer": "ΦΥΝΤΑΝΙΑ",
+     "r": 7,
+     "c": 1,
+     "dir": "H",
+     "crossings": 2,
+     "cluePos": [
+      7,
+      0
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 31,
+     "answer": "ΣΕΡΡΕΣ",
+     "r": 13,
+     "c": 21,
+     "dir": "V",
+     "crossings": 1,
+     "cluePos": [
+      12,
+      21
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 30,
+     "answer": "ΦΟΡΑ",
+     "r": 18,
+     "c": 5,
+     "dir": "V",
+     "crossings": 2,
+     "cluePos": [
+      17,
+      5
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 57,
+     "answer": "ΒΡΩΜΟΠΑΠΠΟΥΣ",
+     "r": 19,
+     "c": 1,
+     "dir": "H",
+     "crossings": 2,
+     "cluePos": [
+      19,
+      0
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 60,
+     "answer": "ΑΥΝΑΝΙΣΤΗΣ",
+     "r": 21,
+     "c": 2,
+     "dir": "H",
+     "crossings": 1,
+     "cluePos": [
+      21,
+      1
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 15,
+     "answer": "ΤΣΕΛΙΚΑΣ",
+     "r": 15,
+     "c": 12,
+     "dir": "H",
+     "crossings": 3,
+     "cluePos": [
+      15,
+      11
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 5,
+     "answer": "ΙΣΤΟΡΙΑ",
+     "r": 15,
+     "c": 2,
+     "dir": "V",
+     "crossings": 2,
+     "cluePos": [
+      14,
+      2
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 1,
+     "answer": "ΤΙΟΥΜΠΑ",
+     "r": 1,
+     "c": 5,
+     "dir": "V",
+     "crossings": 1,
+     "cluePos": [
+      0,
+      5
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 52,
+     "answer": "ΜΙΟΥΤ",
+     "r": 15,
+     "c": 1,
+     "dir": "H",
+     "crossings": 1,
+     "cluePos": [
+      15,
+      0
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 17,
+     "answer": "ΤΑΚΗΣ",
+     "r": 19,
+     "c": 16,
+     "dir": "H",
+     "crossings": 1,
+     "cluePos": [
+      19,
+      15
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 18,
+     "answer": "ΖΩΑ",
+     "r": 17,
+     "c": 17,
+     "dir": "H",
+     "crossings": 1,
+     "cluePos": [
+      17,
+      16
+     ],
+     "arrow": "straight"
+    }
+   ],
+   "clueCells": [
+    {
+     "r": 0,
+     "c": 5,
+     "clues": [
+      {
+       "id": 1,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 0,
+     "c": 12,
+     "clues": [
+      {
+       "id": 29,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 0,
+     "c": 18,
+     "clues": [
+      {
+       "id": 34,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 1,
+     "c": 9,
+     "clues": [
+      {
+       "id": 36,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 1,
+     "c": 21,
+     "clues": [
+      {
+       "id": 22,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 2,
+     "c": 7,
+     "clues": [
+      {
+       "id": 4,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 2,
+     "c": 14,
+     "clues": [
+      {
+       "id": 42,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 3,
+     "c": 6,
+     "clues": [
+      {
+       "id": 54,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 4,
+     "c": 20,
+     "clues": [
+      {
+       "id": 14,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 5,
+     "c": 10,
+     "clues": [
+      {
+       "id": 48,
+       "arrow": "straight"
+      },
+      {
+       "id": 45,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 7,
+     "c": 0,
+     "clues": [
+      {
+       "id": 9,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 7,
+     "c": 16,
+     "clues": [
+      {
+       "id": 43,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 7,
+     "c": 17,
+     "clues": [
+      {
+       "id": 40,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 9,
+     "c": 8,
+     "clues": [
+      {
+       "id": 11,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 12,
+     "c": 19,
+     "clues": [
+      {
+       "id": 33,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 12,
+     "c": 21,
+     "clues": [
+      {
+       "id": 31,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 13,
+     "c": 1,
+     "clues": [
+      {
+       "id": 46,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 13,
+     "c": 13,
+     "clues": [
+      {
+       "id": 32,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 14,
+     "c": 2,
+     "clues": [
+      {
+       "id": 5,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 15,
+     "c": 0,
+     "clues": [
+      {
+       "id": 52,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 15,
+     "c": 11,
+     "clues": [
+      {
+       "id": 15,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 17,
+     "c": 5,
+     "clues": [
+      {
+       "id": 30,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 17,
+     "c": 10,
+     "clues": [
+      {
+       "id": 50,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 17,
+     "c": 16,
+     "clues": [
+      {
+       "id": 18,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 19,
+     "c": 0,
+     "clues": [
+      {
+       "id": 57,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 19,
+     "c": 15,
+     "clues": [
+      {
+       "id": 17,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 21,
+     "c": 1,
+     "clues": [
+      {
+       "id": 60,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 21,
+     "c": 13,
+     "clues": [
+      {
+       "id": 44,
+       "arrow": "straight"
+      }
+     ]
+    }
+   ],
+   "imageBlock": {
+    "id": 58,
+    "r": 8,
+    "c": 2,
+    "size": 5,
+    "src": "assets/q58.png",
+    "arrow": "straight",
+    "dir": "H",
+    "attached": true
+   }
+  },
+  {
+   "label": "ΣΕΛΙΔΑ 2",
+   "rows": 22,
+   "cols": 22,
+   "words": [
+    {
+     "id": 3,
+     "answer": "ΝΤΟΛΜΑΔΑΚΙΑ",
+     "r": 1,
+     "c": 1,
+     "dir": "H",
+     "crossings": 1,
+     "cluePos": [
+      1,
+      0
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 23,
+     "answer": "ΓΥΡΟΣ",
+     "r": 11,
+     "c": 10,
+     "dir": "H",
+     "crossings": 1,
+     "cluePos": [
+      11,
+      9
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 59,
+     "answer": "ΜΑΛΟΥΜΑ",
+     "r": 7,
+     "c": 2,
+     "dir": "H",
+     "crossings": 1,
+     "cluePos": [
+      7,
+      1
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 38,
+     "answer": "ΠΟΥΤΣΟΦΣΚΙ",
+     "r": 19,
+     "c": 9,
+     "dir": "H",
+     "crossings": 2,
+     "cluePos": [
+      19,
+      8
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 47,
+     "answer": "ΑΜΙΣΘΙ",
+     "r": 4,
+     "c": 12,
+     "dir": "V",
+     "crossings": 2,
+     "cluePos": [
+      3,
+      12
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 12,
+     "answer": "ΛΙΘΟΥΑΝΗ",
+     "r": 12,
+     "c": 20,
+     "dir": "V",
+     "crossings": 2,
+     "cluePos": [
+      11,
+      20
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 49,
+     "answer": "ΠΕΤΣΟΚΟΜΜΑ",
+     "r": 17,
+     "c": 11,
+     "dir": "H",
+     "crossings": 2,
+     "cluePos": [
+      17,
+      10
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 16,
+     "answer": "ΝΤΟΥΠΛΑΝΤΙΣ",
+     "r": 9,
+     "c": 13,
+     "dir": "V",
+     "crossings": 6,
+     "cluePos": [
+      8,
+      13
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 8,
+     "answer": "ΠΟΣΙΜΠΟΛ",
+     "r": 3,
+     "c": 1,
+     "dir": "H",
+     "crossings": 1,
+     "cluePos": [
+      3,
+      0
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 27,
+     "answer": "ΑΛΦΑΔΙΑ",
+     "r": 15,
+     "c": 10,
+     "dir": "H",
+     "crossings": 1,
+     "cluePos": [
+      15,
+      9
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 20,
+     "answer": "ΓΙΩΡΓΗΣ",
+     "r": 1,
+     "c": 15,
+     "dir": "V",
+     "crossings": 3,
+     "cluePos": [
+      0,
+      15
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 21,
+     "answer": "ΦΕΤΑ",
+     "r": 5,
+     "c": 17,
+     "dir": "H",
+     "crossings": 2,
+     "cluePos": [
+      5,
+      16
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 26,
+     "answer": "ΤΑ",
+     "r": 6,
+     "c": 8,
+     "dir": "V",
+     "crossings": 1,
+     "cluePos": [
+      5,
+      8
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 2,
+     "answer": "ΚΑΤΑΠΛΗΚΤΙΚΟ",
+     "r": 9,
+     "c": 6,
+     "dir": "V",
+     "crossings": 4,
+     "cluePos": [
+      8,
+      6
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 53,
+     "answer": "ΣΤΑΜΑΤΑΑΑ",
+     "r": 3,
+     "c": 3,
+     "dir": "V",
+     "crossings": 2,
+     "cluePos": [
+      2,
+      3
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 24,
+     "answer": "ΜΠΟΥΚΙΤΣΙ",
+     "r": 13,
+     "c": 12,
+     "dir": "H",
+     "crossings": 2,
+     "cluePos": [
+      13,
+      11
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 39,
+     "answer": "ΜΑΡΚΑΤΟΣ",
+     "r": 1,
+     "c": 20,
+     "dir": "V",
+     "crossings": 2,
+     "cluePos": [
+      0,
+      20
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 41,
+     "answer": "ΨΥΧΡΑΙΜΗ",
+     "r": 18,
+     "c": 1,
+     "dir": "H",
+     "crossings": 2,
+     "cluePos": [
+      18,
+      0
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 19,
+     "answer": "ΠΡΑΦΙΤ",
+     "r": 11,
+     "c": 1,
+     "dir": "H",
+     "crossings": 2,
+     "cluePos": [
+      11,
+      0
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 6,
+     "answer": "ΠΕΤΡΟ",
+     "r": 13,
+     "c": 6,
+     "dir": "H",
+     "crossings": 1,
+     "cluePos": [
+      13,
+      5
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 55,
+     "answer": "ΜΕΛΙ",
+     "r": 4,
+     "c": 18,
+     "dir": "V",
+     "crossings": 1,
+     "cluePos": [
+      3,
+      18
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 51,
+     "answer": "ΓΚΡΑΝΓΚΙΝΙΟΛΙΚΟ",
+     "r": 9,
+     "c": 5,
+     "dir": "H",
+     "crossings": 3,
+     "cluePos": [
+      9,
+      4
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 10,
+     "answer": "ΛΥΜΠΕΡΑΚΗ",
+     "r": 8,
+     "c": 1,
+     "dir": "V",
+     "crossings": 1,
+     "cluePos": [
+      7,
+      1
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 7,
+     "answer": "ΠΟΙΟΤΗΤΑ",
+     "r": 2,
+     "c": 13,
+     "dir": "H",
+     "crossings": 2,
+     "cluePos": [
+      2,
+      12
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 56,
+     "answer": "ΚΥΚΛΟΥΣ",
+     "r": 20,
+     "c": 2,
+     "dir": "H",
+     "crossings": 1,
+     "cluePos": [
+      20,
+      1
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 37,
+     "answer": "ΙΩΑΝΝΟΥ",
+     "r": 5,
+     "c": 1,
+     "dir": "H",
+     "crossings": 1,
+     "cluePos": [
+      5,
+      0
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 13,
+     "answer": "ΖΑΧΑΡΗ",
+     "r": 4,
+     "c": 11,
+     "dir": "H",
+     "crossings": 2,
+     "cluePos": [
+      4,
+      10
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 28,
+     "answer": "ΣΙΩΠΗ",
+     "r": 6,
+     "c": 11,
+     "dir": "H",
+     "crossings": 2,
+     "cluePos": [
+      6,
+      10
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 35,
+     "answer": "ΦΥΤΡΟ",
+     "r": 11,
+     "c": 8,
+     "dir": "V",
+     "crossings": 1,
+     "cluePos": [
+      10,
+      8
+     ],
+     "arrow": "straight"
+    },
+    {
+     "id": 25,
+     "answer": "ΚΕΙΚ",
+     "r": 16,
+     "c": 3,
+     "dir": "H",
+     "crossings": 1,
+     "cluePos": [
+      16,
+      2
+     ],
+     "arrow": "straight"
+    }
+   ],
+   "clueCells": [
+    {
+     "r": 0,
+     "c": 15,
+     "clues": [
+      {
+       "id": 20,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 0,
+     "c": 20,
+     "clues": [
+      {
+       "id": 39,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 1,
+     "c": 0,
+     "clues": [
+      {
+       "id": 3,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 2,
+     "c": 3,
+     "clues": [
+      {
+       "id": 53,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 2,
+     "c": 12,
+     "clues": [
+      {
+       "id": 7,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 3,
+     "c": 0,
+     "clues": [
+      {
+       "id": 8,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 3,
+     "c": 12,
+     "clues": [
+      {
+       "id": 47,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 3,
+     "c": 18,
+     "clues": [
+      {
+       "id": 55,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 4,
+     "c": 10,
+     "clues": [
+      {
+       "id": 13,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 5,
+     "c": 0,
+     "clues": [
+      {
+       "id": 37,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 5,
+     "c": 8,
+     "clues": [
+      {
+       "id": 26,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 5,
+     "c": 16,
+     "clues": [
+      {
+       "id": 21,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 6,
+     "c": 10,
+     "clues": [
+      {
+       "id": 28,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 7,
+     "c": 1,
+     "clues": [
+      {
+       "id": 59,
+       "arrow": "straight"
+      },
+      {
+       "id": 10,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 8,
+     "c": 6,
+     "clues": [
+      {
+       "id": 2,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 8,
+     "c": 13,
+     "clues": [
+      {
+       "id": 16,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 9,
+     "c": 4,
+     "clues": [
+      {
+       "id": 51,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 10,
+     "c": 8,
+     "clues": [
+      {
+       "id": 35,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 11,
+     "c": 0,
+     "clues": [
+      {
+       "id": 19,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 11,
+     "c": 9,
+     "clues": [
+      {
+       "id": 23,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 11,
+     "c": 20,
+     "clues": [
+      {
+       "id": 12,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 13,
+     "c": 5,
+     "clues": [
+      {
+       "id": 6,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 13,
+     "c": 11,
+     "clues": [
+      {
+       "id": 24,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 15,
+     "c": 9,
+     "clues": [
+      {
+       "id": 27,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 16,
+     "c": 2,
+     "clues": [
+      {
+       "id": 25,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 17,
+     "c": 10,
+     "clues": [
+      {
+       "id": 49,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 18,
+     "c": 0,
+     "clues": [
+      {
+       "id": 41,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 19,
+     "c": 8,
+     "clues": [
+      {
+       "id": 38,
+       "arrow": "straight"
+      }
+     ]
+    },
+    {
+     "r": 20,
+     "c": 1,
+     "clues": [
+      {
+       "id": 56,
+       "arrow": "straight"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -28,6 +28,27 @@ for it in qna["items"]:
 # Αρίθμηση με τη σειρά ανάγνωσης (πάνω-αριστερά πρώτα). Η εικόνα μετράει κι
 # αυτή ως κελί-ορισμού, γιατί αυτόν τον ρόλο παίζει.
 for page in grids["pages"]:
+    # ΚΛΑΣΙΚΗ σελίδα: δεν υπάρχουν κελιά-ορισμοί. Αριθμούμε τις ΑΡΧΕΣ των
+    # λέξεων με τη σειρά ανάγνωσης, και δύο λέξεις που ξεκινούν στο ίδιο
+    # κελί μοιράζονται τον ίδιο αριθμό -- όπως στα έντυπα.
+    if page.get("style") == "classic":
+        starts = {}
+        for w in page["words"]:
+            starts.setdefault((w["r"], w["c"]), []).append(w)
+        n = 0
+        for pos in sorted(starts):
+            n += 1
+            for w in starts[pos]:
+                w["n"] = n
+        ib = page.get("imageBlock")
+        if ib:
+            q = questions.get(str(ib["id"]))
+            if q and q.get("image"):
+                ib["src"] = q["image"]
+            wid = ib["id"]
+            ib["n"] = next((w["n"] for w in page["words"] if w["id"] == wid), None)
+        continue
+
     anchors = [(cc["r"], cc["c"], cc) for cc in page["clueCells"]]
     ib = page.get("imageBlock")
     if ib:
