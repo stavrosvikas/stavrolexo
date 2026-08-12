@@ -520,7 +520,12 @@ window.Book = (function () {
       window.addEventListener('pointerup', up);
       window.addEventListener('pointercancel', up);
 
-      jump(Store.page());
+      /* Το τεύχος ανοίγει ΠΑΝΤΑ από το εξώφυλλο. Πριν πηδούσε στη σελίδα
+         που ήσουν την προηγούμενη φορά, οπότε όποιος είχε φτάσει στις
+         λύσεις τις έβλεπε κατευθείαν με το που άνοιγε -- σπόιλερ, και
+         χαμένο εξώφυλλο. Ό,τι έχεις γράψει μένει γραμμένο· το εξώφυλλο
+         δείχνει από μόνο του πόσες λέξεις έχεις βρει. */
+      jump(0);
     },
     go: go,
     current: function () { return current; },
