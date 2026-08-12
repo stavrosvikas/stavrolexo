@@ -1,485 +1,485 @@
 {
-  "title": "ΣΤΑΥΡΟΛΕΞΟ LUBEN SUMMER 26",
-  "items": [
-    {
-      "id": 1,
-      "clue": "ΣΗΜΑΙΝΕΙ “ΤΙ ΕΙΠΑ”",
-      "answer": "ΤΙΟΥΜΠΑ",
-      "answerRaw": "ΤΙΟΥΜΠΑ",
-      "len": 7,
-      "image": null
-    },
-    {
-      "id": 2,
-      "clue": "ΚΑΙ ΗΤΑΝΕ….",
-      "answer": "ΚΑΤΑΠΛΗΚΤΙΚΟ",
-      "answerRaw": "ΚΑΤΑΠΛΗΚΤΙΚΟ",
-      "len": 12,
-      "image": null
-    },
-    {
-      "id": 3,
-      "clue": "ΑΓΑΠΗΜΕΝΟ ΦΑΓΗΤΟ ΤΟΥ ΚΟΥΛΗ",
-      "answer": "ΝΤΟΛΜΑΔΑΚΙΑ",
-      "answerRaw": "ΝΤΟΛΜΑΔΑΚΙΑ",
-      "len": 11,
-      "image": null
-    },
-    {
-      "id": 4,
-      "clue": "ΤΟ ΤΡΩΕΙ Ο GIO KAY;",
-      "answer": "ΕΛΑΦΙ",
-      "answerRaw": "ΕΛΑΦΙ",
-      "len": 5,
-      "image": null
-    },
-    {
-      "id": 5,
-      "clue": "TI MAΘΗΜΑ ΕΔΙΝΕ Ο ΠΙΟ YOLO ΜΑΘΗΤΗΣ",
-      "answer": "ΙΣΤΟΡΙΑ",
-      "answerRaw": "ΙΣΤΟΡΙΑ",
-      "len": 7,
-      "image": null
-    },
-    {
-      "id": 6,
-      "clue": "ΠΩΣ ΤΟΝ ΛΕΝΕ ΤΟΝ ΠΕΛΕΚΑΝΟ;",
-      "answer": "ΠΕΤΡΟ",
-      "answerRaw": "ΠΕΤΡΟ",
-      "len": 5,
-      "image": null
-    },
-    {
-      "id": 7,
-      "clue": "ΤΙ ΛΕΙΠΕΙ ΑΠΟ ΤΟΝ ΤΣΙΤΣΙΠΑ",
-      "answer": "ΠΟΙΟΤΗΤΑ",
-      "answerRaw": "ΠΟΙΟΤΗΤΑ",
-      "len": 8,
-      "image": null
-    },
-    {
-      "id": 8,
-      "clue": "ΑΤΑΚΑ ΤΟΥ ΑΔΥΝΑΜΟΥ ΚΡΙΚΟΥ",
-      "answer": "ΠΟΣΙΜΠΟΛ",
-      "answerRaw": "ΠΟΣΙΜΠΟΛ",
-      "len": 8,
-      "image": null
-    },
-    {
-      "id": 9,
-      "clue": "ΤΟΥΣ ΕΧΕΙ ΑΔΥΝΑΜΙΑ Ο ΚΟΥΤΣΟΥΜΠΑΣ",
-      "answer": "ΦΥΝΤΑΝΙΑ",
-      "answerRaw": "ΦΥΝΤΑΝΙΑ",
-      "len": 8,
-      "image": null
-    },
-    {
-      "id": 10,
-      "clue": "ΤΗΝ ΕΚΛΑΣΕ Ο ΚΑΡΒΕΛΑΣ",
-      "answer": "ΛΥΜΠΕΡΑΚΗ",
-      "answerRaw": "ΛΥΜΠΕΡΑΚΗ",
-      "len": 9,
-      "image": null
-    },
-    {
-      "id": 11,
-      "clue": "ΤΟ ΛΕΕΙ Η ΡΑΝΙΑ ΤΖΙΜΑ",
-      "answer": "ΚΑΤΑΝΤΙΑ",
-      "answerRaw": "ΚΑΤΑΝΤΙΑ",
-      "len": 8,
-      "image": null
-    },
-    {
-      "id": 12,
-      "clue": "ΓΕΙΩΣΕ ΤΟΝ ΕΡΩΤΑ",
-      "answer": "ΛΙΘΟΥΑΝΗ",
-      "answerRaw": "ΛΙΘΟΥΑΝΗ",
-      "len": 8,
-      "image": null
-    },
-    {
-      "id": 13,
-      "clue": "ΕΛΛΑΔΑ ΣΥΜΦΩΝΑ ΜΕ ΤΟΝ ΑΔΩΝΙ",
-      "answer": "ΖΑΧΑΡΗ",
-      "answerRaw": "ΖΑΧΑΡΗ",
-      "len": 6,
-      "image": null
-    },
-    {
-      "id": 14,
-      "clue": "ΤΑ ΤΡΩΝΕ ΣΤΗΝ ΚΟΜΟΤΗΝΗ",
-      "answer": "ΟΡΝΙΘΙΑ",
-      "answerRaw": "ΟΡΝΙΘΙΑ",
-      "len": 7,
-      "image": null
-    },
-    {
-      "id": 15,
-      "clue": "ΓΥΠΑΕΤΟΣ ΤΟΥ ΡΕΠΟΡΤΑΖ",
-      "answer": "ΤΣΕΛΙΚΑΣ",
-      "answerRaw": "ΤΣΕΛΙΚΑΣ",
-      "len": 8,
-      "image": null
-    },
-    {
-      "id": 16,
-      "clue": "ΦΑΣΩΣΕ ΤΗ ΜΑΝΑ ΤΟΥ",
-      "answer": "ΝΤΟΥΠΛΑΝΤΙΣ",
-      "answerRaw": "ΝΤΟΥΠΛΑΝΤΙΣ",
-      "len": 11,
-      "image": null
-    },
-    {
-      "id": 17,
-      "clue": "ΜΗΝ ΤΡΩΣ ΠΑΤΑΤΑΚΙΑ ΜΠΡΟΣΤΑ ΤΟΥ",
-      "answer": "ΤΑΚΗΣ",
-      "answerRaw": "ΤΑΚΗΣ",
-      "len": 5,
-      "image": null
-    },
-    {
-      "id": 18,
-      "clue": "ΠΟΙΟΙ ΔΕΝ ΠΙΣΤΕΥΑΝ ΤΟΝ ΛΕΒΕΝΤΗ;",
-      "answer": "ΖΩΑ",
-      "answerRaw": "ΖΩΑ",
-      "len": 3,
-      "image": null
-    },
-    {
-      "id": 19,
-      "clue": "ΘΑ ΕΒΓΑΖΕ.. ΜΕ ΛΟΥΞΟΥΡΙΟΥΣ ΜΠΡΙΚΙΑ",
-      "answer": "ΠΡΑΦΙΤ",
-      "answerRaw": "ΠΡΑΦΙΤ",
-      "len": 6,
-      "image": null
-    },
-    {
-      "id": 20,
-      "clue": "ΕΡΧΕΤΑΙ ΠΡΙΝ ΤΗΝ ΣΤΡΟΦΑΡΑ",
-      "answer": "ΓΙΩΡΓΗΣ",
-      "answerRaw": "ΓΙΩΡΓΗΣ",
-      "len": 7,
-      "image": null
-    },
-    {
-      "id": 21,
-      "clue": "ΕΧΕΙ ΚΑΙ Ο ΦΟΥΡΝΙΕ ΤΕΤΟΙΟ ΠΡΟΒΛΗΜΑ",
-      "answer": "ΦΕΤΑ",
-      "answerRaw": "ΦΕΤΑ",
-      "len": 4,
-      "image": null
-    },
-    {
-      "id": 22,
-      "clue": "SAY THE LINE ΜΠΑΡΤΖΩΚΑΣ",
-      "answer": "ΓΤΧΣ",
-      "answerRaw": "ΓΤΧΣ",
-      "len": 4,
-      "image": null
-    },
-    {
-      "id": 23,
-      "clue": "ΤΟ ΜΑΓΕΙΡΕΥΕΙ Ο GIANNIS",
-      "answer": "ΓΥΡΟΣ",
-      "answerRaw": "ΓΥΡΟΣ",
-      "len": 5,
-      "image": null
-    },
-    {
-      "id": 24,
-      "clue": "ΘΕΛΕΙ ΝΑ ΠΑΕΙ Ο ΕΥΤΥΧΗΣ",
-      "answer": "ΜΠΟΥΚΙΤΣΙ",
-      "answerRaw": "ΜΠΟΥΚΙΤΣΙ",
-      "len": 9,
-      "image": null
-    },
-    {
-      "id": 25,
-      "clue": "ΤΑ ΧΑΙΡΕΤΗΣΕ Ο ΚΛΕΟΜΕΝΗΣ",
-      "answer": "ΚΕΙΚ",
-      "answerRaw": "ΚΕΙΚ",
-      "len": 4,
-      "image": null
-    },
-    {
-      "id": 26,
-      "clue": "ΤΟ ΕΚΛΕΨΕ Η ΣΑΤΤΙ ΑΠΟ ΤΗΝ ΔΡΟΥΤΣΑ",
-      "answer": "ΤΑ",
-      "answerRaw": "ΤΑ",
-      "len": 2,
-      "image": null
-    },
-    {
-      "id": 27,
-      "clue": "Η ΕΛΛΑΔΑ ΚΑΤΑ ΤΟΝ ΚΟΒΙΝΤ",
-      "answer": "ΑΛΦΑΔΙΑ",
-      "answerRaw": "ΑΛΦΑΔΙΑ",
-      "len": 7,
-      "image": null
-    },
-    {
-      "id": 28,
-      "clue": "ΤΟ ΔΙΚΑΙΟΥΣΑΙ ΜΕΤΑ ΑΠΟ ΜΙΖΑ",
-      "answer": "ΣΙΩΠΗ",
-      "answerRaw": "ΣΙΩΠΗ",
-      "len": 5,
-      "image": null
-    },
-    {
-      "id": 29,
-      "clue": "ΒΕΒΗΛΩΝΟΥΝ ΕΚΚΛΗΣΙΕΣ",
-      "answer": "ΜΠΑΧΑΛΟΣΑΤΑΝΙΣΤΡΙΕΣ",
-      "answerRaw": "ΜΠΑΧΑΛΟΣΑΤΑΝΙΣΤΡΙΕΣ",
-      "len": 19,
-      "image": null
-    },
-    {
-      "id": 30,
-      "clue": "ΜΕ ΤΙ ΜΠΑΙΝΕΙ Ο ΤΣΙΠΡΑΣ",
-      "answer": "ΦΟΡΑ",
-      "answerRaw": "ΦΟΡΑ",
-      "len": 4,
-      "image": null
-    },
-    {
-      "id": 31,
-      "clue": "Ο ΝΟΜΟΣ ΤΟΥ ΚΟΝΤΕΝΤ",
-      "answer": "ΣΕΡΡΕΣ",
-      "answerRaw": "ΣΕΡΡΕΣ",
-      "len": 6,
-      "image": null
-    },
-    {
-      "id": 32,
-      "clue": "ΕΙΝΑΙ ΟΙ ΕΠΟΜΕΝΕΣ 2 ΒΔΟΜΑΔΕΣ",
-      "answer": "ΚΡΙΣΙΜΕΣ",
-      "answerRaw": "ΚΡΙΣΙΜΕΣ",
-      "len": 8,
-      "image": null
-    },
-    {
-      "id": 33,
-      "clue": "ΦΕΤΙΧ ΤΟΥ ΑΣΛΑΜΑ",
-      "answer": "ΜΑΣΧΑΛΗ",
-      "answerRaw": "ΜΑΣΧΑΛΗ",
-      "len": 7,
-      "image": null
-    },
-    {
-      "id": 34,
-      "clue": "Ο INSIDER ΤΟΥ ΝΑΝΟΥ",
-      "answer": "ΚΡΕΠΑΤΖΗΣ",
-      "answerRaw": "ΚΡΕΠΑΤΖΗΣ",
-      "len": 9,
-      "image": null
-    },
-    {
-      "id": 35,
-      "clue": "ΤΟ ΧΑΛΑΝΕ ΤΑ ΒΡΩΜΟΣΚΥΛΑ",
-      "answer": "ΦΥΤΡΟ",
-      "answerRaw": "ΦΥΤΡΟ",
-      "len": 5,
-      "image": null
-    },
-    {
-      "id": 36,
-      "clue": "ΔΕΝ ΕΙΧΕ Η ΖΗΝΑ",
-      "answer": "ΧΑΜΠΟΥΡΓΚΕΡ",
-      "answerRaw": "ΧΑΜΠΟΥΡΓΚΕΡ",
-      "len": 11,
-      "image": null
-    },
-    {
-      "id": 37,
-      "clue": "ΒΑΦΤΙΣΕ ΤΟΝ ΜΠΙΛΛ ΜΑΣ",
-      "answer": "ΙΩΑΝΝΟΥ",
-      "answerRaw": "ΙΩΑΝΝΟΥ",
-      "len": 7,
-      "image": null
-    },
-    {
-      "id": 38,
-      "clue": "ΣΥΝΘΕΤΗΣ ΚΑΒΛΩΤΙΚΗΣ ΜΟΥΣΙΚΗΣ",
-      "answer": "ΠΟΥΤΣΟΦΣΚΙ",
-      "answerRaw": "ΠΟΥΤΣΟΦΣΚΙ",
-      "len": 10,
-      "image": null
-    },
-    {
-      "id": 39,
-      "clue": "ΕΧΕΙ BEEF ΜΕ ΤΟΝ ΧΙΟ",
-      "answer": "ΜΑΡΚΑΤΟΣ",
-      "answerRaw": "ΜΑΡΚΑΤΟΣ",
-      "len": 8,
-      "image": null
-    },
-    {
-      "id": 40,
-      "clue": "ΑΝ ΕΙΣΑΙ ΑΕΚ ΠΡΕΠΕΙ ΝΑ ΤΗ ΦΟΡΑΣ",
-      "answer": "ΖΩΝΗ",
-      "answerRaw": "ΖΩΝΗ",
-      "len": 4,
-      "image": null
-    },
-    {
-      "id": 41,
-      "clue": "ΕΙΝΑΙ Η ΚΡΙΤΙΚΗ ΤΟΥ ΑΛΕΞ",
-      "answer": "ΨΥΧΡΑΙΜΗ",
-      "answerRaw": "ΨΥΧΡΑΙΜΗ",
-      "len": 8,
-      "image": null
-    },
-    {
-      "id": 42,
-      "clue": "ΣΥΣΤΗΜΑ ΠΕΔΟΥΛΑΚΗ",
-      "answer": "ΜΠΟΧΟΥ",
-      "answerRaw": "ΜΠΟΧΟΥ",
-      "len": 6,
-      "image": null
-    },
-    {
-      "id": 43,
-      "clue": "ΕΙΝΑΙ ΚΑΛΟΣ ΤΩΡΑ;",
-      "answer": "ΜΠΟΓΡΙΝΙΟ",
-      "answerRaw": "ΜΠΟΓΡΙΝΙΟ",
-      "len": 9,
-      "image": null
-    },
-    {
-      "id": 44,
-      "clue": "ΠΡΕΠΕΙ ΝΑ ΗΡΕΜΗΣΕΙ",
-      "answer": "ΣΛΑΤΙΝΑ",
-      "answerRaw": "ΣΛΑΤΙΝΑ",
-      "len": 7,
-      "image": null
-    },
-    {
-      "id": 45,
-      "clue": "ΤΡΩΕΙ ΤΣΙΓΚΙΝΑ ΚΟΥΤΑΚΙΑ",
-      "answer": "ΛΑΓΟΚΕΦΑΛΟΣ",
-      "answerRaw": "ΛΑΓΟΚΕΦΑΛΟΣ",
-      "len": 11,
-      "image": null
-    },
-    {
-      "id": 46,
-      "clue": "ΘΑ ΕΧΕΙΣ ΑΝ ΜΠΛΕΞΕΙΣ ΜΕ ΣΩΡΡΑ",
-      "answer": "ΦΟΡΤΩΜΑΤΑ",
-      "answerRaw": "ΦΟΡΤΩΜΑΤΑ",
-      "len": 9,
-      "image": null
-    },
-    {
-      "id": 47,
-      "clue": "ΗΤΑΝ Ο ΤΑΣΟΣ ΚΑΚΟΣ ΣΤΟΝ ΣΚΑΪ",
-      "answer": "ΑΜΙΣΘΙ",
-      "answerRaw": "ΑΜΙΣΘΙ",
-      "len": 6,
-      "image": null
-    },
-    {
-      "id": 48,
-      "clue": "ΜΤΣΤΚΣ ΣΕ ΗΛΙΚΙΩΜΕΝΟΥΣ",
-      "answer": "ΤΕΛΕΙΩΣΑΤΕ",
-      "answerRaw": "ΤΕΛΕΙΩΣΑΤΕ",
-      "len": 10,
-      "image": null
-    },
-    {
-      "id": 49,
-      "clue": "ΤΟ ΕΚΑΝΕ Ο ΚΑΡΑΜΑΝΗΣ",
-      "answer": "ΠΕΤΣΟΚΟΜΜΑ",
-      "answerRaw": "ΠΕΤΣΟΚΟΜΜΑ",
-      "len": 10,
-      "image": null
-    },
-    {
-      "id": 50,
-      "clue": "ΤΟΝ ΒΡΗΚΑΝ ΝΑ ΚΛΕΒΕΙ ΕΡΓΑΛΕΙΑ",
-      "answer": "ΦΙΛΟΣ",
-      "answerRaw": "ΦΙΛΟΣ",
-      "len": 5,
-      "image": null
-    },
-    {
-      "id": 51,
-      "clue": "ΦΙΝΑΛΕ ΑΓΩΝΑ ΕΥΡΩΛΙΓΚΑΣ",
-      "answer": "ΓΚΡΑΝΓΚΙΝΙΟΛΙΚΟ",
-      "answerRaw": "ΓΚΡΑΝΓΚΙΝΙΟΛΙΚΟ",
-      "len": 15,
-      "image": null
-    },
-    {
-      "id": 52,
-      "clue": "ΤΟ ΕΧΕΙ ΟΠΛΙΣΜΕΝΟ ΗΧΟΛΗΠΤΗΣ ΤΟΥ OPEN",
-      "answer": "ΜΙΟΥΤ",
-      "answerRaw": "ΜΙΟΥΤ",
-      "len": 5,
-      "image": null
-    },
-    {
-      "id": 53,
-      "clue": "ΟΥΡΛΙΑΖΕ Ο ΑΓΙΟΣ ΠΑΪΣΙΟΣ",
-      "answer": "ΣΤΑΜΑΤΑΑΑ",
-      "answerRaw": "ΣΤΑΜΑΤΑΑΑ",
-      "len": 9,
-      "image": null
-    },
-    {
-      "id": 54,
-      "clue": "ΒΓΑΙΝΕΙ ΠΛΕΟΝ ΚΑΙ ΣΕ ΑΝΑΒΑΘΜΙΣΜΕΝΟ ΜΟΝΤΕΛΟ",
-      "answer": "ΕΛΛΑΔΑ",
-      "answerRaw": "ΕΛΛΑΔΑ",
-      "len": 6,
-      "image": null
-    },
-    {
-      "id": 55,
-      "clue": "ΤΟ ΑΝΤΙΗΛΙΑΚΟ ΤΟΥ ΡΑΠΤΟΠΟΥΛΟΥ",
-      "answer": "ΜΕΛΙ",
-      "answerRaw": "ΜΕΛΙ",
-      "len": 4,
-      "image": null
-    },
-    {
-      "id": 56,
-      "clue": "ΤΟΥΣ ΒΛΕΠΟΥΝ ΟΙ ΡΕΪΒΕΡ",
-      "answer": "ΚΥΚΛΟΥΣ",
-      "answerRaw": "ΚΥΚΛΟΥΣ",
-      "len": 7,
-      "image": null
-    },
-    {
-      "id": 57,
-      "clue": "ΤΟΝ ΕΠΑΙΖΕ ΣΤΟΥΣ ΘΑΜΝΟΥΣ",
-      "answer": "ΒΡΩΜΟΠΑΠΠΟΥΣ",
-      "answerRaw": "ΒΡΩΜΟΠΑΠΠΟΥΣ",
-      "len": 12,
-      "image": null
-    },
-    {
-      "id": 58,
-      "clue": "ΕΙΝΑΙ Η ΦΑΣΗ ΣΤΗ ΦΩΤΟΓΡΑΦΙΑ",
-      "answer": "ΓΚΡΙΝΤΖΥ",
-      "answerRaw": "ΓΚΡΙΝΤΖΥ",
-      "len": 8,
-      "image": "assets/q58-web.png"
-    },
-    {
-      "id": 59,
-      "clue": "ΠΑΠΑΤΖΗΣ ΨΥΧΟΛΟΓΟΣ",
-      "answer": "ΜΑΛΟΥΜΑ",
-      "answerRaw": "ΜΑΛΟΥΜΑ",
-      "len": 7,
-      "image": null
-    },
-    {
-      "id": 60,
-      "clue": "ΑΚΟΥΣΤΗΚΕ ΣΕ ΣΥΝΕΝΤΕΥΞΗ ΤΗΣ ΛΑΤΙΝΟΠΟΥΛΟΥ",
-      "answer": "ΑΥΝΑΝΙΣΤΗΣ",
-      "answerRaw": "ΑΥΝΑΝΙΣΤΗΣ",
-      "len": 10,
-      "image": null
-    }
-  ]
+ "title": "ΣΤΑΥΡΟΛΕΞΟ LUBEN SUMMER 26",
+ "items": [
+  {
+   "id": 1,
+   "clue": "ΣΗΜΑΙΝΕΙ “ΤΙ ΕΙΠΑ”",
+   "answer": "ΤΙΟΥΜΠΑ",
+   "answerRaw": "ΤΙΟΥΜΠΑ",
+   "len": 7,
+   "image": null
+  },
+  {
+   "id": 2,
+   "clue": "ΚΑΙ ΗΤΑΝΕ….",
+   "answer": "ΚΑΤΑΠΛΗΚΤΙΚΟ",
+   "answerRaw": "ΚΑΤΑΠΛΗΚΤΙΚΟ",
+   "len": 12,
+   "image": null
+  },
+  {
+   "id": 3,
+   "clue": "ΑΓΑΠΗΜΕΝΟ ΦΑΓΗΤΟ ΤΟΥ ΚΟΥΛΗ",
+   "answer": "ΝΤΟΛΜΑΔΑΚΙΑ",
+   "answerRaw": "ΝΤΟΛΜΑΔΑΚΙΑ",
+   "len": 11,
+   "image": null
+  },
+  {
+   "id": 4,
+   "clue": "ΤΟ ΤΡΩΕΙ Ο GIO KAY;",
+   "answer": "ΕΛΑΦΙ",
+   "answerRaw": "ΕΛΑΦΙ",
+   "len": 5,
+   "image": null
+  },
+  {
+   "id": 5,
+   "clue": "TI MAΘΗΜΑ ΕΔΙΝΕ Ο ΠΙΟ YOLO ΜΑΘΗΤΗΣ",
+   "answer": "ΙΣΤΟΡΙΑ",
+   "answerRaw": "ΙΣΤΟΡΙΑ",
+   "len": 7,
+   "image": null
+  },
+  {
+   "id": 6,
+   "clue": "ΠΩΣ ΤΟΝ ΛΕΝΕ ΤΟΝ ΠΕΛΕΚΑΝΟ;",
+   "answer": "ΠΕΤΡΟ",
+   "answerRaw": "ΠΕΤΡΟ",
+   "len": 5,
+   "image": null
+  },
+  {
+   "id": 7,
+   "clue": "ΤΙ ΛΕΙΠΕΙ ΑΠΟ ΤΟΝ ΤΣΙΤΣΙΠΑ",
+   "answer": "ΠΟΙΟΤΗΤΑ",
+   "answerRaw": "ΠΟΙΟΤΗΤΑ",
+   "len": 8,
+   "image": null
+  },
+  {
+   "id": 8,
+   "clue": "ΑΤΑΚΑ ΤΟΥ ΑΔΥΝΑΜΟΥ ΚΡΙΚΟΥ",
+   "answer": "ΠΟΣΙΜΠΟΛ",
+   "answerRaw": "ΠΟΣΙΜΠΟΛ",
+   "len": 8,
+   "image": null
+  },
+  {
+   "id": 9,
+   "clue": "ΤΟΥΣ ΕΧΕΙ ΑΔΥΝΑΜΙΑ Ο ΚΟΥΤΣΟΥΜΠΑΣ",
+   "answer": "ΦΥΝΤΑΝΙΑ",
+   "answerRaw": "ΦΥΝΤΑΝΙΑ",
+   "len": 8,
+   "image": null
+  },
+  {
+   "id": 10,
+   "clue": "ΤΗΝ ΕΚΛΑΣΕ Ο ΚΑΡΒΕΛΑΣ",
+   "answer": "ΛΥΜΠΕΡΑΚΗ",
+   "answerRaw": "ΛΥΜΠΕΡΑΚΗ",
+   "len": 9,
+   "image": null
+  },
+  {
+   "id": 11,
+   "clue": "ΤΟ ΛΕΕΙ Η ΡΑΝΙΑ ΤΖΙΜΑ",
+   "answer": "ΚΑΤΑΝΤΙΑ",
+   "answerRaw": "ΚΑΤΑΝΤΙΑ",
+   "len": 8,
+   "image": null
+  },
+  {
+   "id": 12,
+   "clue": "ΓΕΙΩΣΕ ΤΟΝ ΕΡΩΤΑ",
+   "answer": "ΛΙΘΟΥΑΝΗ",
+   "answerRaw": "ΛΙΘΟΥΑΝΗ",
+   "len": 8,
+   "image": null
+  },
+  {
+   "id": 13,
+   "clue": "ΕΛΛΑΔΑ ΣΥΜΦΩΝΑ ΜΕ ΤΟΝ ΑΔΩΝΙ",
+   "answer": "ΖΑΧΑΡΗ",
+   "answerRaw": "ΖΑΧΑΡΗ",
+   "len": 6,
+   "image": null
+  },
+  {
+   "id": 14,
+   "clue": "ΤΑ ΤΡΩΝΕ ΣΤΗΝ ΚΟΜΟΤΗΝΗ",
+   "answer": "ΟΡΝΙΘΙΑ",
+   "answerRaw": "ΟΡΝΙΘΙΑ",
+   "len": 7,
+   "image": null
+  },
+  {
+   "id": 15,
+   "clue": "ΓΥΠΑΕΤΟΣ ΤΟΥ ΡΕΠΟΡΤΑΖ",
+   "answer": "ΤΣΕΛΙΚΑΣ",
+   "answerRaw": "ΤΣΕΛΙΚΑΣ",
+   "len": 8,
+   "image": null
+  },
+  {
+   "id": 16,
+   "clue": "ΦΑΣΩΣΕ ΤΗ ΜΑΝΑ ΤΟΥ",
+   "answer": "ΝΤΟΥΠΛΑΝΤΙΣ",
+   "answerRaw": "ΝΤΟΥΠΛΑΝΤΙΣ",
+   "len": 11,
+   "image": null
+  },
+  {
+   "id": 17,
+   "clue": "ΜΗΝ ΤΡΩΣ ΠΑΤΑΤΑΚΙΑ ΜΠΡΟΣΤΑ ΤΟΥ",
+   "answer": "ΤΑΚΗΣ",
+   "answerRaw": "ΤΑΚΗΣ",
+   "len": 5,
+   "image": null
+  },
+  {
+   "id": 18,
+   "clue": "ΠΟΙΟΙ ΔΕΝ ΠΙΣΤΕΥΑΝ ΤΟΝ ΛΕΒΕΝΤΗ;",
+   "answer": "ΖΩΑ",
+   "answerRaw": "ΖΩΑ",
+   "len": 3,
+   "image": null
+  },
+  {
+   "id": 19,
+   "clue": "ΘΑ ΕΒΓΑΖΕ.. ΜΕ ΛΟΥΞΟΥΡΙΟΥΣ ΜΠΡΙΚΙΑ",
+   "answer": "ΠΡΑΦΙΤ",
+   "answerRaw": "ΠΡΑΦΙΤ",
+   "len": 6,
+   "image": null
+  },
+  {
+   "id": 20,
+   "clue": "ΕΡΧΕΤΑΙ ΠΡΙΝ ΤΗΝ ΣΤΡΟΦΑΡΑ",
+   "answer": "ΓΙΩΡΓΗΣ",
+   "answerRaw": "ΓΙΩΡΓΗΣ",
+   "len": 7,
+   "image": null
+  },
+  {
+   "id": 21,
+   "clue": "ΕΧΕΙ ΚΑΙ Ο ΦΟΥΡΝΙΕ ΤΕΤΟΙΟ ΠΡΟΒΛΗΜΑ",
+   "answer": "ΦΕΤΑ",
+   "answerRaw": "ΦΕΤΑ",
+   "len": 4,
+   "image": null
+  },
+  {
+   "id": 22,
+   "clue": "SAY THE LINE ΜΠΑΡΤΖΩΚΑΣ",
+   "answer": "ΓΤΧΣ",
+   "answerRaw": "ΓΤΧΣ",
+   "len": 4,
+   "image": null
+  },
+  {
+   "id": 23,
+   "clue": "ΤΟ ΜΑΓΕΙΡΕΥΕΙ Ο GIANNIS",
+   "answer": "ΓΥΡΟΣ",
+   "answerRaw": "ΓΥΡΟΣ",
+   "len": 5,
+   "image": null
+  },
+  {
+   "id": 24,
+   "clue": "ΘΕΛΕΙ ΝΑ ΠΑΕΙ Ο ΕΥΤΥΧΗΣ",
+   "answer": "ΜΠΟΥΚΙΤΣΙ",
+   "answerRaw": "ΜΠΟΥΚΙΤΣΙ",
+   "len": 9,
+   "image": null
+  },
+  {
+   "id": 25,
+   "clue": "ΤΑ ΧΑΙΡΕΤΗΣΕ Ο ΚΛΕΟΜΕΝΗΣ",
+   "answer": "ΚΕΙΚ",
+   "answerRaw": "ΚΕΙΚ",
+   "len": 4,
+   "image": null
+  },
+  {
+   "id": 26,
+   "clue": "ΤΟ ΕΚΛΕΨΕ Η ΣΑΤΤΙ ΑΠΟ ΤΗΝ ΔΡΟΥΤΣΑ",
+   "answer": "ΤΑ",
+   "answerRaw": "ΤΑ",
+   "len": 2,
+   "image": null
+  },
+  {
+   "id": 27,
+   "clue": "Η ΕΛΛΑΔΑ ΚΑΤΑ ΤΟΝ ΚΟΒΙΝΤ",
+   "answer": "ΑΛΦΑΔΙΑ",
+   "answerRaw": "ΑΛΦΑΔΙΑ",
+   "len": 7,
+   "image": null
+  },
+  {
+   "id": 28,
+   "clue": "ΤΟ ΔΙΚΑΙΟΥΣΑΙ ΜΕΤΑ ΑΠΟ ΜΙΖΑ",
+   "answer": "ΣΙΩΠΗ",
+   "answerRaw": "ΣΙΩΠΗ",
+   "len": 5,
+   "image": null
+  },
+  {
+   "id": 29,
+   "clue": "ΒΕΒΗΛΩΝΟΥΝ ΕΚΚΛΗΣΙΕΣ",
+   "answer": "ΜΠΑΧΑΛΟΣΑΤΑΝΙΣΤΡΙΕΣ",
+   "answerRaw": "ΜΠΑΧΑΛΟΣΑΤΑΝΙΣΤΡΙΕΣ",
+   "len": 19,
+   "image": null
+  },
+  {
+   "id": 30,
+   "clue": "ΜΕ ΤΙ ΜΠΑΙΝΕΙ Ο ΤΣΙΠΡΑΣ",
+   "answer": "ΦΟΡΑ",
+   "answerRaw": "ΦΟΡΑ",
+   "len": 4,
+   "image": null
+  },
+  {
+   "id": 31,
+   "clue": "Ο ΝΟΜΟΣ ΤΟΥ ΚΟΝΤΕΝΤ",
+   "answer": "ΣΕΡΡΕΣ",
+   "answerRaw": "ΣΕΡΡΕΣ",
+   "len": 6,
+   "image": null
+  },
+  {
+   "id": 32,
+   "clue": "ΕΙΝΑΙ ΟΙ ΕΠΟΜΕΝΕΣ 2 ΒΔΟΜΑΔΕΣ",
+   "answer": "ΚΡΙΣΙΜΕΣ",
+   "answerRaw": "ΚΡΙΣΙΜΕΣ",
+   "len": 8,
+   "image": null
+  },
+  {
+   "id": 33,
+   "clue": "ΦΕΤΙΧ ΤΟΥ ΑΣΛΑΜΑ",
+   "answer": "ΜΑΣΧΑΛΗ",
+   "answerRaw": "ΜΑΣΧΑΛΗ",
+   "len": 7,
+   "image": null
+  },
+  {
+   "id": 34,
+   "clue": "Ο INSIDER ΤΟΥ ΝΑΝΟΥ",
+   "answer": "ΚΡΕΠΑΤΖΗΣ",
+   "answerRaw": "ΚΡΕΠΑΤΖΗΣ",
+   "len": 9,
+   "image": null
+  },
+  {
+   "id": 35,
+   "clue": "ΤΟ ΧΑΛΑΝΕ ΤΑ ΒΡΩΜΟΣΚΥΛΑ",
+   "answer": "ΦΥΤΡΟ",
+   "answerRaw": "ΦΥΤΡΟ",
+   "len": 5,
+   "image": null
+  },
+  {
+   "id": 36,
+   "clue": "ΔΕΝ ΕΙΧΕ Η ΖΗΝΑ",
+   "answer": "ΧΑΜΠΟΥΡΓΚΕΡ",
+   "answerRaw": "ΧΑΜΠΟΥΡΓΚΕΡ",
+   "len": 11,
+   "image": null
+  },
+  {
+   "id": 37,
+   "clue": "ΒΑΦΤΙΣΕ ΤΟΝ ΜΠΙΛΛ ΜΑΣ",
+   "answer": "ΙΩΑΝΝΟΥ",
+   "answerRaw": "ΙΩΑΝΝΟΥ",
+   "len": 7,
+   "image": null
+  },
+  {
+   "id": 38,
+   "clue": "ΣΥΝΘΕΤΗΣ ΚΑΒΛΩΤΙΚΗΣ ΜΟΥΣΙΚΗΣ",
+   "answer": "ΠΟΥΤΣΟΦΣΚΙ",
+   "answerRaw": "ΠΟΥΤΣΟΦΣΚΙ",
+   "len": 10,
+   "image": null
+  },
+  {
+   "id": 39,
+   "clue": "ΕΧΕΙ BEEF ΜΕ ΤΟΝ ΧΙΟ",
+   "answer": "ΜΑΡΚΑΤΟΣ",
+   "answerRaw": "ΜΑΡΚΑΤΟΣ",
+   "len": 8,
+   "image": null
+  },
+  {
+   "id": 40,
+   "clue": "ΑΝ ΕΙΣΑΙ ΑΕΚ ΠΡΕΠΕΙ ΝΑ ΤΗ ΦΟΡΑΣ",
+   "answer": "ΖΩΝΗ",
+   "answerRaw": "ΖΩΝΗ",
+   "len": 4,
+   "image": null
+  },
+  {
+   "id": 41,
+   "clue": "ΕΙΝΑΙ Η ΚΡΙΤΙΚΗ ΤΟΥ ΠΛΑΤΣ",
+   "answer": "ΨΥΧΡΑΙΜΗ",
+   "answerRaw": "ΨΥΧΡΑΙΜΗ",
+   "len": 8,
+   "image": null
+  },
+  {
+   "id": 42,
+   "clue": "ΣΥΣΤΗΜΑ ΠΕΔΟΥΛΑΚΗ",
+   "answer": "ΜΠΟΧΟΥ",
+   "answerRaw": "ΜΠΟΧΟΥ",
+   "len": 6,
+   "image": null
+  },
+  {
+   "id": 43,
+   "clue": "ΕΙΝΑΙ ΚΑΛΟΣ ΤΩΡΑ;",
+   "answer": "ΜΠΟΓΡΙΝΙΟ",
+   "answerRaw": "ΜΠΟΓΡΙΝΙΟ",
+   "len": 9,
+   "image": null
+  },
+  {
+   "id": 44,
+   "clue": "ΠΡΕΠΕΙ ΝΑ ΗΡΕΜΗΣΕΙ",
+   "answer": "ΣΛΑΤΙΝΑ",
+   "answerRaw": "ΣΛΑΤΙΝΑ",
+   "len": 7,
+   "image": null
+  },
+  {
+   "id": 45,
+   "clue": "ΤΡΩΕΙ ΤΣΙΓΚΙΝΑ ΚΟΥΤΑΚΙΑ",
+   "answer": "ΛΑΓΟΚΕΦΑΛΟΣ",
+   "answerRaw": "ΛΑΓΟΚΕΦΑΛΟΣ",
+   "len": 11,
+   "image": null
+  },
+  {
+   "id": 46,
+   "clue": "ΘΑ ΕΧΕΙΣ ΑΝ ΜΠΛΕΞΕΙΣ ΜΕ ΣΩΡΡΑ",
+   "answer": "ΦΟΡΤΩΜΑΤΑ",
+   "answerRaw": "ΦΟΡΤΩΜΑΤΑ",
+   "len": 9,
+   "image": null
+  },
+  {
+   "id": 47,
+   "clue": "ΗΤΑΝ Ο ΤΑΣΟΣ ΚΑΚΟΣ ΣΤΟΝ ΣΚΑΪ",
+   "answer": "ΑΜΙΣΘΙ",
+   "answerRaw": "ΑΜΙΣΘΙ",
+   "len": 6,
+   "image": null
+  },
+  {
+   "id": 48,
+   "clue": "ΜΤΣΤΚΣ ΣΕ ΗΛΙΚΙΩΜΕΝΟΥΣ",
+   "answer": "ΤΕΛΕΙΩΣΑΤΕ",
+   "answerRaw": "ΤΕΛΕΙΩΣΑΤΕ",
+   "len": 10,
+   "image": null
+  },
+  {
+   "id": 49,
+   "clue": "ΤΟ ΕΚΑΝΕ Ο ΚΑΡΑΜΑΝΗΣ",
+   "answer": "ΠΕΤΣΟΚΟΜΜΑ",
+   "answerRaw": "ΠΕΤΣΟΚΟΜΜΑ",
+   "len": 10,
+   "image": null
+  },
+  {
+   "id": 50,
+   "clue": "ΤΟΝ ΒΡΗΚΑΝ ΝΑ ΚΛΕΒΕΙ ΕΡΓΑΛΕΙΑ",
+   "answer": "ΦΙΛΟΣ",
+   "answerRaw": "ΦΙΛΟΣ",
+   "len": 5,
+   "image": null
+  },
+  {
+   "id": 51,
+   "clue": "ΦΙΝΑΛΕ ΑΓΩΝΑ ΕΥΡΩΛΙΓΚΑΣ",
+   "answer": "ΓΚΡΑΝΓΚΙΝΙΟΛΙΚΟ",
+   "answerRaw": "ΓΚΡΑΝΓΚΙΝΙΟΛΙΚΟ",
+   "len": 15,
+   "image": null
+  },
+  {
+   "id": 52,
+   "clue": "ΤΟ ΕΧΕΙ ΟΠΛΙΣΜΕΝΟ ΗΧΟΛΗΠΤΗΣ ΤΟΥ OPEN",
+   "answer": "ΜΙΟΥΤ",
+   "answerRaw": "ΜΙΟΥΤ",
+   "len": 5,
+   "image": null
+  },
+  {
+   "id": 53,
+   "clue": "ΟΥΡΛΙΑΖΕ Ο ΑΓΙΟΣ ΠΑΪΣΙΟΣ",
+   "answer": "ΣΤΑΜΑΤΑΑΑ",
+   "answerRaw": "ΣΤΑΜΑΤΑΑΑ",
+   "len": 9,
+   "image": null
+  },
+  {
+   "id": 54,
+   "clue": "ΒΓΑΙΝΕΙ ΠΛΕΟΝ ΚΑΙ ΣΕ ΑΝΑΒΑΘΜΙΣΜΕΝΟ ΜΟΝΤΕΛΟ",
+   "answer": "ΕΛΛΑΔΑ",
+   "answerRaw": "ΕΛΛΑΔΑ",
+   "len": 6,
+   "image": null
+  },
+  {
+   "id": 55,
+   "clue": "ΤΟ ΑΝΤΙΗΛΙΑΚΟ ΤΟΥ ΡΑΠΤΟΠΟΥΛΟΥ",
+   "answer": "ΜΕΛΙ",
+   "answerRaw": "ΜΕΛΙ",
+   "len": 4,
+   "image": null
+  },
+  {
+   "id": 56,
+   "clue": "ΤΟΥΣ ΒΛΕΠΟΥΝ ΟΙ ΡΕΪΒΕΡ",
+   "answer": "ΚΥΚΛΟΥΣ",
+   "answerRaw": "ΚΥΚΛΟΥΣ",
+   "len": 7,
+   "image": null
+  },
+  {
+   "id": 57,
+   "clue": "ΤΟΝ ΕΠΑΙΖΕ ΣΤΟΥΣ ΘΑΜΝΟΥΣ",
+   "answer": "ΒΡΩΜΟΠΑΠΠΟΥΣ",
+   "answerRaw": "ΒΡΩΜΟΠΑΠΠΟΥΣ",
+   "len": 12,
+   "image": null
+  },
+  {
+   "id": 58,
+   "clue": "ΕΙΝΑΙ Η ΦΑΣΗ ΣΤΗ ΦΩΤΟΓΡΑΦΙΑ",
+   "answer": "ΓΚΡΙΝΤΖΥ",
+   "answerRaw": "ΓΚΡΙΝΤΖΥ",
+   "len": 8,
+   "image": "assets/q58-web.png"
+  },
+  {
+   "id": 59,
+   "clue": "ΠΑΠΑΤΖΗΣ ΨΥΧΟΛΟΓΟΣ",
+   "answer": "ΜΑΛΟΥΜΑ",
+   "answerRaw": "ΜΑΛΟΥΜΑ",
+   "len": 7,
+   "image": null
+  },
+  {
+   "id": 60,
+   "clue": "ΑΚΟΥΣΤΗΚΕ ΣΕ ΣΥΝΕΝΤΕΥΞΗ ΤΗΣ ΛΑΤΙΝΟΠΟΥΛΟΥ",
+   "answer": "ΑΥΝΑΝΙΣΤΗΣ",
+   "answerRaw": "ΑΥΝΑΝΙΣΤΗΣ",
+   "len": 10,
+   "image": null
+  }
+ ]
 }
