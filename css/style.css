@@ -225,6 +225,12 @@ body{
   background:linear-gradient(135deg,#fff 0%,#f1eff1 40%,#dbd8db 52%,
              rgba(0,0,0,.14) 56%,transparent 57%);
 }
+/* Η γωνία της όψης που κοιτάει ΑΛΛΟΥ δεν ζωγραφίζεται, αλλά ο browser την
+   κρατάει στο hit-testing — και επειδή πέφτει ακριβώς πάνω στη σωστή, της
+   έτρωγε το hover. Την απενεργοποιούμε ρητά. */
+.leaf.turned > .face.front > .corner{pointer-events:none}
+.leaf:not(.turned) > .face.back > .corner{pointer-events:none}
+
 /* με ποντίκι μόνο στο hover· σε αφή αναβοσβήνει μόνο στο εξώφυλλο */
 @media (hover:hover){
   .face > .corner:hover::before{opacity:.75}

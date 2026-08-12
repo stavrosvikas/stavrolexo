@@ -60,6 +60,9 @@ window.Book = (function () {
     var edge = Math.min(from === undefined ? current : from, current) - 1;
     for (var i = 0; i < count; i++) {
       leaves[i].style.visibility = (i < edge) ? 'hidden' : 'visible';
+      // ποια όψη κοιτάει τον χρήστη — το CSS το χρειάζεται για να μη
+      // «πιάνει» το ποντίκι η γωνία της γυρισμένης όψης
+      leaves[i].classList.toggle('turned', i < current);
     }
   }
 
