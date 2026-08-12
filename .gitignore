@@ -17,3 +17,6 @@ desktop.ini
 
 # παράγωγα του qna zip — ξαναβγαίνουν όποτε χρειαστεί
 qna/extracted/
+
+# προσωρινά wrappers ελέγχου
+_*.html
