@@ -176,22 +176,15 @@ body{
   /* διαιρούμε με το ζουμ, ώστε η σκιά να μη μεγεθύνεται μαζί με το χαρτί */
   box-shadow:0 calc(2px / var(--z)) calc(30px / var(--z)) rgba(0,0,0,.45);
 }
-/* σκιά ράχης */
-.face::before{
-  content:"";position:absolute;left:0;top:0;bottom:0;
-  width:calc(30px / var(--z));
-  background:linear-gradient(to right,rgba(0,0,0,.16),rgba(0,0,0,.03) 45%,rgba(0,0,0,0));
-  pointer-events:none;z-index:4;
-}
+/* Καμία σκιά ράχης: η ίδια η σελίδα έχει ήδη τη δική της σκιά και δίνει
+   το βάθος. Δύο εφέ στο ίδιο σημείο έβγαζαν σκούρα μπάντα στη μέση. */
+
 /* η πίσω όψη του φύλλου — αυτή είναι που κάνει το γύρισμα να μοιάζει χαρτί */
 .face.back{
   transform:rotateY(180deg);
   background:
     linear-gradient(to left,#f2f0f2,#ffffff 30%,#f7f5f7);
 }
-/* Η πίσω όψη ΔΕΝ βάζει δική της σκιά ράχης. Θα κολλούσε δίπλα σε αυτήν της
-   δεξιάς σελίδας και θα διπλασίαζε τη σκούρα μπάντα στη μέση. Μία αρκεί. */
-.face.back::before{display:none}
 .face.back::after{
   content:"";position:absolute;inset:0;
   background:repeating-linear-gradient(0deg,rgba(0,0,0,.012) 0 2px,transparent 2px 5px);
