@@ -22,8 +22,9 @@
       var host = Book.back(idx);
       if (!host) return;
       host.innerHTML = '';
+      // χωρίς αρίθμηση σελίδας: η αριστερή σελίδα δεν είναι η «ΣΕΛΙΔΑ x»
       var h = document.createElement('h3');
-      h.textContent = p.data.label + ' · Ορισμοί';
+      h.textContent = 'Ορισμοί';
       host.appendChild(h);
 
       var cols = document.createElement('div');
@@ -169,19 +170,6 @@
   // οι πίσω όψεις υπάρχουν μόνο αφού τρέξει το Book.init
   buildBacks();
 
-  // Η αριστερή σελίδα του τελευταίου ανοίγματος δεν έχει ορισμούς να δείξει
-  // (τα σταυρόλεξα είναι δύο). Αντί για λευκό χαρτί που μοιάζει λάθος,
-  // μπαίνει το κολοφώνιο του τεύχους.
-  var colophon = Book.back(2);
-  if (colophon) {
-    colophon.innerHTML =
-      '<div class="colophon">' +
-        '<span class="mark">luben.tv</span>' +
-        '<b>ΛΟΥΜΠΕΝΟΛΕΞΟ</b>' +
-        'Τεύχος No 01 · Summer 26<br>' +
-        '60 ερωτήσεις, δύο πλέγματα<br>κι ένα πρόσωπο σε τελείες.' +
-      '</div>';
-  }
 
   // ── πληκτρολόγιο ────────────────────────────────────────────────
   Keyboard.init(kb, {

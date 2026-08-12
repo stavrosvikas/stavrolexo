@@ -212,15 +212,19 @@ body{
 }
 /* Στο εξώφυλλο δεν χρειάζεται: εκεί μιλάει το animation που σηκώνει τη γωνία. */
 .leaf[data-page="0"] > .face.front > .corner{display:none}
+/* Το τρίγωνο το φτιάχνει το ίδιο το gradient (σκληρό stop στο 57%), οπότε
+   ΔΕΝ βάζουμε clip-path: θα έκοβε και την περιοχή που πιάνει το ποντίκι και
+   θα έπρεπε να πετύχεις ακριβώς μέσα στο τριγωνάκι. Έτσι το hover πιάνει
+   όλο το τετράγωνο της γωνίας — ίδια περιοχή με τη ζώνη γυρίσματος. */
 /* μπροστινή όψη: η ελεύθερη ακμή είναι δεξιά */
 .face.front > .corner.r{
-  right:0;clip-path:polygon(100% 0,100% 100%,0 100%);
+  right:0;
   background:linear-gradient(225deg,#fff 0%,#f1eff1 40%,#dbd8db 52%,
              rgba(0,0,0,.14) 56%,transparent 57%);
 }
 /* πίσω όψη = η αριστερή σελίδα· η ελεύθερη ακμή της είναι τέρμα αριστερά */
 .face.back > .corner.l{
-  left:0;clip-path:polygon(0 0,100% 100%,0 100%);
+  left:0;
   background:linear-gradient(135deg,#fff 0%,#f1eff1 40%,#dbd8db 52%,
              rgba(0,0,0,.14) 56%,transparent 57%);
 }
@@ -463,14 +467,6 @@ body{
 .facing-cols::-webkit-scrollbar{width:8px}
 .facing-cols::-webkit-scrollbar-thumb{background:var(--m-20);border-radius:99px}
 /* σε κινητό η πίσω όψη δεν φαίνεται ποτέ — μη χτίζεται καν οπτικά */
-/* κολοφώνιο στην αριστερή σελίδα του τελευταίου ανοίγματος */
-.colophon{margin:auto;text-align:center;color:var(--ink-2);font-size:12.5px;
-          line-height:1.75;padding:0 12%}
-.colophon .mark{display:block;color:var(--m-100);font-weight:700;
-                letter-spacing:.34em;font-size:9px;margin-bottom:14px}
-.colophon b{display:block;font-size:19px;color:var(--ink-1);font-weight:900;
-            letter-spacing:-.02em;margin-bottom:8px}
-
 /* οι ορισμοί ζωγραφίζονται μόνο όταν φαίνεται η αριστερή σελίδα */
 #app:not(.spread) .back-inner{display:none}
 .cl-group{break-inside:avoid-column;margin-bottom:12px}
