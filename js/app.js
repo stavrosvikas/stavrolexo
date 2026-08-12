@@ -240,7 +240,15 @@
     revealBtn.textContent = open ? 'Κρύψε τις λύσεις' : 'Δείξε μου τις λύσεις';
     // η σελίδα σκρολάρει μόνο όταν υπάρχει λόγος
     lastPage.classList.toggle('scrollable', open);
-    if (!open) lastPage.scrollTop = 0;
+    if (!open) { lastPage.scrollTop = 0; return; }
+
+    /* Σε μικρές οθόνες οι λύσεις ξεκινάνε κάτω από το ορατό και έμοιαζαν
+       να μην εμφανίζονται καθόλου. Τις φέρνουμε μπροστά στα μάτια. */
+    requestAnimationFrame(function () {
+      var h = revealBtn.previousElementSibling;      // ο τίτλος «Λύσεις»
+      var target = (h && h.previousElementSibling) || revealBtn;
+      lastPage.scrollTop = Math.max(0, target.offsetTop - 12);
+    });
   }
 
   revealBtn.addEventListener('click', function () {

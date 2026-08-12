@@ -350,7 +350,10 @@ body{
            touch-action:none;display:flex;justify-content:center;
            flex:1 1 auto;min-height:140px}
 #dots-wrap svg{display:block;width:100%;height:100%}
-.last.scrollable #dots-wrap{flex:none;height:46vh}
+/* Μόλις ανοίξουν οι λύσεις, το ταμπλό των τελειών ΜΙΚΡΑΙΝΕΙ — δεν μεγαλώνει.
+   Πριν γινόταν 46vh και έσπρωχνε τις λύσεις κάτω από το ορατό, με
+   αποτέλεσμα να μοιάζουν εξαφανισμένες. */
+.last.scrollable #dots-wrap{flex:none;height:min(30vh,260px);min-height:150px}
 .dot-pt{fill:#b6b6c0}
 .dot-pt.done{fill:var(--m-100)}
 .dot-pt.next{fill:var(--m-100)}
