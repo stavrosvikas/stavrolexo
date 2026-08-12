@@ -95,8 +95,26 @@ body{
   background:var(--m-05);border-bottom:1px solid var(--m-20);
   min-height:66px;
 }
+/* .empty = εκτός σελίδων πλέγματος -> τελείως άδεια, μόνο κρατάει τον χώρο.
+   .hint  = σε σελίδα πλέγματος χωρίς επιλεγμένη λέξη -> δείχνει τι να κάνεις. */
 #cluebar.empty{background:var(--bg);border-bottom-color:transparent}
 #cluebar.empty > *{visibility:hidden}
+
+.clue-hint{
+  display:none;align-items:center;gap:9px;
+  font:inherit;font-size:14px;color:var(--m-ink);
+  background:none;border:0;cursor:pointer;padding:8px 10px;
+  border-radius:99px;
+}
+.clue-hint .ch-ico{font-size:17px;animation:tap 2.2s ease-in-out infinite}
+@keyframes tap{
+  0%,68%,100%{transform:translateY(0);opacity:.75}
+  78%,88%{transform:translateY(-4px);opacity:1}
+}
+.clue-hint:active{background:var(--m-10)}
+#cluebar.hint .clue-lines,
+#cluebar.hint #clue-image{display:none}
+#cluebar.hint .clue-hint{display:inline-flex}
 #cluebar .clue-nav{
   flex:0 0 44px;background:transparent;border:0;color:var(--m-ink);
   font-size:24px;cursor:pointer;

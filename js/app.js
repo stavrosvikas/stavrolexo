@@ -80,8 +80,7 @@
   function showClue(w, q) {
     if (!w) {
       // καθάρισε το πεδίο, μη μείνει κρεμασμένος ο προηγούμενος ορισμός.
-      // Η μπάρα κρατάει τον χώρο της, απλώς αδειάζει.
-      cluebar.classList.add('empty');
+      // Τις κλάσεις τις ορίζει το syncChrome.
       clueN.textContent = '';
       clueText.textContent = '';
       clueLen.textContent = '';
@@ -89,7 +88,6 @@
       clueImg.removeAttribute('src');
       return;
     }
-    cluebar.classList.remove('empty');
     clueN.textContent = w.n + (w.dir === 'H' ? ' ΟΡΙΖΟΝΤΙΑ' : ' ΚΑΘΕΤΑ');
     clueText.textContent = q.clue;
     clueLen.textContent = w.answer.length + ' γράμματα';
@@ -116,7 +114,9 @@
     var i = Book.current();
     var onGrid = (i === 1 || i === 2);
     var p = activePuzzle();
-    cluebar.classList.toggle('empty', !onGrid || !p || !p.active);
+    var picked = !!(onGrid && p && p.active);
+    cluebar.classList.toggle('empty', !onGrid);
+    cluebar.classList.toggle('hint', onGrid && !picked);
     kb.classList.toggle('empty', !onGrid || !Keyboard.wantsOnScreen());
   }
 
@@ -176,6 +176,11 @@
     letter: function (ch) { var p = activePuzzle(); if (p) p.type(ch); },
     del: function () { var p = activePuzzle(); if (p) p.backspace(); },
     step: function (d) { var p = activePuzzle(); if (p) p.step(d); }
+  });
+
+  document.getElementById('clue-hint').addEventListener('click', function () {
+    var p = activePuzzle();
+    if (p) p.nextUnsolved();
   });
 
   document.getElementById('clue-prev').addEventListener('click', function () {
