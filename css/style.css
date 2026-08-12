@@ -326,21 +326,23 @@ body{
 
 /* ── τελευταία σελίδα ──────────────────────────────────────────── */
 
+/* Σκρολάρει το ΠΕΡΙΕΧΟΜΕΝΟ μέσα στη σελίδα, όχι η σελίδα. Αλλιώς έφευγε
+   μαζί και η σκιά της ράχης, και έμενε κομμένη ακμή στο πλάι. */
 .last{overflow:hidden}
-.last.scrollable{overflow-y:auto;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
-.last::-webkit-scrollbar{width:10px}
-.last::-webkit-scrollbar-track{background:var(--m-05)}
-.last::-webkit-scrollbar-thumb{background:var(--m-20);border-radius:99px;
-                               border:3px solid var(--m-05)}
-.last::-webkit-scrollbar-thumb:hover{background:var(--m-40)}
-.last{scrollbar-width:thin;scrollbar-color:var(--m-20) var(--m-05)}
+.last.scrollable .sheet{overflow-y:auto;-webkit-overflow-scrolling:touch;
+                        scroll-behavior:smooth}
+.sheet::-webkit-scrollbar{width:10px}
+.sheet::-webkit-scrollbar-track{background:var(--m-05)}
+.sheet::-webkit-scrollbar-thumb{background:var(--m-20);border-radius:99px;
+                                border:3px solid var(--m-05)}
+.sheet::-webkit-scrollbar-thumb:hover{background:var(--m-40)}
+.sheet{scrollbar-width:thin;scrollbar-color:var(--m-20) var(--m-05)}
 
 /* Κλειστές λύσεις = μια σελίδα που χωράει ολόκληρη, χωρίς σκρολ.
    Ανοιχτές = η σελίδα επιμηκύνεται και σκρολάρει. */
 .last{display:flex}
-.last.scrollable{display:block}
-.sheet{padding:14px 16px 18px 36px;max-width:620px;margin:0 auto;width:100%;
-       display:flex;flex-direction:column;min-height:0}
+.sheet{position:relative;padding:14px 16px 18px 36px;max-width:620px;
+       margin:0 auto;width:100%;display:flex;flex-direction:column;min-height:0}
 .last.scrollable .sheet{display:block;padding-bottom:42px}
 .sheet h2{margin:0 0 3px;font-size:20px;font-weight:900;letter-spacing:-.015em}
 .sheet h2.mt{margin-top:26px}
@@ -499,5 +501,5 @@ body{
   .stage.fx{transition:none}
   .face.front::after{display:none}
   .leaf{border-radius:0}
-  .last.scrollable{scroll-behavior:auto}
+  .last.scrollable .sheet{scroll-behavior:auto}
 }
