@@ -166,10 +166,9 @@ body{
   background:
     linear-gradient(to left,#f2f0f2,#ffffff 30%,#f7f5f7);
 }
-.face.back::before{
-  left:auto;right:0;
-  background:linear-gradient(to left,rgba(0,0,0,.16),rgba(0,0,0,0));
-}
+/* Η πίσω όψη ΔΕΝ βάζει δική της σκιά ράχης. Θα κολλούσε δίπλα σε αυτήν της
+   δεξιάς σελίδας και θα διπλασίαζε τη σκούρα μπάντα στη μέση. Μία αρκεί. */
+.face.back::before{display:none}
 .face.back::after{
   content:"";position:absolute;inset:0;
   background:repeating-linear-gradient(0deg,rgba(0,0,0,.012) 0 2px,transparent 2px 5px);
