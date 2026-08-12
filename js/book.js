@@ -348,6 +348,39 @@ window.Book = (function () {
     return null;
   }
 
+  /* ΠΑΝΟΡΑΜΙΚΗ όσο είσαι ζουμαρισμένος, από ΟΠΟΥΔΗΠΟΤΕ πάνω στο τεύχος.
+     Πριν, το σύρσιμο έπιανε μόνο μέσα στο πλέγμα -- στη σελίδα των ορισμών
+     δεν υπήρχε κανένας χειριστής και δεν κουνιόταν τίποτα. Το πλέγμα κρατάει
+     τον δικό του (χρειάζεται και το pinch), γι' αυτό το εξαιρούμε εδώ. */
+  var pan = null;
+  function panDown(e) {
+    if (atFitFlag()) return;
+    if (e.target.closest('button')) return;
+    if (e.target.closest('.gridwrap')) return;
+    pan = { id: e.pointerId, x: e.clientX, y: e.clientY, live: false };
+  }
+  function panMove(e) {
+    if (!pan || e.pointerId !== pan.id) return;
+    if (!pan.live) {
+      if (Math.abs(e.clientX - pan.x) < 6 && Math.abs(e.clientY - pan.y) < 6) return;
+      pan.live = true;
+      var bk = document.getElementById('book');
+      try { bk.setPointerCapture(e.pointerId); } catch (err) {}
+    }
+    panBy(e.clientX - pan.x, e.clientY - pan.y);
+    pan.x = e.clientX; pan.y = e.clientY;
+  }
+  function panUp(e) {
+    if (!pan || (e && e.pointerId !== pan.id)) return;
+    var moved = pan.live;
+    pan = null;
+    if (!moved) return;
+    // μετά από σύρσιμο δεν θέλουμε και «κλικ» στο σημείο που άφησες
+    var block = function (ev) { ev.stopPropagation(); ev.preventDefault(); };
+    window.addEventListener('click', block, true);
+    setTimeout(function () { window.removeEventListener('click', block, true); }, 0);
+  }
+
   function inEdgeZone(clientX, clientY, target) {
     return corner(clientX, clientY, target) !== null;
   }
@@ -478,6 +511,11 @@ window.Book = (function () {
       });
 
       stack.addEventListener('pointerdown', down);
+      var bk = document.getElementById('book');
+      bk.addEventListener('pointerdown', panDown);
+      window.addEventListener('pointermove', panMove);
+      window.addEventListener('pointerup', panUp);
+      window.addEventListener('pointercancel', panUp);
       window.addEventListener('pointermove', move);
       window.addEventListener('pointerup', up);
       window.addEventListener('pointercancel', up);
