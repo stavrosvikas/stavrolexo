@@ -106,11 +106,6 @@ body{
   background:none;border:0;cursor:pointer;padding:8px 10px;
   border-radius:99px;
 }
-.clue-hint .ch-ico{font-size:17px;animation:tap 2.2s ease-in-out infinite}
-@keyframes tap{
-  0%,68%,100%{transform:translateY(0);opacity:.75}
-  78%,88%{transform:translateY(-4px);opacity:1}
-}
 .clue-hint:active{background:var(--m-10)}
 #cluebar.hint .clue-lines,
 #cluebar.hint #clue-image{display:none}
@@ -439,6 +434,28 @@ body{
 .key:active{background:var(--m-100);color:#fff;border-color:var(--m-100);
             box-shadow:none;transform:translateY(1px)}
 .key.wide{max-width:62px;flex:1.4 1 0;font-size:17px;background:#dedee6}
+
+/* ── πληκτρολόγιο στο πλάι (οριζόντια συσκευή αφής) ─────────────
+   Σε οριζόντιο tablet το πληκτρολόγιο από κάτω έτρωγε ύψος, και επειδή η
+   σελίδα δένεται στο ύψος έβγαινε μικρότερη κι από κινητό — ενώ περίσσευαν
+   ~300px πλάτος. Εδώ μπαίνει στο πλάι και η σελίδα παίρνει όλο το ύψος.
+   Ενεργοποιείται ΜΟΝΟ σε coarse pointer: ποντίκι/trackpad δεν το βλέπουν. */
+#app.kbside{
+  display:grid;
+  grid-template-columns:1fr auto;
+  grid-template-rows:auto minmax(0,1fr) auto;
+  grid-template-areas:"clue clue" "book kb" "pager pager";
+}
+#app.kbside #cluebar{grid-area:clue}
+#app.kbside #book   {grid-area:book;min-width:0}
+#app.kbside #pager  {grid-area:pager}
+#app.kbside #keyboard{
+  grid-area:kb;align-self:center;
+  width:clamp(280px, 34vw, 430px);
+  border-top:0;border-left:1px solid var(--hair);
+  padding:10px 8px;
+}
+#app.kbside #keyboard.empty{border-left-color:transparent}
 
 /* ── pager ─────────────────────────────────────────────────────── */
 

@@ -139,6 +139,18 @@
     if (Book.restack) Book.restack();     // αλλάζει ποιο φύλλο μένει ορατό
   }
 
+  /* Οριζόντια συσκευή αφής: το πληκτρολόγιο πάει στο πλάι αντί από κάτω.
+     Αλλιώς τρώει ύψος, και επειδή η σελίδα δένεται στο ύψος βγαίνει
+     μικρότερη κι από κινητό ενώ περισσεύει πλάτος. Απαιτεί coarse pointer,
+     ώστε ποντίκι και trackpad να μην επηρεάζονται ποτέ. */
+  function syncKbSide() {
+    var touch = window.matchMedia('(pointer: coarse)').matches;
+    var landscape = window.innerWidth > window.innerHeight;
+    var wide = window.innerWidth >= 820;
+    document.getElementById('app')
+            .classList.toggle('kbside', touch && landscape && wide);
+  }
+
   // ── πλέγματα ────────────────────────────────────────────────────
   P.pages.forEach(function (pageData, i) {
     var el = document.querySelector('.face[data-grid="' + i + '"]');
@@ -269,6 +281,7 @@
   window.addEventListener('resize', function () {
     clearTimeout(rt);
     rt = setTimeout(function () {
+      syncKbSide();
       syncSpread();
       syncChrome();
       var p = activePuzzle();
@@ -277,11 +290,13 @@
     }, 140);
   });
 
+  syncKbSide();
   syncSpread();
   syncChrome();
   updateCover();
   // το layout μπορεί να μην έχει σταθεροποιηθεί στο πρώτο frame
   requestAnimationFrame(function () {
+    syncKbSide();
     syncSpread();
     var p = activePuzzle();
     if (p) p.fit(true);
