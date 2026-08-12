@@ -63,12 +63,25 @@ window.Dots = (function () {
     };
   };
 
-  Board.prototype.hit = function (clientX, clientY) {
+  /* Το κατώφλι ΠΡΕΠΕΙ να είναι σε πραγματικά pixel οθόνης, όχι σε μονάδες
+     του viewBox. Το σταθερό 34 σε viewBox 1080 έβγαινε ~7px στο κινητό:
+     άπιαστο ακόμα κι όταν ήξερες ακριβώς πού να πατήσεις. */
+  Board.prototype.tol = function () {
+    var r = this.svg.getBoundingClientRect();
+    var vb = this.data.viewBox;
+    var s = Math.min(r.width / vb[2], r.height / vb[3]) || 1;
+    return Math.max(34, 22 / s);
+  };
+
+  Board.prototype.hit = function (clientX, clientY, chained) {
     if (this.progress >= this.pts.length) return;
     var p = this.toSvg(clientX, clientY);
     var target = this.pts[this.progress];
     var d = Math.hypot(p.x - target[0], p.y - target[1]);
-    if (d <= 34) {
+    // Με το δάχτυλο ακίνητο δεν πρέπει να τρέχουν πολλές τελείες μαζί: η
+    // αλυσίδα συνεχίζει μόνο αν η επόμενη είναι πραγματικά από κάτω.
+    var tol = this.tol() * (chained ? .45 : 1);
+    if (d <= tol) {
       this.progress++;
       Store.dots(this.progress);
       SFX.dot(this.progress);
@@ -78,7 +91,7 @@ window.Dots = (function () {
         SFX.good();
       }
       // αν το δάχτυλο είναι ήδη πάνω στην επόμενη, συνέχισε
-      this.hit(clientX, clientY);
+      this.hit(clientX, clientY, true);
     }
   };
 
