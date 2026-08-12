@@ -42,22 +42,50 @@ window.Book = (function () {
              width: ri - l, height: b - t };
   }
 
-  /* ΤΟ ΚΑΡΕ ΠΟΥ ΣΕΡΒΙΡΟΥΜΕ. Είναι ΕΝΑ και σταθερό ανά οθόνη: το #stack
-     είναι ήδη χτισμένο ώστε να χωράει ολόκληρο στο #book σε λόγο 3:4, άρα
-     το σερβιριστό καρέ είναι απλώς «καμία μετατόπιση, καμία κλίμακα».
-     ΔΕΝ εξαρτάται από τη μπάρα ή το πληκτρολόγιο -- όταν εξαρτιόταν,
-     ξαναϋπολογιζόταν σε κάθε εμφάνισή τους και το τεύχος τιναζόταν σε
-     κάθε γύρισμα σελίδας και σε κάθε κλικ σε κελί. */
-  var SERVED = { z: 1, x: 0, y: 0 };
+  /* ΤΟ ΚΑΡΕ ΠΟΥ ΣΕΡΒΙΡΟΥΜΕ. Είναι ΕΝΑ και σταθερό ανά οθόνη, και στη βασική
+     του θέση ΔΕΝ ακουμπάει τίποτα το τεύχος: αφήνουμε πάντα ελεύθερη τη
+     λωρίδα της μπάρας ερώτησης -- πάντα, ακόμα και στις σελίδες που δεν την
+     έχουν. Το ύψος της είναι σταθερό, οπότε το καρέ μένει σταθερό και δεν
+     ξαναρχίζει το τίναγμα από σελίδα σε σελίδα.
+
+     Το πληκτρολόγιο ΔΕΝ αφαιρείται: εμφανίζεται μόνο όταν έχεις επιλέξει
+     λέξη, δηλαδή σε κατάσταση εστίασης, όπου επιτρέπεται να επικαλύπτει.
+
+     Όλα μετριούνται με offsetWidth/offsetHeight. Το getBoundingClientRect()
+     επιστρέφει την τρέχουσα τιμή του transition, και μετρώντας πάνω σε
+     κίνηση το ζουμ κατέρρεε στο 0.10 και το τεύχος εξαφανιζόταν. */
+  function servedFrame() {
+    var book = document.getElementById('book');
+    if (!book || !spread) return { z: 1, x: 0, y: 0 };
+    var sw = spread.offsetWidth, sh = spread.offsetHeight;
+    var f = document.getElementById('facing'), st = document.getElementById('stack');
+    var cw = ((f && f.offsetWidth) || 0) + ((st && st.offsetWidth) || 0);
+    var ch = Math.max((f && f.offsetHeight) || 0, (st && st.offsetHeight) || 0);
+    if (!sw || !sh || !cw || !ch) return { z: 1, x: 0, y: 0 };
+
+    var cb = document.getElementById('cluebar');
+    var inset = (cb && cb.offsetHeight) || 0;      // σταθερή, ό,τι κι αν παίζει
+    var r = book.getBoundingClientRect();
+    var av = { left: r.left, top: r.top + inset, width: r.width,
+               height: Math.max(60, r.height - inset) };
+
+    var z = Math.min(1, av.width / cw, av.height / ch);
+    var lx = (sw - cw) / 2, ly = (sh - ch) / 2;    // θέση μέσα στο #spread
+    return {
+      z: z,
+      x: av.left + (av.width  - cw * z) / 2 - (r.left + lx * z),
+      y: av.top  + (av.height - ch * z) / 2 - (r.top  + ly * z)
+    };
+  }
 
   /* Μαγνήτης: όσο κι αν σύρεις ή ζουμάρεις, το τεύχος δεν φεύγει από το
      κάδρο -- κρατάμε πάντα ένα κομμάτι του μέσα στη ζώνη. */
   function clampZoom() {
     var book = document.getElementById('book');
     if (!book) return;
-    if (zoom.z <= SERVED.z + 1e-4) {
-      zoom.z = SERVED.z; zoom.x = SERVED.x; zoom.y = SERVED.y; return;
-    }
+    var S = servedFrame();
+    fitZ = S.z;
+    if (zoom.z <= S.z + 1e-4) { zoom.z = S.z; zoom.x = S.x; zoom.y = S.y; return; }
     zoom.z = Math.min(zoom.z, MAXZ);
     var band = bandRect();
     var b = { x: spread.getBoundingClientRect().left - zoom.x,
@@ -133,7 +161,8 @@ window.Book = (function () {
   }
 
   function zoomReset(instant) {
-    zoom = { z: SERVED.z, x: SERVED.x, y: SERVED.y };
+    var S = servedFrame();
+    zoom = { z: S.z, x: S.x, y: S.y };
     applyZoom(instant);
   }
   function atFit() { return atFitFlag(); }
