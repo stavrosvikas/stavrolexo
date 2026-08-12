@@ -465,26 +465,34 @@ body{
 
 /* ── η πίσω όψη του φύλλου: εδώ τυπώνονται οι ορισμοί ──────────── */
 
+/* Το κείμενο ΜΙΚΡΑΙΝΕΙ μαζί με τη σελίδα, αντί να ξεχειλίζει. Το --pagew
+   είναι το πλάτος της σελίδας, οπότε οι ορισμοί κλιμακώνονται μαζί της. */
 .back-inner{position:absolute;inset:0;display:flex;flex-direction:column;
-            padding:16px 22px 14px 20px;overflow:hidden}
+            padding:16px 22px 14px 20px;overflow:hidden;
+            font-size:clamp(8.5px, calc(var(--pagew) * .0255), 13px)}
 .back-inner:empty{display:none}
 .back-inner h3{
-  margin:0 0 8px;font-size:10px;letter-spacing:.24em;text-transform:uppercase;
+  margin:0 0 8px;font-size:.8em;letter-spacing:.24em;text-transform:uppercase;
   color:var(--m-ink);border-bottom:1px solid var(--hair);padding-bottom:6px;
 }
-.facing-cols{flex:1 1 auto;min-height:0;overflow-y:auto;
-             columns:2;column-gap:20px;column-rule:1px solid var(--hair)}
-.facing-cols::-webkit-scrollbar{width:8px}
-.facing-cols::-webkit-scrollbar-thumb{background:var(--m-20);border-radius:99px}
-/* σε κινητό η πίσω όψη δεν φαίνεται ποτέ — μη χτίζεται καν οπτικά */
+/* ΔΥΟ ΡΗΤΕΣ ΣΤΗΛΕΣ, όχι CSS columns. Με columns, ό,τι δεν χωρούσε σε ύψος
+   έφτιαχνε ΝΕΑ στήλη δεξιά: εμφανιζόταν οριζόντια μπάρα κύλισης και τα
+   ΚΑΘΕΤΑ έφευγαν εκτός κάδρου. */
+.facing-cols{flex:1 1 auto;min-height:0;display:flex;gap:14px;overflow:hidden}
+.cl-group{flex:1 1 0;min-width:0;overflow-y:auto;overflow-x:hidden;
+          padding-right:4px}
+.cl-group + .cl-group{border-left:1px solid var(--hair);padding-left:14px}
+.cl-group::-webkit-scrollbar{width:6px}
+.cl-group::-webkit-scrollbar-thumb{background:var(--m-20);border-radius:99px}
+.cl-group{scrollbar-width:thin;scrollbar-color:var(--m-20) transparent}
 /* οι ορισμοί ζωγραφίζονται μόνο όταν φαίνεται η αριστερή σελίδα */
 #app:not(.spread) .back-inner{display:none}
-.cl-group{break-inside:avoid-column;margin-bottom:12px}
-.cl-group > b{display:block;font-size:9px;letter-spacing:.2em;color:var(--ink-3);
-              margin-bottom:4px;text-transform:uppercase}
+.cl-group > b{display:block;font-size:.72em;letter-spacing:.2em;color:var(--ink-3);
+              margin-bottom:4px;text-transform:uppercase;position:sticky;top:0;
+              background:#fff;padding-bottom:2px}
 .cl-item{
-  display:flex;gap:6px;font-size:12px;line-height:1.28;padding:2px 4px;
-  border-radius:3px;cursor:pointer;break-inside:avoid;
+  display:flex;gap:6px;font-size:1em;line-height:1.3;padding:2px 4px;
+  border-radius:3px;cursor:pointer;
 }
 .cl-item:hover{background:var(--y-10)}
 .cl-item.on{background:var(--y-100)}
