@@ -366,9 +366,13 @@ body{
 /* Το περιεχόμενο κυλάει ΠΑΝΤΑ όταν δεν χωράει -- σε μικρές ή περίεργες
    οθόνες κοβόταν το κουμπί των λύσεων και δεν υπήρχε τρόπος να το φτάσεις.
    Όταν χωράει, δεν εμφανίζεται μπάρα. */
+/* Η κύλιση οδηγείται από τη JS (το iOS δεν κυλάει μέσα σε preserve-3d),
+   γι' αυτό touch-action:none: δεν θέλουμε ΚΑΙ τον browser να κυλάει από
+   πάνω μας, θα διπλασίαζε την κίνηση σε Android και desktop.
+   Και όχι scroll-behavior:smooth -- κάθε βήμα του σύρσιμου θα ζητούσε δική
+   του ομαλή μετάβαση και η κίνηση θα καθυστερούσε πίσω από το δάχτυλο. */
 .last{overflow:hidden}
-.last .sheet{overflow-y:auto;-webkit-overflow-scrolling:touch;
-             scroll-behavior:smooth}
+.last .sheet{overflow-y:auto;touch-action:none;scroll-behavior:auto}
 .sheet::-webkit-scrollbar{width:10px}
 .sheet::-webkit-scrollbar-track{background:var(--m-05)}
 .sheet::-webkit-scrollbar-thumb{background:var(--m-20);border-radius:99px;
@@ -395,7 +399,7 @@ body{
    pan-y: η κατακόρυφη κύλιση ανήκει στη σελίδα, το πάτημα στις τελείες.
    Χωρίς αυτό, μια προσπάθεια scroll πάνω στο ταμπλό δεν έκανε τίποτα. */
 #dots-wrap{background:#fff;border:1px solid var(--hair);overflow:hidden;
-           touch-action:pan-y;display:flex;justify-content:center;
+           touch-action:none;display:flex;justify-content:center;
            flex:1 1 auto;min-height:150px}
 #dots-wrap svg{display:block;width:100%;height:100%}
 /* Μόλις ανοίξουν οι λύσεις, το ταμπλό των τελειών ΜΙΚΡΑΙΝΕΙ — δεν μεγαλώνει.

@@ -95,19 +95,25 @@ window.Dots = (function () {
     }
   };
 
+  /* Ξεκίνησες πάνω σε τελεία -> σχεδιάζεις. Ξεκίνησες σε κενό -> η σελίδα
+     κυλάει. Χωρίς αυτό, το ταμπλό κατάπινε κάθε προσπάθεια κύλισης. */
+  Board.prototype.drawing = function () { return !!this._draw; };
+
   Board.prototype.bind = function () {
     var self = this, down = false;
     this.svg.addEventListener('pointerdown', function (e) {
-      down = true;
-      try { self.svg.setPointerCapture(e.pointerId); } catch (err) {}
+      var before = self.progress;
       self.hit(e.clientX, e.clientY);
+      self._draw = self.progress > before;
+      down = self._draw;
+      if (down) { try { self.svg.setPointerCapture(e.pointerId); } catch (err) {} }
     });
     this.svg.addEventListener('pointermove', function (e) {
       if (!down) return;
       self.hit(e.clientX, e.clientY);
     });
     ['pointerup', 'pointercancel'].forEach(function (ev) {
-      self.svg.addEventListener(ev, function () { down = false; });
+      self.svg.addEventListener(ev, function () { down = false; self._draw = false; });
     });
   };
 

@@ -87,6 +87,55 @@
     hintBtn.disabled = left <= 0 || w.state === 'ok' || !p.emptyCells(w).length;
   }
 
+  /* ── κύλιση της τελευταίας σελίδας ────────────────────────────
+     Το iOS ΔΕΝ κυλάει στοιχεία που ζουν μέσα σε preserve-3d, και οι σελίδες
+     μας γυρίζουν στον χώρο. Τα αγγίγματα φτάνουν κανονικά -- οι χρήστες
+     παίζουν το σταυρόλεξο μια χαρά -- απλώς δεν ενεργοποιείται η αυτόματη
+     κύλιση. Οπότε την οδηγούμε εμείς, ίδια σε κάθε συσκευή.
+
+     Πάνω στο ταμπλό των τελειών ισχύει ο κανόνας: αν ξεκινήσεις ΠΑΝΩ σε
+     τελεία σχεδιάζεις, αν ξεκινήσεις σε κενό κυλάς. */
+  function initSheetScroll() {
+    var sheet = lastPage.querySelector('.sheet');
+    var drag = null, vel = 0, glide = 0;
+
+    function maxTop() { return Math.max(0, sheet.scrollHeight - sheet.clientHeight); }
+    function to(v) { sheet.scrollTop = Math.max(0, Math.min(maxTop(), v)); }
+
+    sheet.addEventListener('pointerdown', function (e) {
+      if (e.target.closest('button, a')) return;
+      if (board && board.drawing && board.drawing()) return;
+      cancelAnimationFrame(glide);
+      drag = { y: e.clientY, top: sheet.scrollTop, t: Date.now(), live: false };
+    });
+    window.addEventListener('pointermove', function (e) {
+      if (!drag) return;
+      var dy = e.clientY - drag.y;
+      if (!drag.live) {
+        if (Math.abs(dy) < 5) return;
+        drag.live = true;
+        try { sheet.setPointerCapture(e.pointerId); } catch (err) {}
+      }
+      var now = Date.now(), dt = Math.max(16, now - drag.t);
+      vel = (sheet.scrollTop - (drag.top - dy)) / dt;
+      drag.t = now;
+      to(drag.top - dy);
+    });
+    window.addEventListener('pointerup', function () {
+      if (!drag) return;
+      var live = drag.live;
+      drag = null;
+      if (!live || Math.abs(vel) < .05) return;
+      // λίγη αδράνεια, αλλιώς μια λίστα 60 απαντήσεων θέλει δέκα σπρωξιές
+      var v = Math.max(-2.6, Math.min(2.6, vel)) * 16;
+      (function step() {
+        v *= .93;
+        to(sheet.scrollTop - v);
+        if (Math.abs(v) > .4) glide = requestAnimationFrame(step);
+      })();
+    });
+  }
+
   function activePuzzle() {
     var p = Book.current();
     return (p === 1 || p === 2) ? puzzles[p - 1] : null;
@@ -354,6 +403,7 @@
     }, 140);
   });
 
+  initSheetScroll();
   syncKbSide();
   syncSpread();
   syncChrome();
